@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>typescript</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
+<!-- <script src="../typescript/greeter.ts"></script> -->
+<script>
+    // let duplicator = (arr) => {
+    //     let Arr = [...arr]
+    //     for (item in arr) {
+    //         Arr.push(item)
+    //     }
+    //     return Arr
+    // }
+    // let a = duplicator([1, 2, 3, 4, 5])
+    // console.log('a', a)
+    let duplicator = function() {
+        let arr = [1, 2, 3, 4, 5]
+        let Arr = [...arr]
+        arr.concat(Arr)
+        return arr
+    }
+
+    console.log([1, 2, 3, 4, 5].duplicator())
+</script>
