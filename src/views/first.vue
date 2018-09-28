@@ -36,10 +36,42 @@
         {{b}}
       </div>
     </div>
+
+    <div class="robot">
+      <Row>
+        <Col span="10">
+        <Form :label-width="40">
+          <FormItem label="我:"
+                    v-for="(item, index) in myList"
+                    :key="index">
+            <Input v-model="item.iptValue">
+            </Input>
+          </FormItem>
+        </Form>
+        </Col>
+        <Col
+             span="10">
+        <Form :label-width="40">
+          <FormItem label="图灵:"
+                    v-for="(item, index) in robotList"
+                    :key="index">
+            <Input v-model="item.iptValue">
+            </Input>
+          </FormItem>
+        </Form>
+        </Col>
+      </Row>
+      <div class="tuling">
+        <Input v-model="formIpt"
+                   @on-enter="tulingRobot">
+            </Input>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import $ from 'jquery'
+import Axios from 'axios'
 export default {
   data() {
     return {
@@ -140,27 +172,63 @@ export default {
         id: '001',
         num: '1234',
         name: '解构赋值'
-      }
+      },
+      params: {},
+      formIpt: '',
+      myList: [],
+      robotList: []
     }
   },
   methods: {
     getFullName({ id, name, num }) {
       console.log(id, name, num)
+    },
+    tulingRobot() {
+      // this.params.perception.audition.text = this.formIpt
+      this.params = {
+        key: '8197672cf9664021b436d3e36c4a6622',
+        info: this.formIpt
+      }
+      this.myList.push({ iptValue: this.formIpt })
+      this.getRobot(this.params)
+    },
+    getRobot(data) {
+      this.$api.tulingPOST(data).then(res => {
+        console.log(res, res.data.code)
+        if (res.data.code === 100000) {
+          // console.log(res.data.text)
+          this.robotList.push({ iptValue: res.data.text })
+        }
+      })
     }
   },
   created() {
-    const [first, , second] = this.arr
-    console.log(first, second)
-    console.log(this.arr)
-    const mapArr = [...this.arr]
-    mapArr[1] = '啦啦'
-    console.log(mapArr, this.arr)
-
-    this.getFullName(this.user)
+    // const [first, , second] = this.arr
+    // console.log(first, second)
+    // console.log(this.arr)
+    // const mapArr = [...this.arr]
+    // mapArr[1] = '啦啦'
+    // console.log(mapArr, this.arr)
+    // this.getFullName(this.user)
   }
 }
 </script>
 <style>
+.robot {
+  width: 400px;
+  height: 500px;
+  border: 2px gray solid;
+  border-radius: 5px;
+  position: relative;
+}
+.tuling {
+  width: 100%;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  background: rgb(221, 217, 217);
+  padding: 5px 10px;
+}
 .ivu-tooltip-inner {
   white-space: normal;
 }
