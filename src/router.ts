@@ -26,6 +26,11 @@ export default new Router({
       path: '/first',
       name: 'first',
       component: () => import('./views/first.vue')
+    },
+    {
+      path: '/eCharts',
+      name: 'eCharts',
+      component: () => import('./views/echarts.vue')
     }
   ]
 })

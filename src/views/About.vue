@@ -12,6 +12,7 @@
       </audio>
         <Button @click="pause">暂停</Button>
         <Button @click="play">播放</Button>
+        <Button @click="progress">下载</Button>
         <video style="width:100%;" controls="controls">                         
           <source src="@/assets/movie.ogg"
                                                                     type="video/ogg"    autostart="false">
@@ -30,8 +31,13 @@ export default {
     },
     play() {
       this.$refs.music.play()
+      console.log('播放', this.$refs.music.currentSrc)
+    },
+    progress() {
+      window.open(this.$refs.music.currentSrc)
     }
-  }
+  },
+  created() {}
 }
 </script>
 <style>
