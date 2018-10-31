@@ -1,5 +1,5 @@
 import axios from 'axios'
-axios.defaults.baseURL = '/api'
+
 axios.defaults.headers.post['Content-Type'] =
   'application/x-www-form-urlencoded;charset=UTF-8' // 配置请求头
 export default {
@@ -7,6 +7,6 @@ export default {
     return axios.get('' + data)
   },
   tulingPOST(data: JSON) {
-    return axios.post('', data)
+    return axios.post('/api', data)
   }
 }

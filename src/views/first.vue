@@ -29,7 +29,7 @@
            title="Modal 2">
       <div>This is the second modal</div>
     </Modal>
-    <hr />
+    <hr/>
     <div>
       <h3>ES6字符串扩展</h3>
       <div id="list">
@@ -38,28 +38,33 @@
     </div>
 
     <div class="robot">
-      <Form :label-width="40">
-        <FormItem label="我:"
-                  v-for="(item, index) in myList"
-                  :key="index">
-          <Input type="textarea"
-                 v-model="item.iptValue">
-          </Input>
-        </FormItem>
-      </Form>
-      <Form :label-width="40">
-        <FormItem label="图灵:"
-                  v-for="(item, index) in robotList"
-                  :key="index">
-          <Input type="textarea"
-                 v-model="item.iptValue">
-          </Input>
-        </FormItem>
-      </Form>
+      <Row>
+        <Col span="10">
+        <Form :label-width="40">
+          <FormItem label="我:"
+                    v-for="(item, index) in myList"
+                    :key="index">
+            <Input type="textarea" v-model="item.iptValue">
+            </Input>
+          </FormItem>
+        </Form>
+        </Col>
+        <Col
+             span="10" offset="2">
+        <Form :label-width="40">
+          <FormItem label="图灵:"
+                    v-for="(item, index) in robotList"
+                    :key="index">
+            <Input type="textarea" v-model="item.iptValue">
+            </Input>
+          </FormItem>
+        </Form>
+        </Col>
+      </Row>
       <div class="tuling">
         <Input v-model="formIpt"
-               @on-enter="tulingRobot">
-        </Input>
+                   @on-enter="tulingRobot">
+            </Input>
       </div>
     </div>
   </div>
