@@ -73,7 +73,8 @@ export default {
           key: "address"
         }
       ],
-      data1: [
+      data1: [],
+      data: [
         {
           name: "John Brown",
           age: 18,
@@ -113,6 +114,18 @@ export default {
       console.log("假装掉接口", this.pageNum, this.pageSize);
     },
     selectChange(value) {
+      if (value.value === 'London') {
+        this.data1 = [
+           {
+          name: "London",
+          age: 18,
+          address: "New York No. 1 Lake Park",
+          date: "2016-10-03"
+        }
+        ]
+      } else {
+        this.data1 = this.data
+      }
       console.log(value)
     }
   },

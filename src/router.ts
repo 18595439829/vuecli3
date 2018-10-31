@@ -31,6 +31,11 @@ export default new Router({
       path: '/eCharts',
       name: 'eCharts',
       component: () => import('./views/echarts.vue')
+    },
+    {
+      path: '/aplayer',
+      name: 'aplayer',
+      component: () => import('./views/aplayer.vue')
     }
   ]
 })
