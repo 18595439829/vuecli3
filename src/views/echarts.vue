@@ -157,12 +157,13 @@ export default {
           }
         },
         legend: {
+          bottom: 'bottom',
           data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎']
         },
         grid: {
           left: '3%',
           right: '4%',
-          bottom: '3%',
+          // bottom: '3%',
           containLabel: true
         },
         xAxis: {
