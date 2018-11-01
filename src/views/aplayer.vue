@@ -6,6 +6,15 @@
       </aplayer>
     </div>
     {{number | capitalize}}
+    <div>
+      <Button @click="arrClick">点击</Button>
+      <div v-show="arrList.length == 0">
+        数组为空
+      </div>
+       <div v-show="arrList.length > 0">
+          数组有值
+      </div>
+    </div>
   </div>
 </template>  
   
@@ -20,6 +29,7 @@ export default {
   },
   data() {
     return {
+      arrList: [],
       musicList: {
         title: 'youkao100',
         src: 'http://172.18.238.202:7788/voice/failed11.mp3',
@@ -51,7 +61,15 @@ export default {
       return res
     }
   },
-  methods: {},
+  methods: {
+    arrClick() {
+      if (this.arrList.length <= 0) {
+        this.arrList = [1,2,3]
+      } else if (this.arrList.length > 0) {
+        this.arrList = []
+      }
+    }
+  },
   computed: {
     url() {
       return this.pdfurl
