@@ -7,7 +7,9 @@ import axios from 'axios'
 import '@/plugins/iview'
 import $ from 'jquery'
 import eCharts from 'echarts'
+import Viser from 'viser-vue'
 
+Vue.use(Viser)
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 Vue.prototype.$api = api

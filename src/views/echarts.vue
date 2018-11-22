@@ -359,7 +359,11 @@ export default {
       }
     }
   },
-  mounted() {}
+  mounted() {
+    this.$eCharts.init(this.$refs.echart).on('click', function(params) {
+      console.log(params)
+    })
+  }
 }
 </script>
 <style>

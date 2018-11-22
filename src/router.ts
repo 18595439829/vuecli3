@@ -36,6 +36,40 @@ export default new Router({
       path: '/aplayer',
       name: 'aplayer',
       component: () => import('./views/aplayer.vue')
+    },
+    {
+      path: '/lucktask',
+      name: 'lucktask',
+      component: () => import('./views/lucktask.vue')
+    },
+    {
+      path: '/viserLine',
+      name: 'viserLine',
+      component: () => import('./views/viser/index.vue'),
+      children: [
+        {
+          path: 'line',
+          name: 'line',
+          component: () => import('./views/viser/line.vue')
+        },
+        {
+          path: 'bar',
+          name: 'bar',
+          component: () => import('./views/viser/bar.vue')
+        }
+      ]
+    },
+    {
+      path: '/es6',
+      name: 'es6',
+      component: () => import('./views/es6/index.vue'),
+      children: [
+        {
+          path: 'es6-10',
+          name: 'es6-10',
+          component: () => import('./views/es6/10-objectNewFunction.vue')
+        }
+      ]
     }
   ]
 })

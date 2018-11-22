@@ -5,7 +5,10 @@
       <router-link to="/about">About</router-link> |
       <router-link to="/first">First</router-link> |
       <router-link to="/eCharts">eCharts</router-link> |
-      <router-link to="/aplayer">aplayer</router-link>
+      <router-link to="/aplayer">aplayer</router-link> | 
+      <router-link to="/lucktask">抽奖</router-link> |
+      <router-link to="/viserLine">viser线形图</router-link> |
+      <router-link to="/es6">es6</router-link>
     </div>
     <router-view />
   </div>
