@@ -6,7 +6,7 @@
                  :height="barNormal.height"
                  :data="barNormal.data"
                  :scale="barNormal.scale">
-          <v-tooltip @on-change="barTipChange" />
+          <v-tooltip :on-change="barTipChange" />
           <v-axis />
           <v-bar position="year*sales" />
         </v-chart>
@@ -28,7 +28,11 @@
         </v-chart>
       </div>
     </div>
-    <Button @click="sumClick">点击运算</Button>
+    <Button type="primary" @click="sumClick">点击运算</Button>
+    <div class="lessStyle">
+      <div class="lessColor"></div>
+      <div class="banner">啦啦啦啦啦</div>
+    </div>
   </div>
 </template>
 
@@ -120,3 +124,32 @@ export default {
   flex: 1;
 }
 </style>
+<style lang="less">
+@base: #f04615;
+@width: 0.5;
+@my-selector: banner;
+
+.text3d(@color) {
+  color: @color;
+  text-shadow: 1px 1px 0px darken(@color, 5%),
+               2px 2px 0px darken(@color, 10%),
+               3px 3px 0px darken(@color, 15%),
+               4px 4px 0px darken(@color, 20%),
+               4px 4px 2px #000;
+}
+
+.lessStyle {
+  text-align: center;
+  .lessColor {
+    width: percentage(@width); // returns `50%`
+    height: 100px;
+    color: saturate(@base, 5%);
+    background-color: spin(lighten(@base, 25%), 8);
+  }
+  .@{my-selector} {
+    font-size: 32pt;
+    .text3d(#0982c1);
+  }
+}
+</style>
+

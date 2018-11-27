@@ -70,6 +70,11 @@ export default new Router({
           component: () => import('./views/es6/10-objectNewFunction.vue')
         }
       ]
+    },
+    {
+      path: '/iviewTheme',
+      name: 'iviewTheme',
+      component: () => import('./views/iviewTheme/theme.vue')
     }
   ]
 })

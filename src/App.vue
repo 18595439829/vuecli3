@@ -7,8 +7,9 @@
       <router-link to="/eCharts">eCharts</router-link> |
       <router-link to="/aplayer">aplayer</router-link> | 
       <router-link to="/lucktask">抽奖</router-link> |
+      <router-link to="/es6">es6</router-link> |
       <router-link to="/viserLine">viser线形图</router-link> |
-      <router-link to="/es6">es6</router-link>
+      <router-link to="/iviewTheme">iview主题定制</router-link>
     </div>
     <router-view />
   </div>
@@ -20,11 +21,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  padding: 20px;
+  /* padding: 20px; */
 }
 #nav {
   text-align: center;
-  padding: 30px;
+  border-bottom: #2c3e50 1px solid
+  /* padding: 30px; */
 }
 
 #nav a {

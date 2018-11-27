@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>pi</title>
+  </head>
+
+  <body></body>
+</html>
+<script>
+  let pi = 0
+  let num = 1
+  // let PI = function() {
+  //   pi = pi + (-1) ** (num + 1) * (4 / (2 * num - 1))
+  //   num++
+  //   if (pi > 3.1415926 && pi < 3.1415927) {
+  //     		// console.log(num);
+  //     n = num
+  //   } else {
+  //     PI()
+  //   }
+  //   return n
+  // }
+  let PI = function () { 
+    while (pi < 3.1415926 ||  pi > 3.1415927) {
+      pi = pi + (-1) ** (num + 1) * (4 / (2 * num - 1))
+      num++
+    }
+    console.log(num-1) 
+   }
+  PI()
+</script>

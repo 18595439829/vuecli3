@@ -9,12 +9,14 @@ import $ from 'jquery'
 import eCharts from 'echarts'
 import Viser from 'viser-vue'
 
+
 Vue.use(Viser)
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 Vue.prototype.$api = api
 Vue.prototype.$ = $
 Vue.prototype.$eCharts = eCharts
+Vue.prototype.$store = store
 new Vue({
   router,
   store,
