@@ -6,9 +6,11 @@
     <Button @click="bgClick('purple')">紫色</Button>
     <Button @click="bgClick('white')">白色</Button>
     <Button @click="bgClick('red')">红色</Button>
-    <div 
-         :class="{widthHeight: true,bgColorP: isPurple,bgColorW: isWhite,bgColorR: isRed}">
-      <h3>自定义主题更换</h3>
+    <div :class="{widthHeight: true,bgColorP: isPurple,bgColorW: isWhite,bgColorR: isRed}">
+      <div class="lessStyle">
+        <div class="lessColor"></div>
+        <div class="banner">啦啦啦啦啦</div>
+      </div>
     </div>
   </div>
 </template>
@@ -57,8 +59,7 @@ export default {
 <style lang="less" scoped>
 .widthHeight {
   margin: 10px 20px;
-  width: 200px;
-  height: 100px;
+  width: 400px;
 }
 .bgColor (@bgColor: black, @fColor: white ) {
   background: @bgColor;
@@ -72,5 +73,30 @@ export default {
 }
 .bgColorR {
   .bgColor(red, black);
+}
+
+@base: #f04615;
+@width: 0.5;
+@my-selector: banner;
+
+.text3d(@color) {
+  color: @color;
+  text-shadow: 1px 1px 0px darken(@color, 5%), 2px 2px 0px darken(@color, 10%),
+    3px 3px 0px darken(@color, 15%), 4px 4px 0px darken(@color, 20%),
+    4px 4px 2px #000;
+}
+
+.lessStyle {
+  text-align: center;
+  .lessColor {
+    width: percentage(@width); // returns `50%`
+    height: 100px;
+    color: saturate(@base, 5%);
+    background-color: spin(lighten(@base, 25%), 8);
+  }
+  .@{my-selector} {
+    font-size: 32pt;
+    .text3d(#0982c1);
+  }
 }
 </style>

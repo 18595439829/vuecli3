@@ -28,10 +28,21 @@
         </v-chart>
       </div>
     </div>
-    <Button type="primary" @click="sumClick">点击运算</Button>
-    <div class="lessStyle">
-      <div class="lessColor"></div>
-      <div class="banner">啦啦啦啦啦</div>
+    <Button type="primary"
+            @click="sumClick">点击更改分组数据</Button>
+    <div class="bar">
+      <div class="flex">
+        <v-chart :forceFit="true"
+                 :height="barGroup.height"
+                 :data="barGroup.data">
+          <v-tooltip />
+          <v-axis />
+          <v-legend />
+          <v-bar position="月份*月均降雨量"
+                 color="name"
+                 :adjust="barGroup.adjust" />
+        </v-chart>
+      </div>
     </div>
   </div>
 </template>
@@ -73,13 +84,47 @@ export default {
         height: 400,
         fields: ['小于5岁', '5至13岁', '14至17岁']
       },
+      barGroup: {
+        sourceData: [
+          {
+            name: 'London',
+            'Jan.': 18.9,
+            'Feb.': 28.8,
+            'Mar.': 39.3,
+            'Apr.': 81.4,
+            May: 47,
+            'Jun.': 20.3,
+            'Jul.': 24,
+            'Aug.': 35.6
+          },
+          {
+            name: 'Berlin',
+            'Jan.': 12.4,
+            'Feb.': 23.2,
+            'Mar.': 34.5,
+            'Apr.': 99.7,
+            May: 52.6,
+            'Jun.': 35.5,
+            'Jul.': 37.4,
+            'Aug.': 42.4
+          }
+        ],
+        data: null,
+        height: 400,
+        adjust: [
+          {
+            type: 'dodge',
+            marginRatio: 1 / 32
+          }
+        ]
+      },
       pi: 0,
       num: 0
     }
   },
   methods: {
     getBarPileData() {
-      const dv = new DataSet.View().source(this.barPile.sourceData)
+      let dv = new DataSet.View().source(this.barPile.sourceData)
       dv.transform({
         type: 'fold',
         fields: ['小于5岁', '5至13岁', '14至17岁'],
@@ -89,6 +134,16 @@ export default {
       })
       this.barPile.data = dv.rows
     },
+    getBarGroupData(sourceData) {
+      let dv = new DataSet.View().source(sourceData)
+      dv.transform({
+        type: 'fold',
+        fields: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.'],
+        key: '月份',
+        value: '月均降雨量'
+      })
+      this.barGroup.data = dv.rows
+    },
     barPileClick(env, chart) {
       console.log(env, chart)
     },
@@ -96,7 +151,11 @@ export default {
       console.log(env, chart)
     },
     sumClick() {
-      this.PI()
+      let sourceData = [
+        { name: '北京', 'Jan.': 43.9, 'Feb.': 11.8, 'Mar.': 123.3, 'Apr.': 81.4, 'May': 52, 'Jun.': 200.3, 'Jul.': 53, 'Aug.': 27.6 },
+    { name: '上海', 'Jan.': 21.4, 'Feb.': 32.2, 'Mar.': 34.5, 'Apr.': 99.7, 'May': 122.6, 'Jun.': 66.5, 'Jul.': 63.4, 'Aug.': 73.4 }
+      ]
+      this.getBarGroupData(sourceData)
     },
     PI() {
       // this.pi = this.pi + (-1) ** (this.num + 1) * (4 / (2 * this.num - 1))
@@ -113,6 +172,7 @@ export default {
   },
   mounted() {
     this.getBarPileData()
+    this.getBarGroupData(this.barGroup.sourceData)
   }
 }
 </script>
@@ -122,34 +182,6 @@ export default {
 }
 .bar .flex {
   flex: 1;
-}
-</style>
-<style lang="less">
-@base: #f04615;
-@width: 0.5;
-@my-selector: banner;
-
-.text3d(@color) {
-  color: @color;
-  text-shadow: 1px 1px 0px darken(@color, 5%),
-               2px 2px 0px darken(@color, 10%),
-               3px 3px 0px darken(@color, 15%),
-               4px 4px 0px darken(@color, 20%),
-               4px 4px 2px #000;
-}
-
-.lessStyle {
-  text-align: center;
-  .lessColor {
-    width: percentage(@width); // returns `50%`
-    height: 100px;
-    color: saturate(@base, 5%);
-    background-color: spin(lighten(@base, 25%), 8);
-  }
-  .@{my-selector} {
-    font-size: 32pt;
-    .text3d(#0982c1);
-  }
 }
 </style>
 
