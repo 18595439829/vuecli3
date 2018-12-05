@@ -136,6 +136,7 @@ export default {
     },
     getBarGroupData(sourceData) {
       let dv = new DataSet.View().source(sourceData)
+      console.log('BarGroup', new DataSet, dv)
       dv.transform({
         type: 'fold',
         fields: ['Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'Jun.', 'Jul.', 'Aug.'],
@@ -148,7 +149,7 @@ export default {
       console.log(env, chart)
     },
     barTipChange(env, chart) {
-      console.log(env, chart)
+      // console.log(env, chart)
     },
     sumClick() {
       let sourceData = [

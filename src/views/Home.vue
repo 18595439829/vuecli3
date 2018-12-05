@@ -1,18 +1,34 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+    <Button @click="btnClick">点击测试外部js</Button>
+    <div class="iptsDiv">
+      <input type="text"
+             class="iptText">
+      <input type="text"
+             class="iptText1">
+      <input type="text"
+             class="iptText">
+    </div>
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
-
-@Component({
-  components: {
-    HelloWorld
+<script>
+import homeJS from '../assets/js/home'
+export default {
+  methods: {
+    btnClick() {
+      homeJS.btnClick()
+    }
   }
-})
-export default class Home extends Vue {}
+}
 </script>
+<style>
+@import '../assets/css/home.css';
+.home {
+  position: relative;
+}
+.home .iptsDiv {
+  position: absolute;
+}
+</style>
+
