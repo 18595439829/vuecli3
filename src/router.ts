@@ -75,6 +75,28 @@ export default new Router({
       path: '/iviewTheme',
       name: 'iviewTheme',
       component: () => import('./views/iviewTheme/theme.vue')
+    },
+    {
+      path: '/animate',
+      name: 'animate',
+      component: () => import('./views/animate/home.vue'),
+      children: [
+        {
+          path: 'css2D',
+          name: 'css2D',
+          component: () => import('./views/animate/cssAnimate.vue')
+        },
+        {
+          path: 'cube',
+          name: 'cube',
+          component: () => import('./views/animate/cube.vue')
+        },
+        {
+          path: 'ceshi',
+          name: 'ceshi',
+          component: () => import('./views/animate/ceshi.vue')
+        }
+      ]
     }
   ]
 })

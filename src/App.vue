@@ -9,7 +9,8 @@
       <router-link to="/lucktask">抽奖</router-link> |
       <router-link to="/es6">es6</router-link> |
       <router-link to="/viserLine">viser线形图</router-link> |
-      <router-link to="/iviewTheme">iview主题定制</router-link>
+      <router-link to="/iviewTheme">iview主题定制</router-link> |
+      <router-link to="/animate">css动画</router-link>
     </div>
     <router-view />
   </div>
