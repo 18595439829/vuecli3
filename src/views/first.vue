@@ -29,7 +29,7 @@
            title="Modal 2">
       <div>This is the second modal</div>
     </Modal>
-    <hr/>
+    <hr />
     <div>
       <h3>ES6字符串扩展</h3>
       <div id="list">
@@ -38,33 +38,20 @@
     </div>
 
     <div class="robot">
-      <Row>
-        <Col span="10">
-        <Form :label-width="40">
-          <FormItem label="我:"
-                    v-for="(item, index) in myList"
-                    :key="index">
-            <Input type="textarea" v-model="item.iptValue">
-            </Input>
-          </FormItem>
-        </Form>
-        </Col>
-        <Col
-             span="10" offset="2">
-        <Form :label-width="40">
-          <FormItem label="图灵:"
-                    v-for="(item, index) in robotList"
-                    :key="index">
-            <Input type="textarea" v-model="item.iptValue">
-            </Input>
-          </FormItem>
-        </Form>
-        </Col>
-      </Row>
+      <div class="robotWidth"
+           v-for="(item, index) in myList"
+           :key="index">
+        <div class="robotLeft">
+         我: <Button>{{item.myValue}}</Button>
+        </div>
+        <div class="robotRight">
+          <Button>{{item.robotValue}}</Button> :图灵
+        </div>
+      </div>
       <div class="tuling">
         <Input v-model="formIpt"
-                   @on-enter="tulingRobot">
-            </Input>
+               @on-enter="tulingRobot">
+        </Input>
       </div>
     </div>
   </div>
@@ -186,41 +173,54 @@ export default {
     tulingRobot() {
       // this.params.perception.audition.text = this.formIpt
       this.params = {
-        key: '8197672cf9664021b436d3e36c4a6622',
-        info: this.formIpt
+        reqType: 0,
+        perception: {
+          inputText: {
+            text: this.formIpt
+          }
+        },
+        userInfo: {
+          apiKey: '8197672cf9664021b436d3e36c4a6622',
+          userId: '12345678'
+        }
       }
-      this.myList.push({ iptValue: this.formIpt })
       this.getRobot(this.params)
       this.formIpt = ''
     },
     getRobot(data) {
+      let str = this.formIpt
       this.$api.tulingPOST(data).then(res => {
-        console.log(res, res.data.code)
-        if (res.data.code === 100000) {
-          // console.log(res.data.text)
-          this.robotList.push({ iptValue: res.data.text })
-        }
+        this.myList.push({
+          myValue: str,
+          robotValue: res.data.results[0].values.text
+        })
       })
     }
   },
-  created() {
-    // const [first, , second] = this.arr
-    // console.log(first, second)
-    // console.log(this.arr)
-    // const mapArr = [...this.arr]
-    // mapArr[1] = '啦啦'
-    // console.log(mapArr, this.arr)
-    // this.getFullName(this.user)
-  }
+  created() {}
 }
 </script>
 <style>
 .robot {
+  margin: 10px;
   width: 400px;
   height: 500px;
   border: 2px gray solid;
   border-radius: 5px;
   position: relative;
+}
+.robotWidth {
+  width: 100%;
+}
+.robotWidth .robotLeft {
+  width: 100%;
+  text-align: left;
+  margin: 5px;
+}
+.robotWidth .robotRight {
+  width: 100%;
+  text-align: right;
+  margin: 5px;
 }
 .tuling {
   width: 100%;
