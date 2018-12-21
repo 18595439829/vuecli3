@@ -38,22 +38,28 @@
     </div>
 
     <div class="robot">
-      <div class="robotWidth"
+      <div class="robotChat">
+        <div class="robotWidth"
            v-for="(item, index) in myList"
            :key="index">
         <div class="robotLeft">
-         我: <Button>{{item.myValue}}</Button>
+          <div class="robotLeft_name">我:</div>
+          <div class="robotLeft_text">{{item.myValue}}</div> 
+          <div style="clear:both"></div>
         </div>
         <div class="robotRight">
-          <Button>{{item.robotValue}}</Button> :图灵
+          <div class="robotRight_name">:图灵</div>
+          <div class="robotRight_text">{{item.robotValue}}</div> 
+          <div style="clear:both"></div>
         </div>
       </div>
-      <div class="tuling">
+      </div> 
+    </div>
+    <div class="tuling">
         <Input v-model="formIpt"
                @on-enter="tulingRobot">
         </Input>
       </div>
-    </div>
   </div>
 </template>
 <script>
@@ -200,14 +206,17 @@ export default {
   created() {}
 }
 </script>
-<style>
+<style lang="less">
 .robot {
-  margin: 10px;
+  margin: 0 10px;
   width: 400px;
   height: 500px;
   border: 2px gray solid;
   border-radius: 5px;
-  position: relative;
+  .robotChat{
+    height: 100%;
+    overflow-y: auto;
+  }
 }
 .robotWidth {
   width: 100%;
@@ -215,18 +224,34 @@ export default {
 .robotWidth .robotLeft {
   width: 100%;
   text-align: left;
-  margin: 5px;
+  margin: 5px 0;
+  padding: 0 5px;
+  .robotLeft_text {
+    width: 300px;
+    float: left;
+  }
+  .robotLeft_name {
+    width: 30px;
+    float: left;
+  }
 }
 .robotWidth .robotRight {
   width: 100%;
   text-align: right;
-  margin: 5px;
+  margin: 5px 0;
+  padding: 0 5px;
+  .robotRight_text {
+    width: 300px;
+    float: right;
+  }
+  .robotRight_name {
+    width: 50px;
+    float: right;
+  }
 }
 .tuling {
-  width: 100%;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
+  margin-left: 10px;
+  width: 400px;
   background: rgb(221, 217, 217);
   padding: 5px 10px;
 }
