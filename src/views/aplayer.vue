@@ -6,12 +6,14 @@
       </aplayer>
     </div>
     {{number | capitalize}}
+    <img :src="imgUrl()" alt="">
+    <audio :src="audioUrl()" controls="controls"></audio>
     <div>
       <Button @click="arrClick">点击</Button>
-      <div v-show="arrList.length == 0">
+      <div v-if="arrList.length == 0">
         数组为空
       </div>
-       <div v-show="arrList.length > 0">
+       <div v-else-if="arrList.length > 0">
           数组有值
       </div>
     </div>
@@ -32,7 +34,7 @@ export default {
       arrList: [],
       musicList: {
         title: 'youkao100',
-        src: 'http://172.18.238.202:7788/voice/failed11.mp3',
+        src: '../assets/music.mp3',
         artist: ' ',
         pic: ''
         // lrc: "[00:00.00]lrc here\n[00:01.00]aplayer"
@@ -68,6 +70,20 @@ export default {
       } else if (this.arrList.length > 0) {
         this.arrList = []
       }
+    },
+    imgUrl() {
+      let url = null
+      url =  require('../assets/logo.png')
+      console.log(url)
+      return url
+    },
+    audioUrl () {
+      let url = null
+       url =  require('../assets/music.mp3')
+       console.log(url)
+      return url
+      // console.log(require('../assets/music.mp3'))
+      // this.musicList.src = window.URL.createObjectURL('../assets/music.mp3')
     }
   },
   computed: {
@@ -75,7 +91,9 @@ export default {
       return this.pdfurl
     }
   },
-  mounted() {}
+  mounted() {
+    this.audioUrl()
+  }
 }
 </script>  
   
