@@ -68,6 +68,11 @@ export default new Router({
           path: 'es6-10',
           name: 'es6-10',
           component: () => import('./views/es6/10-objectNewFunction.vue')
+        },
+        {
+          path: 'async',
+          name: 'async',
+          component: () => import('./views/es6/19-async.vue')
         }
       ]
     },
@@ -95,6 +100,18 @@ export default new Router({
           path: 'ceshi',
           name: 'ceshi',
           component: () => import('./views/animate/ceshi.vue')
+        }
+      ]
+    },
+    {
+      path: '/pinYin',
+      name: 'pinYin',
+      component: () => import('./views/pinYin/index.vue'),
+      children: [
+        {
+          path: 'chinese',
+          name: 'chinese',
+          component: () => import('./views/pinYin/chinese.vue')
         }
       ]
     }

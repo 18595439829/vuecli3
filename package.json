@@ -18,6 +18,7 @@
         "jquery": "^3.3.1",
         "less": "^3.8.1",
         "less-loader": "^4.1.0",
+        "pinyin": "^2.8.3",
         "viser-vue": "^2.4.1",
         "vue": "^2.5.17",
         "vue-aplayer": "^1.6.1",
