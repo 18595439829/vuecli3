@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      {{'你好,世界,埠,斛' | pinyin}}
+      {{'君不见黄河之水天上来,奔流到海不复回,饕餮' | pinyin}}
     </div>
   </div>
 </template>
@@ -9,15 +9,55 @@
 import pinYin from 'pinyin'
 export default {
   name: 'chinese',
+  data() {
+    return {
+      punctuation: [
+        ',',
+        '.',
+        '/',
+        '"',
+        ';',
+        '，',
+        '。',
+        '；',
+        '：',
+        '？',
+        '“',
+        '”',
+        '、'
+      ]
+    }
+  },
   filters: {
     pinyin(value) {
+      let punctuation = [
+        ',',
+        '.',
+        '/',
+        '"',
+        ';',
+        '，',
+        '。',
+        '；',
+        '：',
+        '？',
+        '“',
+        '”',
+        '、'
+      ]
       if (value) {
-        let pinyinArray = pinYin(value, { style: pinYin.STYLE_TONE })
+        let strArray = []
         let str = ''
-        pinyinArray.forEach(item => {
-           str = `${str}  ${item} `
-        });
-        return `${value}(${str})` 
+        for (let item of value) {
+          let pinyin = null
+          if (punctuation.indexOf(item) > -1) {
+            str = `${str} ${item}`
+          } else {
+            let pinyin = pinYin(item, { style: pinYin.STYLE_TONE })
+            str = `${str} ${item} (${pinyin})`
+          }
+        }
+        return str
       } else {
         return ''
       }
