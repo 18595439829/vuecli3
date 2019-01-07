@@ -1,9 +1,11 @@
 <template>
   <div class="home">
-     <svg class="icon" aria-hidden="true">
+    <svg class="icon"
+         aria-hidden="true">
       <use xlink:href="#icon-kongxian"></use>
     </svg>
     <Button @click="btnClick">点击测试外部js</Button>
+    <Button @click="serverClick">请求node.js</Button>
     <div class="iptsDiv">
       <input type="text"
              class="iptText">
@@ -12,6 +14,7 @@
       <input type="text"
              class="iptText">
     </div>
+
   </div>
 </template>
 
@@ -22,6 +25,11 @@ export default {
   methods: {
     btnClick() {
       homeJS.btnClick()
+    },
+    serverClick() {
+      this.$axios.get('/node').then( (res) => {
+        console.log(res)
+      })
     }
   }
 }
