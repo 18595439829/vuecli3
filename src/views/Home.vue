@@ -5,7 +5,9 @@
       <use xlink:href="#icon-kongxian"></use>
     </svg>
     <Button @click="btnClick">点击测试外部js</Button>
-    <Button @click="serverClick">请求node.js</Button>
+    <Button @click="serverClick">请求node.js_http</Button>
+    <Button @click="expressClickGET">请求node.js_express_GET</Button>
+    <Button @click="expressClickPOST">请求node.js_express_POST</Button>
     <div class="iptsDiv">
       <input type="text"
              class="iptText">
@@ -27,7 +29,29 @@ export default {
       homeJS.btnClick()
     },
     serverClick() {
-      this.$axios.get('/node').then( (res) => {
+      let params = {
+        name: 'admin',
+        password: '123456'
+      }
+      this.$axios.get('/node', {params: params}).then( (res) => {
+        console.log(res)
+      })
+    },
+    expressClickGET() {
+      let params = {
+        name: 'admin',
+        password: '123456'
+      }
+      this.$axios.get('/Express', {params: params}).then( (res) => {
+        console.log(res)
+      })
+    },
+    expressClickPOST() {
+      let params = {
+        name: 'admin',
+        password: '123456'
+      }
+      this.$axios.post('/Express', {params: params}).then( (res) => {
         console.log(res)
       })
     }
