@@ -2,6 +2,10 @@
   <div>
     <div>
       {{'君不见黄河之水天上来,奔流到海不复回,饕餮' | pinyin}}
+      <br/>
+      {{`甲乙丙丁,戊戌庚辛,壬癸,羰基化合物` | pinyin}}
+      <br/>
+      <input type="text" v-model="inputPinyin">{{inputPinyin | pinyin}}
     </div>
     <div>
       <Input v-model="inputValue" style="width: 200px"></Input>
@@ -36,7 +40,8 @@ export default {
         '、'
       ],
       inputValue: '',
-      timer: null
+      timer: null,
+      inputPinyin: ''
     }
   },
   filters: {

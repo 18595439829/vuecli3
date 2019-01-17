@@ -112,6 +112,11 @@ export default new Router({
           path: 'chinese',
           name: 'chinese',
           component: () => import('./views/pinYin/chinese.vue')
+        },
+        {
+          path: 'fileUpload',
+          name: 'fileUpload',
+          component: () => import('./views/pinYin/fileUpload.vue')
         }
       ]
     }

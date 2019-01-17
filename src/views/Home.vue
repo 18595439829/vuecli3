@@ -16,7 +16,9 @@
       <input type="text"
              class="iptText">
     </div>
-
+    <div>
+      <canvas class="canvas"></canvas>
+    </div>
   </div>
 </template>
 
@@ -33,7 +35,7 @@ export default {
         name: 'admin',
         password: '123456'
       }
-      this.$axios.get('/node', {params: params}).then( (res) => {
+      this.$axios.get('/node', { params: params }).then(res => {
         console.log(res)
       })
     },
@@ -42,7 +44,7 @@ export default {
         name: 'admin',
         password: '123456'
       }
-      this.$axios.get('/Express', {params: params}).then( (res) => {
+      this.$axios.get('/Express', { params: params }).then(res => {
         console.log(res)
       })
     },
@@ -51,18 +53,42 @@ export default {
         name: 'admin',
         password: '123456'
       }
-      this.$axios.post('/Express', {params: params}).then( (res) => {
+      this.$axios.post('/Express', { params: params }).then(res => {
         console.log(res)
       })
     }
+  },
+  mounted() {
+    //通过FormData构造函数创建一个空对象
+    var formdata = new FormData()
+    //通过append()方法在末尾追加key为name值为laoliu的数据
+    formdata.append('name', 'laoliu')
+    console.log(formdata.getAll('name'))
+    //通过append()方法在末尾追加key为name值为laoliu2的数据
+    formdata.append('name', 'laoliu2')
+    //通过get方法读取key为name的第一个值
+    console.log(formdata.get('name')) //laoliu
+    //通过getAll方法读取key为name的所有值
+    console.log(formdata.getAll('name')) //["laoliu", "laoliu2"]
+
+    //将存在的key为name的值修改为laoli
+    formdata.set('name', 'laoli')
+    //通过get方法读取key为name的第一个值
+    console.log(formdata.get('name')) //laoli
+    //通过getAll方法读取key为name的所有值
+    console.log(formdata.getAll('name')) //["laoli"]
   }
 }
 </script>
-<style>
+<style lang="less">
 @import '../assets/css/home.css';
 @import '../assets/css/iconfont/iconfont.css';
 .home {
   position: relative;
+  .canvas {
+    width: 400px;
+    height: 300px;
+  }
 }
 .home .iptsDiv {
   position: absolute;
