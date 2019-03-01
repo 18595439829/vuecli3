@@ -119,6 +119,11 @@ export default new Router({
           component: () => import('./views/pinYin/fileUpload.vue')
         }
       ]
+    },
+    {
+      path: '/drag',
+      name: 'drag',
+      component: () => import('./views/drag/index.vue')
     }
   ]
 })

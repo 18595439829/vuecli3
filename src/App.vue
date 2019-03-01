@@ -11,7 +11,8 @@
       <router-link to="/viserLine">viser线形图</router-link> |
       <router-link to="/iviewTheme">iview主题定制</router-link> |
       <router-link to="/animate">css动画</router-link> |
-      <router-link to="/pinYin">拼音插件</router-link>
+      <router-link to="/pinYin">拼音插件</router-link> |
+      <router-link to="/drag">拖拽</router-link>
     </div>
     <router-view />
   </div>

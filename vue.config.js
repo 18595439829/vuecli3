@@ -1,5 +1,5 @@
 module.exports = {
-    baseUrl: '/',
+    publicPath: '/',
     outputDir: 'dist',
     indexPath: 'index.html',
     runtimeCompiler: true,
