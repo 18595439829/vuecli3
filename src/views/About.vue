@@ -19,7 +19,6 @@
                        autostart="false">
         您的浏览器不支持 vodeo 标签。
       </video>  
-
     </div>
     <a href="www/baidu.com">fsafds</a>
   </div>
@@ -28,46 +27,48 @@
 export default {
   methods: {
     pause() {
-      this.$refs.music.pause()
+      this.$refs.music.pause();
     },
     play() {
-      this.$refs.music.play()
-      console.log('播放', this.$refs.music.currentSrc)
+      this.$refs.music.play();
+      console.log("播放", this.$refs.music.currentSrc);
     },
     progress() {
-      window.open(this.$refs.music.currentSrc)
+      window.open(this.$refs.music.currentSrc);
     },
     getSearchString(key, Url) {
       // 获取URL中?之后的字符
-      var str = Url
-      str = str.substring(0, str.length)
-      console.log(1, str)
+      var str = Url;
+      str = str.substring(0, str.length);
+      console.log(1, str);
       // 以&分隔字符串，获得类似name=xiaoli这样的元素数组
-      var arrStr = str.split('?')
-      console.log('arrStr', arrStr)
-      str = arrStr[1]
-      var arr = str.split('&')
-      console.log(2,arr)
-      var obj = new Object()
+      var arrStr = str.split("?");
+      console.log("arrStr", arrStr);
+      str = arrStr[1];
+      var arr = str.split("&");
+      console.log(2, arr);
+      var obj = new Object();
 
       // 将每一个数组元素以=分隔并赋给obj对象
       for (var i = 0; i < arr.length; i++) {
-        var tmp_arr = arr[i].split('=')
-        obj[decodeURIComponent(tmp_arr[0])] = decodeURIComponent(tmp_arr[1])
+        var tmp_arr = arr[i].split("=");
+        obj[decodeURIComponent(tmp_arr[0])] = decodeURIComponent(tmp_arr[1]);
       }
-      console.log(3,obj)
-      return obj[key]
+      console.log(3, obj);
+      return obj[key];
     }
   },
   created() {
-    console.log(this.getSearchString('name', 'lala/lili?name=haha&password=123'))
+    console.log(
+      this.getSearchString("name", "lala/lili?name=haha&password=123")
+    );
   }
-}
+};
 </script>
 <style>
 .music {
   width: 500px;
-  background: url('../assets/logo.png');
+  background: url("../assets/logo.png");
   background-size: cover;
 }
 </style>

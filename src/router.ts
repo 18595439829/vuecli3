@@ -97,6 +97,11 @@ export default new Router({
           component: () => import('./views/animate/ceshi.vue')
         }
       ]
+    },
+    {
+      path: '/code',
+      name: 'code',
+      component: () => import('./views/code/code.vue')
     }
   ]
 })
