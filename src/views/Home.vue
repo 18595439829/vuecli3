@@ -19,6 +19,13 @@
     <div>
       <canvas class="canvas"></canvas>
     </div>
+    <div ref="box"
+         class="box"
+         style="width:500px;height:100px; border:1px solid black;overflow-x: hidden;overflow-y: auto;margin:50px auto 0;padding: 3px;">
+      <div v-for="item in items">当前时间：{{item.time}}</div>
+    </div>
+    <Button @click="add"
+            style="display:block;width:100px;height:20px;margin:20px auto;">添加</Button>
   </div>
 </template>
 
@@ -26,6 +33,12 @@
 import homeJS from '../assets/js/home'
 import '../assets/css/iconfont/iconfont'
 export default {
+  name: 'home',
+  data() {
+    return {
+      items: []
+    }
+  },
   methods: {
     btnClick() {
       homeJS.btnClick()
@@ -56,6 +69,14 @@ export default {
       this.$axios.post('/Express', { params: params }).then(res => {
         console.log(res)
       })
+    },
+    add() {
+      var div = this.$refs.box,
+        time = new Date().getTime(),
+        item = { time: time }
+
+      this.items.push(item)
+      div.scrollTop = div.scrollHeight
     }
   },
   mounted() {

@@ -37,19 +37,19 @@
       </div>
     </div>
 
-    <div class="robot">
+    <div class="robot" ref="robot">
       <div class="robotChat">
         <div class="robotWidth"
            v-for="(item, index) in myList"
            :key="index">
         <div class="robotLeft">
           <div class="robotLeft_name">我:</div>
-          <div class="robotLeft_text">{{item.myValue}}</div> 
+          <div class="robotLeft_text"><span class="robotLeft_text_span">{{item.myValue}}</span></div> 
           <div style="clear:both"></div>
         </div>
         <div class="robotRight">
           <div class="robotRight_name">:图灵</div>
-          <div class="robotRight_text">{{item.robotValue}}</div> 
+          <div class="robotRight_text"><span class="robotRight_text_span">{{item.robotValue}}</span></div> 
           <div style="clear:both"></div>
         </div>
       </div>
@@ -195,11 +195,16 @@ export default {
     },
     getRobot(data) {
       let str = this.formIpt
+      let div = this.$refs.robot
       this.$api.tulingPOST(data).then(res => {
         this.myList.push({
           myValue: str,
           robotValue: res.data.results[0].values.text
         })
+        
+        // this.$nextTick(() =>{
+          div.scrollTop = div.scrollHeight
+        // })
       })
     }
   },
@@ -229,6 +234,9 @@ export default {
   .robotLeft_text {
     width: 300px;
     float: left;
+    .robotLeft_text_span {
+      background: #1bf02c
+    }
   }
   .robotLeft_name {
     width: 30px;
@@ -243,6 +251,9 @@ export default {
   .robotRight_text {
     width: 300px;
     float: right;
+    .robotRight_text_span {
+      background: #78a5e9
+    }
   }
   .robotRight_name {
     width: 50px;

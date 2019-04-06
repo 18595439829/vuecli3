@@ -44,3 +44,4 @@ http
     }
   })
   .listen(8111)
+console.log('服务器已启动')
