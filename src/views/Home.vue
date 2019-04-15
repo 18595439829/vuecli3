@@ -16,9 +16,9 @@
       <input type="text"
              class="iptText">
     </div>
-    <div>
+    <!-- <div>
       <canvas class="canvas"></canvas>
-    </div>
+    </div> -->
     <div ref="box"
          class="box"
          style="width:500px;height:100px; border:1px solid black;overflow-x: hidden;overflow-y: auto;margin:50px auto 0;padding: 3px;">
