@@ -16,7 +16,7 @@
                 :sizeChange="sizeChange"
                 :total="100"
                 :columns="columns1"
-                :data="data1"></table-page>
+                :data="data"></table-page>
   </div>
 </template>
 <script>
@@ -236,31 +236,23 @@ export default {
           }
         ]
       },
-      selectDefault: 'Sydney',
+      selectDefault: 'name',
       options: [
         {
-          value: 'New York',
-          label: 'New York'
+          value: 'name',
+          label: 'name'
         },
         {
-          value: 'London',
-          label: 'London'
+          value: 'age',
+          label: 'age'
         },
         {
-          value: 'Sydney',
-          label: 'Sydney'
+          value: 'address',
+          label: 'address'
         },
         {
-          value: 'Ottawa',
-          label: 'Ottawa'
-        },
-        {
-          value: 'Paris',
-          label: 'Paris'
-        },
-        {
-          value: 'Canberra',
-          label: 'Canberra'
+          value: 'date',
+          label: 'date'
         }
       ],
       columns1: [

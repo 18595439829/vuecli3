@@ -68,6 +68,11 @@ export default new Router({
           path: 'es6-10',
           name: 'es6-10',
           component: () => import('./views/es6/10-objectNewFunction.vue')
+        },
+        {
+          path: 'async',
+          name: 'async',
+          component: () => import('./views/es6/19-async.vue')
         }
       ]
     },
@@ -102,6 +107,28 @@ export default new Router({
       path: '/code',
       name: 'code',
       component: () => import('./views/code/code.vue')
+    },
+    {
+      path: '/pinYin',
+      name: 'pinYin',
+      component: () => import('./views/pinYin/index.vue'),
+      children: [
+        {
+          path: 'chinese',
+          name: 'chinese',
+          component: () => import('./views/pinYin/chinese.vue')
+        },
+        {
+          path: 'fileUpload',
+          name: 'fileUpload',
+          component: () => import('./views/pinYin/fileUpload.vue')
+        }
+      ]
+    },
+    {
+      path: '/drag',
+      name: 'drag',
+      component: () => import('./views/drag/index.vue')
     }
   ]
 })

@@ -29,7 +29,7 @@
            title="Modal 2">
       <div>This is the second modal</div>
     </Modal>
-    <hr/>
+    <hr />
     <div>
       <h3>ES6字符串扩展</h3>
       <div id="list">
@@ -37,36 +37,29 @@
       </div>
     </div>
 
-    <div class="robot">
-      <Row>
-        <Col span="10">
-        <Form :label-width="40">
-          <FormItem label="我:"
-                    v-for="(item, index) in myList"
-                    :key="index">
-            <Input type="textarea" v-model="item.iptValue">
-            </Input>
-          </FormItem>
-        </Form>
-        </Col>
-        <Col
-             span="10" offset="2">
-        <Form :label-width="40">
-          <FormItem label="图灵:"
-                    v-for="(item, index) in robotList"
-                    :key="index">
-            <Input type="textarea" v-model="item.iptValue">
-            </Input>
-          </FormItem>
-        </Form>
-        </Col>
-      </Row>
-      <div class="tuling">
-        <Input v-model="formIpt"
-                   @on-enter="tulingRobot">
-            </Input>
+    <div class="robot" ref="robot">
+      <div class="robotChat">
+        <div class="robotWidth"
+           v-for="(item, index) in myList"
+           :key="index">
+        <div class="robotLeft">
+          <div class="robotLeft_name">我:</div>
+          <div class="robotLeft_text"><span class="robotLeft_text_span">{{item.myValue}}</span></div> 
+          <div style="clear:both"></div>
+        </div>
+        <div class="robotRight">
+          <div class="robotRight_name">:图灵</div>
+          <div class="robotRight_text"><span class="robotRight_text_span">{{item.robotValue}}</span></div> 
+          <div style="clear:both"></div>
+        </div>
       </div>
+      </div> 
     </div>
+    <div class="tuling">
+        <Input v-model="formIpt"
+               @on-enter="tulingRobot">
+        </Input>
+      </div>
   </div>
 </template>
 <script>
@@ -186,47 +179,90 @@ export default {
     tulingRobot() {
       // this.params.perception.audition.text = this.formIpt
       this.params = {
-        key: '8197672cf9664021b436d3e36c4a6622',
-        info: this.formIpt
+        reqType: 0,
+        perception: {
+          inputText: {
+            text: this.formIpt
+          }
+        },
+        userInfo: {
+          apiKey: '8197672cf9664021b436d3e36c4a6622',
+          userId: '12345678'
+        }
       }
-      this.myList.push({ iptValue: this.formIpt })
       this.getRobot(this.params)
       this.formIpt = ''
     },
     getRobot(data) {
+      let str = this.formIpt
+      let div = this.$refs.robot
       this.$api.tulingPOST(data).then(res => {
-        console.log(res, res.data.code)
-        if (res.data.code === 100000) {
-          // console.log(res.data.text)
-          this.robotList.push({ iptValue: res.data.text })
-        }
+        this.myList.push({
+          myValue: str,
+          robotValue: res.data.results[0].values.text
+        })
+        
+        // this.$nextTick(() =>{
+          div.scrollTop = div.scrollHeight
+        // })
       })
     }
   },
-  created() {
-    // const [first, , second] = this.arr
-    // console.log(first, second)
-    // console.log(this.arr)
-    // const mapArr = [...this.arr]
-    // mapArr[1] = '啦啦'
-    // console.log(mapArr, this.arr)
-    // this.getFullName(this.user)
-  }
+  created() {}
 }
 </script>
-<style>
+<style lang="less">
 .robot {
+  margin: 0 10px;
   width: 400px;
   height: 500px;
   border: 2px gray solid;
   border-radius: 5px;
-  position: relative;
+  .robotChat{
+    height: 100%;
+    overflow-y: auto;
+  }
+}
+.robotWidth {
+  width: 100%;
+}
+.robotWidth .robotLeft {
+  width: 100%;
+  text-align: left;
+  margin: 5px 0;
+  padding: 0 5px;
+  .robotLeft_text {
+    width: 300px;
+    float: left;
+    .robotLeft_text_span {
+      background: #1bf02c
+    }
+  }
+  .robotLeft_name {
+    width: 30px;
+    float: left;
+  }
+}
+.robotWidth .robotRight {
+  width: 100%;
+  text-align: right;
+  margin: 5px 0;
+  padding: 0 5px;
+  .robotRight_text {
+    width: 300px;
+    float: right;
+    .robotRight_text_span {
+      background: #78a5e9
+    }
+  }
+  .robotRight_name {
+    width: 50px;
+    float: right;
+  }
 }
 .tuling {
-  width: 100%;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
+  margin-left: 10px;
+  width: 400px;
   background: rgb(221, 217, 217);
   padding: 5px 10px;
 }

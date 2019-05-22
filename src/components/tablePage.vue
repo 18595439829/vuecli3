@@ -8,6 +8,7 @@
     </div>
 </template>
 <script>
+import action from './action'
 export default {
   data() {
     return {
@@ -25,6 +26,13 @@ export default {
              obj['key'] = v[i].value
             arr.push(obj)
          }
+         let actionObj = {
+             title: '操作',
+             render:(h,params) => {
+                return h(action)
+             }
+         }
+         arr.push(actionObj)
          this.columns1 = arr
      }
   }
