@@ -22,18 +22,25 @@
     <div ref="box"
          class="box"
          style="width:500px;height:100px; border:1px solid black;overflow-x: hidden;overflow-y: auto;margin:50px auto 0;padding: 3px;">
-      <div v-for="item in items">当前时间：{{item.time}}</div>
+      <div v-for="item in items" :key="item.name">当前时间：{{item.time}}</div>
     </div>
     <Button @click="add"
             style="display:block;width:100px;height:20px;margin:20px auto;">添加</Button>
+    <div>
+      <treeSearch></treeSearch>
+    </div>
   </div>
 </template>
 
 <script>
 import homeJS from '../assets/js/home'
+import treeSearch from '@/views/treeSearch';
 import '../assets/css/iconfont/iconfont'
 export default {
   name: 'home',
+  components: {
+    treeSearch,
+  },
   data() {
     return {
       items: []
