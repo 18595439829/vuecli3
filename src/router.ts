@@ -129,6 +129,23 @@ export default new Router({
       path: '/drag',
       name: 'drag',
       component: () => import('./views/drag/index.vue')
-    }
+    },
+    {
+      path: '/ol',
+      name: 'openLayer',
+      component: () => import('./views/ol/Home.vue'),
+      children: [
+        {
+          path: 'test',
+          name: 'test',
+          component: () => import('./views/ol/Test.vue')
+        },
+        {
+          path: 'ShiLiangTuCeng',
+          name: 'ShiLiangTuCeng',
+          component: () => import('./views/ol/ShiLiangTuCeng.vue')
+        }
+      ]
+    },
   ]
 })

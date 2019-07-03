@@ -13,7 +13,8 @@
       <router-link to="/animate">css动画</router-link> |
       <router-link to="/code">移动端验证码</router-link>
       <router-link to="/pinYin">拼音插件</router-link> |
-      <router-link to="/drag">拖拽</router-link>
+      <router-link to="/drag">拖拽</router-link> |
+      <router-link to="/ol">openLayer</router-link>
     </div>
     <router-view />
   </div>
