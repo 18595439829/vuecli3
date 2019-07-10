@@ -2,23 +2,32 @@
   <div>
     <div id="map" :class="$style['map']"></div>
     <div id="info">&nbsp;</div>
+    <div ref="kaola" :class="$style['kaola']">
+      <img :src="imgurl" alt="">
+    </div>
   </div>
 </template>
 <script>
 import Map from "ol/Map.js";
 import View from "ol/View.js";
+import Overlay from 'ol/Overlay.js';
 import TileLayer from "ol/layer/Tile";
 import OSM from "ol/source/OSM.js";
-import { fromLonLat } from "ol/proj.js";
+import XYZ from "ol/source/XYZ.js";
+import { fromLonLat, transform } from "ol/proj.js";
 import GeoJSON from "ol/format/GeoJSON.js";
 import VectorLayer from "ol/layer/Vector.js";
 import VectorSource from "ol/source/Vector.js";
 import { Fill, Stroke, Style, Text } from "ol/style.js";
+
+import imgurl from '@/assets/img/Koala.jpg';
+
 export default {
   name: "ShiLiangTuCeng",
   data() {
     return {
       map: null,
+      imgurl,
       style: new Style({
         fill: new Fill({
           color: "rgba(255, 255, 255, 0.6)"
@@ -82,25 +91,26 @@ export default {
   mounted() {
     this.initMap();
     this.$nextTick(() => {
-      this.map.on("pointermove", evt => {
-        // console.log(evt);
-        if (evt.dragging) {
-          return;
-        }
+      this.map.on("rendercomplete", evt => {
+        console.log(evt);
+        // if (evt.dragging) {
+        //   return;
+        // }
         // 获取鼠标的像素点位
-        let pixel = this.map.getEventPixel(evt.originalEvent);
-        this.displayFeatureInfo(pixel);
+        // let pixel = this.map.getEventPixel(evt.originalEvent);
+        // this.displayFeatureInfo(pixel);
       });
 
       this.map.on("click", evt => {
-          console.log(evt)
-        this.displayFeatureInfo(evt.pixel);
+        let xy = this.map.getCoordinateFromPixel(evt.pixel)
+        console.log(evt, xy, fromLonLat(xy));
+        // this.displayFeatureInfo(evt.pixel);
       });
     });
   },
   methods: {
     initMap() {
-      let map = new Map({
+      this.map = new Map({
         target: "map",
         layers: [
           new TileLayer({
@@ -108,15 +118,26 @@ export default {
           })
         ],
         view: new View({
-          center: fromLonLat([120.15, 30.28]),
-          zoom: 5
+          // center: fromLonLat([120.15, 30.28]),
+          center: [13379936.9339429, 3528007.173944956],
+          zoom: 18
         }),
         controls: []
       });
-      this.map = map;
+      let layerXYZ = new TileLayer({
+        source: new XYZ()
+      });
+      this.map.addLayer(layerXYZ);
+       let marker = new Overlay({
+        position: [13379936.9339429, 3528007.173944956],
+        positioning: 'center-center',
+        element: this.$refs.kaola,
+        stopEvent: false
+      });
+      this.map.addOverlay(marker)
     },
     displayFeatureInfo(pixel) {
-      let feature = this.map.forEachFeatureAtPixel(pixel, function(feature) {  
+      let feature = this.map.forEachFeatureAtPixel(pixel, function(feature) {
         return feature;
       });
       let info = document.getElementById("info");
@@ -144,5 +165,11 @@ export default {
 .map {
   width: 100%;
   height: 500px;
+}
+.kaola {
+  width: 100px;
+  &  > img {
+    width: 100%;
+  } 
 }
 </style>
