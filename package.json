@@ -21,11 +21,13 @@
         "less-loader": "^4.1.0",
         "ol": "^5.3.3",
         "pinyin": "^2.8.3",
+        "stylus": "^0.54.5",
         "stylus-loader": "^3.0.2",
         "viser-vue": "^2.4.1",
         "vue": "^2.5.17",
         "vue-aplayer": "^1.6.1",
         "vue-class-component": "^6.0.0",
+        "vue-i18n": "^8.12.0",
         "vue-property-decorator": "^7.0.0",
         "vue-router": "^3.0.1",
         "vuex": "^3.0.1"

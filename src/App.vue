@@ -5,7 +5,7 @@
       <router-link to="/about">About</router-link> |
       <router-link to="/first">First</router-link> |
       <router-link to="/eCharts">eCharts</router-link> |
-      <router-link to="/aplayer">aplayer</router-link> | 
+      <router-link to="/aplayer">aplayer</router-link> |
       <router-link to="/lucktask">抽奖</router-link> |
       <router-link to="/es6">es6</router-link> |
       <router-link to="/viserLine">viser线形图</router-link> |
@@ -20,9 +20,15 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: "App",
+};
+</script>
+
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
@@ -30,7 +36,7 @@
 }
 #nav {
   text-align: center;
-  border-bottom: #2c3e50 1px solid
+  border-bottom: #2c3e50 1px solid;
   /* padding: 30px; */
 }
 

@@ -21,6 +21,7 @@
       </video>  
     </div>
     <a href="www/baidu.com">fsafds</a>
+    <input v-focus type="text">
   </div>
 </template>
 <script>
