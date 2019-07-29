@@ -29,8 +29,15 @@
     <div>
       <treeSearch></treeSearch>
     </div>
-    <div>
-      <Stylus></Stylus>
+    <div :class="$style['test-css']">
+      <div>
+        <h3>Stylus</h3>
+        <Stylus></Stylus>
+      </div>
+      <div>
+        <h3>Less</h3>
+        <TestLess></TestLess>
+      </div>
     </div>
   </div>
 </template>
@@ -39,12 +46,14 @@
 import homeJS from "../assets/js/home";
 import treeSearch from "@/views/treeSearch";
 import Stylus from '@/components/Stylus';
+import TestLess from '@/components/TestLess';
 import "../assets/css/iconfont/iconfont";
 export default {
   name: "home",
   components: {
     treeSearch,
-    Stylus
+    Stylus,
+    TestLess
   },
   data() {
     return {
@@ -125,6 +134,16 @@ export default {
 }
 .home .iptsDiv {
   position: absolute;
+}
+
+</style>
+<style lang="less" module>
+.test-css {
+  display: flex;
+  & > div {
+    flex: 1;
+    margin: 0 10px;
+  }
 }
 </style>
 

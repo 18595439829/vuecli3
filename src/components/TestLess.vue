@@ -1,12 +1,6 @@
 <template>
   <div :class="$style['container']">
-    <span>测试h3</span>
-    <div :class="$style['box']">
-      <img :src="Kaola" alt="" />
-    </div>
-    <div :class="$style['colors']">
-      <div v-for="item in 5" :key="item"></div>
-    </div>
+    <div :class="$style['box']"></div>
     <div>
       <div>
         <Button @click="setTheme('red')">红色主题</Button>
@@ -24,14 +18,8 @@
   </div>
 </template>
 <script>
-import Kaola from "@/assets/img/Koala.jpg";
 export default {
-  name: "Stylus",
-  data() {
-    return {
-      Kaola
-    };
-  },
+  name: "TestLess",
   methods: {
     setTheme(color) {
       if (color === "red") {
@@ -45,48 +33,31 @@ export default {
   }
 };
 </script>
-<style lang="stylus" module>
-$fontSize = 16px;
-color = red;
-colorArr = #0000ff #00ff00 #ff0000 #00ffff #ffff00;
-
-setColor(i) {
-  return colorArr[i - 1];
-}
+<style lang="less" module>
+@base: #f938ab;
 
 :root {
   --main-color: #ff0000;
   --main-BG: var(--main-color);
   --main-fliter: 100%;
 }
-
-.container {
-  $ > span {
-    font-size: $fontSize;
-    color: color;
-  }
-
-  .box {
+.box-shadow(@style, @c) when (iscolor(@c)) {
+  -webkit-box-shadow: @style @c;
+  box-shadow:         @style @c;
+}
+.box-shadow(@style, @alpha: 50%) when (isnumber(@alpha)) {
+  .box-shadow(@style, rgba(0, 0, 0, @alpha));
+}
+.box {
     width: 100px;
     height: 100px;
-    border: (@height / 10) solid black;
-    margin: (@height / 10);
-    transition: all 1s;
-    background-color: invert(#0000ff);
-
-    img {
-      width: 100%;
-    }
-
-    &:hover {
-      width: 200px;
-      height: 200px;
-    }
-  }
-
-  .theme {
+    border: 1px solid;
+  color: saturate(@base, 5%);
+  border-color: lighten(@base, 30%);
+  div { .box-shadow(0 0 5px, 30%) }
+}
+.theme {
     color: var(--main-color);
-
     .theme_title {
       border: 1px solid var(--main-color);
       background-color: invert(#ff0000);
@@ -94,23 +65,5 @@ setColor(i) {
       filter: invert(var(--main-fliter));
     }
   }
-}
-
-.colors {
-  display: flex;
-
-  & > div {
-    width: 50px;
-    height: @width;
-    margin: 0 10px;
-    border: 1px solid black;
-  }
-
-  for row in 1 2 3 4 5 {
-    div:nth-child({row}) {
-      background-color: setColor(row);
-      height: 10px * row;
-    }
-  }
-}
 </style>
+
