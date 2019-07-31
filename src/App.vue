@@ -23,6 +23,10 @@
 <script>
 export default {
   name: "App",
+  created() {
+    sessionStorage.setItem('aaa', 'aaa');
+    console.log(new Date());
+  }
 };
 </script>
 

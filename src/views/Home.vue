@@ -119,6 +119,8 @@ export default {
     console.log(formdata.get("name")); //laoli
     //通过getAll方法读取key为name的所有值
     console.log(formdata.getAll("name")); //["laoli"]
+
+    console.log(sessionStorage.getItem('aaa'), new Date());
   }
 };
 </script>
