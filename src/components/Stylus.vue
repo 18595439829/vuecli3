@@ -25,12 +25,16 @@
 </template>
 <script>
 import Kaola from "@/assets/img/Koala.jpg";
+import { setInterval } from 'timers';
 export default {
   name: "Stylus",
   data() {
     return {
       Kaola
     };
+  },
+  mounted() {
+    this.setRandomColor();
   },
   methods: {
     setTheme(color) {
@@ -41,6 +45,19 @@ export default {
         document.documentElement.style.setProperty("--main-color", "#0000ff");
         document.documentElement.style.setProperty("--main-filter", "50%");
       }
+    },
+    randomColor() {
+      let arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
+      let color = "";
+      for (var i = 0; i < 6; i++) {
+        color += arr[Math.floor(Math.random() * 16)];
+      }
+      return `#${color}`;
+    },
+    setRandomColor() {
+      setInterval(() => {
+        document.documentElement.style.setProperty("--main-color", this.randomColor());
+      }, 1000);
     }
   }
 };
@@ -86,9 +103,9 @@ setColor(i) {
 
   .theme {
     color: var(--main-color);
-
+    transition: all 1s liner;
     .theme_title {
-      border: 1px solid var(--main-color);
+      // border: 1px solid var(--main-color);
       background-color: invert(#ff0000);
       color: var(--main-color);
       filter: invert(var(--main-fliter));

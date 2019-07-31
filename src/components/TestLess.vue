@@ -112,10 +112,10 @@ export default {
   methods: {
     setTheme(color) {
       if (color === "red") {
-        document.documentElement.style.setProperty("--main-color", "#ff0000");
+        document.documentElement.style.setProperty("--main-hue", 200);
         document.documentElement.style.setProperty("--main-filter", "100%");
       } else {
-        document.documentElement.style.setProperty("--main-color", "#0000ff");
+        document.documentElement.style.setProperty("--main-hue", 300);
         document.documentElement.style.setProperty("--main-filter", "50%");
       }
     },
@@ -161,8 +161,7 @@ export default {
 @base: #f938ab;
 
 :root {
-  --main-color: #ff0000;
-  --main-BG: let(--main-color);
+  --main-hue: 100;
   --main-fliter: 100%;
 }
 .box-shadow(@style, @c) when (iscolor(@c)) {
@@ -183,12 +182,12 @@ export default {
   }
 }
 .theme {
-  color: let(--main-color);
+  color: hsl(var(--main-hue), 50%, 50%);
   .theme_title {
-    border: 1px solid let(--main-color);
-    background-color: invert(#ff0000);
-    color: let(--main-color);
-    filter: invert(let(--main-fliter));
+    border: 1px solid hsl(var(--main-hue), 0%, 50%);
+    background-color: hsl(var(--main-hue), 100%, 90%);
+    color: hsl(var(--main-hue), 100%, 50%);
+    filter: invert(hsl(var(--main-hue), 50%, 100%));
   }
 }
 </style>
