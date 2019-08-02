@@ -1,96 +1,96 @@
 <template>
   <div>
-    <Button type="primary"
-            @click="modal1 = true">Display dialog box</Button> |
+    <Button type="primary" @click="modal1 = true">Display dialog box</Button> |
     <Button @click="modal11 = true">全屏</Button> |
     <Button @click="modal12 = true">可拖动第一个modal</Button> |
     <Button @click="modal13 = true">可拖动第二个modal</Button>
-    <Modal v-model="modal1"
-           title="Common Modal dialog box title">
-      <Table :columns="columns1"
-             :data="data1"></Table>
+    <Modal v-model="modal1" title="Common Modal dialog box title">
+      <Table :columns="columns1" :data="data1"></Table>
     </Modal>
-    <Modal v-model="modal11"
-           fullscreen
-           title="Fullscreen Modal">
+    <Modal v-model="modal11" fullscreen title="Fullscreen Modal">
       <div>This is a fullscreen modal</div>
     </Modal>
-    <Modal v-model="modal12"
-           draggable
-           scrollable
-           title="Modal 1">
+    <Modal v-model="modal12" draggable scrollable title="Modal 1">
       <div>This is the first modal</div>
       <Input v-model="modal1Ipt"></Input>
     </Modal>
-    <Modal style="background"
-           v-model="modal13"
-           draggable
-           scrollable
-           title="Modal 2">
+    <Modal
+      style="background"
+      v-model="modal13"
+      draggable
+      scrollable
+      title="Modal 2"
+    >
       <div>This is the second modal</div>
     </Modal>
     <hr />
     <div>
       <h3>ES6字符串扩展</h3>
       <div id="list">
-        {{b}}
+        {{ b }}
       </div>
     </div>
 
     <div class="robot" ref="robot">
       <div class="robotChat">
-        <div class="robotWidth"
-           v-for="(item, index) in myList"
-           :key="index">
-        <div class="robotLeft">
-          <div class="robotLeft_name">我:</div>
-          <div class="robotLeft_text"><span class="robotLeft_text_span">{{item.myValue}}</span></div> 
-          <div style="clear:both"></div>
-        </div>
-        <div class="robotRight">
-          <div class="robotRight_name">:图灵</div>
-          <div class="robotRight_text"><span class="robotRight_text_span">{{item.robotValue}}</span></div> 
-          <div style="clear:both"></div>
+        <div class="robotWidth" v-for="(item, index) in myList" :key="index">
+          <div class="robotLeft">
+            <div class="robotLeft_name">我:</div>
+            <div class="robotLeft_text">
+              <span class="robotLeft_text_span">{{ item.myValue }}</span>
+            </div>
+            <div style="clear:both"></div>
+          </div>
+          <div class="robotRight">
+            <div class="robotRight_name">:图灵</div>
+            <div class="robotRight_text">
+              <span class="robotRight_text_span">{{ item.robotValue }}</span>
+            </div>
+            <div style="clear:both"></div>
+          </div>
         </div>
       </div>
-      </div> 
     </div>
     <div class="tuling">
-        <Input v-model="formIpt"
-               @on-enter="tulingRobot">
-        </Input>
-      </div>
+      <Input v-model="formIpt" @on-enter="tulingRobot"> </Input>
+    </div>
+    <map-array></map-array>
   </div>
 </template>
 <script>
-import $ from 'jquery'
-import Axios from 'axios'
+import $ from "jquery";
+import Axios from "axios";
+import MapArray from "@/views/MapArray.vue";
 export default {
+  name: "first",
+  components: {
+    MapArray
+  },
   data() {
     return {
-      a: 'foobar',
+      a: "foobar",
       b: `foo${1 + 1}bar`,
       modal1: false,
       modal11: false,
       modal12: false,
       modal13: false,
-      modal1Ipt: '',
+      modal1Ipt: "",
       columns1: [
         {
-          title: 'Name',
-          key: 'name'
+          title: "Name",
+          key: "name"
         },
         {
-          title: 'Age',
-          key: 'age'
+          title: "Age",
+          key: "age"
         },
         {
-          title: 'Address',
-          key: 'address',
+          title: "Address",
+          key: "address",
           render: (h, params) => {
-            return h('div', [
+            return h("div", [
               h(
-                'Tooltip',
+                "Tooltip",
                 {
                   attrs: {
                     content: params.row.address
@@ -101,80 +101,80 @@ export default {
                   style: {
                     // maxWidth: 140,
                     // background: 'red',
-                    whiteSpace: 'normal',
-                    wordBreak: 'break-all'
+                    whiteSpace: "normal",
+                    wordBreak: "break-all"
                   }
                 },
                 [
                   h(
-                    'div',
+                    "div",
                     {
                       style: {
                         // background: 'yellow',
-                        width: '140px',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap'
+                        width: "140px",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap"
                       },
                       props: {
-                        type: 'text',
-                        size: 'small'
+                        type: "text",
+                        size: "small"
                       }
                     },
                     params.row.address
                   )
                 ]
               )
-            ])
+            ]);
           }
         }
       ],
       data1: [
         {
-          name: 'John Brown',
+          name: "John Brown",
           age: 18,
           address:
-            'New York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake Park',
-          date: '2016-10-03'
+            "New York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake Park",
+          date: "2016-10-03"
         },
         {
-          name: 'Jim Green',
+          name: "Jim Green",
           age: 24,
           address:
-            'London No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake Park',
-          date: '2016-10-01'
+            "London No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake Park",
+          date: "2016-10-01"
         },
         {
-          name: 'Joe Black',
+          name: "Joe Black",
           age: 30,
           address:
-            'Sydney No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake Park',
-          date: '2016-10-02'
+            "Sydney No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake Park",
+          date: "2016-10-02"
         },
         {
-          name: 'Jon Snow',
+          name: "Jon Snow",
           age: 26,
           address:
-            'Ottawa No. 2 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake Park',
-          date: '2016-10-04'
+            "Ottawa No. 2 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake ParkNew York No. 1 Lake Park",
+          date: "2016-10-04"
         }
       ],
-      tmpl: '意义',
-      arr: ['1', '2', '3', '4', '5'],
+      tmpl: "意义",
+      arr: ["1", "2", "3", "4", "5"],
       user: {
-        id: '001',
-        num: '1234',
-        name: '解构赋值'
+        id: "001",
+        num: "1234",
+        name: "解构赋值"
       },
       params: {},
-      formIpt: '',
+      formIpt: "",
       myList: [],
       robotList: []
-    }
+    };
   },
   methods: {
     getFullName({ id, name, num }) {
-      console.log(id, name, num)
+      console.log(id, name, num);
     },
     tulingRobot() {
       // this.params.perception.audition.text = this.formIpt
@@ -186,30 +186,30 @@ export default {
           }
         },
         userInfo: {
-          apiKey: '8197672cf9664021b436d3e36c4a6622',
-          userId: '12345678'
+          apiKey: "8197672cf9664021b436d3e36c4a6622",
+          userId: "12345678"
         }
-      }
-      this.getRobot(this.params)
-      this.formIpt = ''
+      };
+      this.getRobot(this.params);
+      this.formIpt = "";
     },
     getRobot(data) {
-      let str = this.formIpt
-      let div = this.$refs.robot
+      let str = this.formIpt;
+      let div = this.$refs.robot;
       this.$api.tulingPOST(data).then(res => {
         this.myList.push({
           myValue: str,
           robotValue: res.data.results[0].values.text
-        })
-        
+        });
+
         // this.$nextTick(() =>{
-          div.scrollTop = div.scrollHeight
+        div.scrollTop = div.scrollHeight;
         // })
-      })
+      });
     }
   },
   created() {}
-}
+};
 </script>
 <style lang="less">
 .robot {
@@ -218,7 +218,7 @@ export default {
   height: 500px;
   border: 2px gray solid;
   border-radius: 5px;
-  .robotChat{
+  .robotChat {
     height: 100%;
     overflow-y: auto;
   }
@@ -235,7 +235,7 @@ export default {
     width: 300px;
     float: left;
     .robotLeft_text_span {
-      background: #1bf02c
+      background: #1bf02c;
     }
   }
   .robotLeft_name {
@@ -252,7 +252,7 @@ export default {
     width: 300px;
     float: right;
     .robotRight_text_span {
-      background: #78a5e9
+      background: #78a5e9;
     }
   }
   .robotRight_name {
