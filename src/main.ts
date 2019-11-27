@@ -5,12 +5,15 @@ import store from '@/store'
 import api from '@/api'
 import axios from 'axios'
 import '@/plugins/iview'
-import $ from 'jquery'
-import eCharts from 'echarts'
+import $ from 'jquery';
+import eCharts from 'echarts';
 import Viser from 'viser-vue'
 import VueI18n from 'vue-i18n'
+import Progress from '@/components/progress/index.js';
+
 
 Vue.use(VueI18n)
+Vue.use(Progress);
 
 Vue.use(Viser)
 Vue.config.productionTip = false

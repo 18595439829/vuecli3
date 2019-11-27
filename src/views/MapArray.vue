@@ -120,7 +120,18 @@ export default {
           name: "牡丹"
         }
       ],
-      arrChecked: [],
+      arrChecked: [
+          {
+          id: "1-1-2-1",
+          pid: "1-1-2",
+          name: "狗"
+        },
+        {
+          id: "2-1-1",
+          pid: "2-1",
+          name: "杨树"
+        },
+      ],
       treeData: [],
     };
   },
@@ -146,8 +157,16 @@ export default {
           arr.push(item);
         }
       });
-      console.log(arr);
       return arr;
+    },
+    setCheckedTree(checked, all) {
+        let obj = {};
+        all.forEach(item => {
+            obj[item.pid] = item;
+        })
+        checked.forEach(item => {
+            obj[item.id]
+        })
     }
   }
 };

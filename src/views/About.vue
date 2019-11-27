@@ -22,11 +22,22 @@
     </div>
     <a href="www/baidu.com">fsafds</a>
     <input v-focus type="text">
+<TestUpload @on-add="add"/>
+<TestUpload @on-add="getAge"/>
   </div>
 </template>
 <script>
+import mixins from '@/common/mixin.js';
+import TestUpload from '@/components/TestUpload.vue';
 export default {
+  components: {
+    TestUpload
+  },
+  mixins: [mixins],
   methods: {
+    add() {
+      console.log('add')
+    },
     pause() {
       this.$refs.music.pause();
     },

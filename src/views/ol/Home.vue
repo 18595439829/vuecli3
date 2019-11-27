@@ -8,13 +8,13 @@
         <Icon type="md-chatbubbles" />
         矢量图层
       </MenuItem>
-      <MenuItem name="3">
+      <MenuItem name="TileLayer">
         <Icon type="md-heart" />
-        用户留存
+        TileLayer
       </MenuItem>
-      <MenuItem name="4">
+      <MenuItem name="HeatMap">
         <Icon type="md-leaf" />
-        流失用户
+        热力图
       </MenuItem>
     </Menu>
     <router-view :class="$style['content']"></router-view>

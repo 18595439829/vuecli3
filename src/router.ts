@@ -144,8 +144,18 @@ export default new Router({
           path: 'ShiLiangTuCeng',
           name: 'ShiLiangTuCeng',
           component: () => import('./views/ol/ShiLiangTuCeng.vue')
-        }
+        },
+        {
+          path: 'TileLayer',
+          name: 'TileLayer',
+          component: () => import('./views/ol/TileLayer.vue')
+        },
+        {
+          path: 'HeatMap',
+          name: 'HeatMap',
+          component: () => import('./views/ol/HeatMap.vue')
+        },
       ]
-    },
+    }
   ]
 })
