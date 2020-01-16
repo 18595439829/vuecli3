@@ -23,6 +23,7 @@
         "pinyin": "^2.8.3",
         "stylus": "^0.54.5",
         "stylus-loader": "^3.0.2",
+        "three": "^0.112.0",
         "viser-vue": "^2.4.1",
         "vue": "^2.5.17",
         "vue-aplayer": "^1.6.1",

@@ -87,8 +87,8 @@ export default new Router({
       component: () => import('./views/animate/home.vue'),
       children: [
         {
-          path: 'css2D',
-          name: 'css2D',
+          path: 'cssAnimate',
+          name: 'cssAnimate',
           component: () => import('./views/animate/cssAnimate.vue')
         },
         {
@@ -100,6 +100,11 @@ export default new Router({
           path: 'ceshi',
           name: 'ceshi',
           component: () => import('./views/animate/ceshi.vue')
+        },
+        {
+          path: '3D',
+          name: '3D',
+          component: () => import('./views/animate/3D.vue')
         }
       ]
     },
@@ -155,6 +160,24 @@ export default new Router({
           name: 'HeatMap',
           component: () => import('./views/ol/HeatMap.vue')
         },
+      ]
+    },
+    {
+      path: '/threejs',
+      name: 'threejs',
+      component: () => import('./views/threejs/Index.vue'),
+      children: []
+    },
+    {
+      path: '/vueProperty',
+      name: 'vueProperty',
+      component: () => import('./views/vueProperty/Index.vue'),
+      children: [
+        {
+          path: 'Chapter2',
+          name: 'Chapter2',
+          component: () => import('./views/vueProperty/Chapter2.vue'),
+        }
       ]
     }
   ]

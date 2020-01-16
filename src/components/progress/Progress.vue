@@ -8,8 +8,6 @@
   </div>
 </template>
 <script>
-import { setTimeout } from 'timers';
-
 export default {
   name: 'Progress',
   props: {
