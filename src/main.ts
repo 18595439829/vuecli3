@@ -35,11 +35,6 @@ let params = {
   name: "admin",
   password: "123456"
 };
-axios.get("/Express", { params: params }).then(res => {
-  console.log(res);
-  sessionStorage.setItem('aaa', 'aaa');
-console.log(new Date());
-});
 
 // 注册一个全局自定义指令 `v-focus`
 Vue.directive('focus', {

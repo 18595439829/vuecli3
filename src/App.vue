@@ -54,8 +54,12 @@ export default {
           name: 'iview主题定制',
         },
         {
-          path: '/animate',
+          path: '/css',
           name: 'css动画',
+        },
+        {
+          path: '/animate',
+          name: '3D动画',
         },
         {
           path: '/code',
