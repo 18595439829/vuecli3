@@ -73,7 +73,12 @@ export default new Router({
           path: "async",
           name: "async",
           component: () => import("./views/es6/19-async.vue")
-        }
+        },
+        {
+          path: "es6-class",
+          name: "es6-class",
+          component: () => import("./views/es6/class.vue")
+        },
       ]
     },
     {
