@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <!-- <Progress /> -->
     <div id="nav">
       <div v-for="(item, index) in menu" :key="index">
         <router-link :to="item.path">{{item.name}}</router-link>
@@ -12,8 +13,12 @@
 </template>
 
 <script>
+import Progress from '@/components/progress/Progress.vue'
 export default {
   name: "App",
+  components: {
+    Progress,
+  },
   data() {
     return {
       menu: [

@@ -47,6 +47,12 @@ export default {
       }
     },
   },
+  // mounted() {
+  //   this.start();
+  //   setTimeout(()=> {
+  //     this.finish();
+  //   },5000)
+  // },
   methods: {
     setWidth(time) {
       setTimeout(() => {
@@ -58,6 +64,7 @@ export default {
       this.isShow = true;
       this.theBackground = '#00b35c';
       this.setWidth(50);
+      console.log('progress.start()')
     },
     finish() {
       this.theWidth = 100;
@@ -81,5 +88,6 @@ export default {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 99999;
 }
 </style>

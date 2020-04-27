@@ -5,6 +5,8 @@
       <Button @click="hide">隐藏</Button>
       <Button @click="cbClass">调用Class内部方法</Button>
       <div ref="text"></div>
+      <Button @click="start">进度条开始</Button>
+      <Button @click="finish">进度条完成</Button>
   </div>
 </template>
 
@@ -34,6 +36,12 @@ export default {
         },
         cbClass() {
             this.newText.cbClass();
+        },
+        start() {
+            this.$progress.start();
+        },
+        finish() {
+            this.$progress.finish();
         }
     }
 }
