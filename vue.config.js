@@ -3,6 +3,9 @@ module.exports = {
     indexPath: 'index.html',
     publicPath: '/vuecli3/',
     runtimeCompiler: true,
+    chainWebpack: (config) => {
+        config.resolve.symlinks(true) // 修复热更新失效
+      },
     css: {
         loaderOptions: { // 向 CSS 相关的 loader 传递选项
           less: {
@@ -11,6 +14,7 @@ module.exports = {
         }
       },
     devServer: {
+        hot: true,
         proxy: {
             '/api': {
                 target: 'http://openapi.tuling123.com/openapi/api/v2', //设置你调用的接口域名和端口号 别忘了加http

@@ -1,32 +1,116 @@
 <template>
   <div id="app">
+    <!-- <Progress /> -->
     <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/first">First</router-link> |
-      <router-link to="/eCharts">eCharts</router-link> |
-      <router-link to="/aplayer">aplayer</router-link> |
-      <router-link to="/lucktask">抽奖</router-link> |
-      <router-link to="/es6">es6</router-link> |
-      <router-link to="/viserLine">viser线形图</router-link> |
-      <router-link to="/iviewTheme">iview主题定制</router-link> |
-      <router-link to="/animate">css动画</router-link> |
-      <router-link to="/code">移动端验证码</router-link>
-      <router-link to="/pinYin">拼音插件</router-link> |
-      <router-link to="/drag">拖拽</router-link> |
-      <router-link to="/ol">openLayer</router-link> |
-      <router-link to="/live2d">live2d</router-link>
+      <div v-for="(item, index) in menu" :key="index">
+        <router-link :to="item.path">{{item.name}}</router-link>
+      </div>
     </div>
-    <router-view />
+    <div class="view">
+      <router-view />
+    </div>
   </div>
 </template>
 
 <script>
+import Progress from '@/components/progress/Progress.vue'
 export default {
   name: "App",
+  components: {
+    Progress,
+  },
+  data() {
+    return {
+      menu: [
+        {
+          path: '/',
+          name: 'Home'
+        },
+        {
+          path: '/about',
+          name: 'About',
+        },
+        {
+          path: '/first',
+          name: 'First',
+        },
+        {
+          path: '/eCharts',
+          name: 'eCharts',
+        },
+        {
+          path: '/aplayer',
+          name: 'aplayer',
+        },
+        {
+          path: '/lucktask',
+          name: '抽奖',
+        },
+        {
+          path: '/es6',
+          name: 'es6',
+        },
+        {
+          path: '/viserLine',
+          name: 'viser线形图',
+        },
+        {
+          path: '/iviewTheme',
+          name: 'iview主题定制',
+        },
+        {
+          path: '/css',
+          name: 'css动画',
+        },
+        {
+          path: '/animate',
+          name: '3D动画',
+        },
+        {
+          path: '/code',
+          name: '移动端验证码',
+        },
+        {
+          path: '/pinYin',
+          name: '拼音插件',
+        },
+        {
+          path: '/drag',
+          name: '拖拽',
+        },
+        {
+          path: '/ol',
+          name: 'openLayer',
+        },
+        {
+          path: '/live2d',
+          name: 'live2d',
+        },
+        {
+          path: '/threejs',
+          name: 'three.js',
+        },
+        {
+          path: '/vueProperty',
+          name: '深入浅出vue.js',
+        },
+      ]
+    }
+  },
   created() {
-    sessionStorage.setItem("aaa", "aaa");
-    console.log(new Date());
+    setTimeout(() => {
+          window.L2Dwidget.init({
+          pluginRootPath: 'live2dw/',
+          pluginJsPath: 'lib/',
+          pluginModelPath: 'live2d-widget-model-z16/assets/',
+          tagMode: false,
+          debug: false,
+          model: { jsonPath: '../live2dw/live2d-widget-model-z16/assets/z16.model.json' },
+          display: { position: 'right', width: 100, height: 200 },
+          mobile: { show: true },
+          log: false
+          })
+      }, 1000)
   },
 };
 </script>
@@ -37,11 +121,14 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  display: flex;
   /* padding: 20px; */
 }
 #nav {
-  text-align: center;
-  border-bottom: #2c3e50 1px solid;
+  width: 150px;
+  border-right: 1px solid #cccccc;
+  margin: 0 10px; 
+  height: 100vh;
   /* padding: 30px; */
 }
 
@@ -52,5 +139,8 @@ export default {
 
 #nav a.router-link-exact-active {
   color: #42b983;
+}
+.view {
+  flex: 1;
 }
 </style>

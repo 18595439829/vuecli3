@@ -9,7 +9,7 @@ import $ from 'jquery';
 import eCharts from 'echarts';
 import Viser from 'viser-vue'
 import VueI18n from 'vue-i18n'
-import Progress from '@/components/progress/index.js';
+import Progress from '@/components/progress/index.ts';
 
 
 Vue.use(VueI18n)
@@ -35,11 +35,6 @@ let params = {
   name: "admin",
   password: "123456"
 };
-axios.get("/Express", { params: params }).then(res => {
-  console.log(res);
-  sessionStorage.setItem('aaa', 'aaa');
-console.log(new Date());
-});
 
 // 注册一个全局自定义指令 `v-focus`
 Vue.directive('focus', {

@@ -16,6 +16,10 @@
         <Icon type="md-leaf" />
         热力图
       </MenuItem>
+      <MenuItem name="DrawMap">
+        <Icon type="md-leaf" />
+        画图
+      </MenuItem>
     </Menu>
     <router-view :class="$style['content']"></router-view>
   </div>
