@@ -9,7 +9,7 @@ import $ from 'jquery';
 import eCharts from 'echarts';
 import Viser from 'viser-vue'
 import VueI18n from 'vue-i18n'
-import Progress from '@/components/progress/index.js';
+import Progress from '@/components/progress/index.ts';
 
 
 Vue.use(VueI18n)

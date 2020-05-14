@@ -177,6 +177,11 @@ export default new Router({
           path: "HeatMap",
           name: "HeatMap",
           component: () => import("./views/ol/HeatMap.vue")
+        },
+        {
+          path: "DrawMap",
+          name: "DrawMap",
+          component: () => import("./views/ol/DrawMap.vue")
         }
       ]
     },
