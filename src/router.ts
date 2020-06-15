@@ -186,6 +186,18 @@ export default new Router({
       ]
     },
     {
+      path: "/cesium",
+      name: "cesium",
+      component: () => import("./views/cesium/Home.vue"),
+      children: [
+        {
+          path: "InitCesium",
+          name: "InitCesium",
+          component: () => import("./views/cesium/InitCesium.vue")
+        },
+      ]
+    },
+    {
       path: "/threejs",
       name: "threejs",
       component: () => import("./views/threejs/Index.vue"),
