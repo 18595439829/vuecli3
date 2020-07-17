@@ -4,6 +4,7 @@
 
 <script>
 // import {init} from '@/views/cesium/js/init-cesium.js';
+
 export default {
   mounted() {
     // init(this.$refs.cesium);
