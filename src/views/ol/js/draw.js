@@ -55,7 +55,7 @@ export default class DrawLayer {
     this.draw = new Draw({
       id: uuid(),
       source: this.source,
-      type: "Polygon", // Circle: 所画图形为圆形 Polygon: 所画图形多边形
+      type: "Point", // Circle: 所画图形为圆形 Polygon: 所画图形多边形
       //   style: [
       //     new Style({
       //       image: new Circle({
@@ -71,8 +71,9 @@ export default class DrawLayer {
     });
     this.draw.on("drawend", (e) => {
       console.log("画完了", e);
+      this.clear();
       this.feature = e.feature;
-      this.remove();
+      // this.remove();
     });
     this.map.addInteraction(this.draw);
   }
