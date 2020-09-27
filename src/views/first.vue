@@ -58,7 +58,6 @@
   </div>
 </template>
 <script>
-import $ from "jquery";
 import Axios from "axios";
 import MapArray from "@/views/MapArray.vue";
 export default {

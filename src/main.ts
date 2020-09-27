@@ -5,30 +5,18 @@ import store from '@/store'
 import api from '@/api'
 import axios from 'axios'
 import '@/plugins/iview'
-import $ from 'jquery';
-import eCharts from 'echarts';
-import Viser from 'viser-vue'
-import VueI18n from 'vue-i18n'
 import Progress from '@/components/progress/index.ts';
 
 console.log(App,document.getElementById('app1'));
-Vue.use(VueI18n)
 Vue.use(Progress);
 
-Vue.use(Viser)
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 Vue.prototype.$api = api
-Vue.prototype.$ = $
-Vue.prototype.$eCharts = eCharts
 Vue.prototype.$store = store
-const i18n = new VueI18n({
-  locale: 'ja', // 设置语言环境
-});
 new Vue({
   router,
   store,
-  i18n,
   render: h => h(App)
 }).$mount('#app')
 let params = {

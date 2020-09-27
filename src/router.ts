@@ -182,6 +182,11 @@ export default new Router({
           path: "DrawMap",
           name: "DrawMap",
           component: () => import("./views/ol/DrawMap.vue")
+        },
+        {
+          path: "SuperMap",
+          name: "SuperMap",
+          component: () => import("./views/ol/superMap/NewMap.vue")
         }
       ]
     },

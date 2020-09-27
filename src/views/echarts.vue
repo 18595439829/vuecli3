@@ -21,8 +21,9 @@
   </div>
 </template>
 <script>
+import eCharts from 'echarts';
 import tablePage from "../components/tablePage";
-import '@/common/test.js';
+// import '@/common/test.js';
 export default {
   components: {
     tablePage,
@@ -329,7 +330,7 @@ export default {
     // 仪表盘
     gaugeClick() {
       // this.eChartInit(this.optionGauge)
-      this.$eCharts.init(this.$refs.echart).setOption(
+      eCharts.init(this.$refs.echart).setOption(
         ({
           bmap: {
             center: [116.46, 39.92],
@@ -684,12 +685,12 @@ export default {
     // 初始化echart表数据
     eChartInit(option) {
       if (option && typeof option === "object") {
-        this.$eCharts.init(this.$refs.echart).setOption(option, true);
+        eCharts.init(this.$refs.echart).setOption(option, true);
       }
     },
   },
   mounted() {
-    this.$eCharts.init(this.$refs.echart).on("click", function(params) {
+    eCharts.init(this.$refs.echart).on("click", function(params) {
       console.log(params);
     });
   },

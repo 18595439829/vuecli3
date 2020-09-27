@@ -1,10 +1,8 @@
-import $ from 'jquery'
 import home from './home'
-import 'jquery'
 export default {
   conlog(i, j) {
     console.log('honeChild', home.data.num += 222)
-    let a = $('.iptsDiv')
+    let a = document.getElementsByClassName('.iptsDiv')[0]
     if (home.data.num > 500) {
       a.css('color', 'red')
       console.log(20 + i * 120, a)

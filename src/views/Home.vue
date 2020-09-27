@@ -78,7 +78,7 @@ export default {
         name: "admin",
         password: "123456"
       };
-      this.$axios.get("/Express", { params: params }).then(res => {
+      this.$axios.get("/Express/login/Express", { params: params }).then(res => {
         console.log(res);
       });
     },
@@ -87,7 +87,7 @@ export default {
         name: "admin",
         password: "123456"
       };
-      this.$axios.post("/Express", { params: params }).then(res => {
+      this.$axios.post("/Express/login", { params: params }).then(res => {
         console.log(res);
       });
     },

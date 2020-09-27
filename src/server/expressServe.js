@@ -4,7 +4,7 @@ var app = express()
 
 app.use(bodyParser.json())
 
-app.get('/', function(req, res) {
+app.get('/login/Express', function(req, res) {
   console.log(req.method, req.url)
   // 输出 JSON 格式
   var response = {
@@ -14,7 +14,7 @@ app.get('/', function(req, res) {
   res.end(JSON.stringify(response))
 })
 
-app.post('/', function(req, res) {
+app.post('/login', function(req, res) {
   console.log(req.method, req.body)
   // 输出 JSON 格式
   var response = {

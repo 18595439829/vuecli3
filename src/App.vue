@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-      <div v-for="(item, index) in menu" :key="index">
+      <div v-for="item in menu" :key="item.name">
         <router-link :to="item.path">{{item.name}}</router-link>
       </div>
     </div>

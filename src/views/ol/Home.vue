@@ -20,6 +20,10 @@
         <Icon type="md-leaf" />
         画图
       </MenuItem>
+      <MenuItem name="SuperMap">
+        <Icon type="md-leaf" />
+        超图
+      </MenuItem>
     </Menu>
     <router-view :class="$style['content']"></router-view>
   </div>
