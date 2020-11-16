@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>闸泵远控</title>
+    <link rel="stylesheet" type="text/css" href="./gate.css"></link>
+  </head>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <body>
+    <div id="app">
+      <div class="title">
+        <div>
+          {{title}}#闸坝控制
+        </div>
+        <div class="buttons">
+          <div @click="start" :class="{start: true, isstart: isStart}">
+            {{isStart ? '电机启动' : '电机停止'}}
+          </div>
+          <div @click="exit">
+            退出远控
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="video">
+          视频
+        </div>
+        <div class="gate">
+            <div class="gate-bg">
+              <div class="gate-door">
+                <div v-for="(item, index) in gateData" :style="{top: `${item.top}px`, left: `${index * 54 + 8 + index * 15}px`}"  :key="item.id">
+                  <img src="./images/闸.png" alt="">
+                </div>
+              </div>
+            </div>
+            <div class="gate-table">
+              <div class="table-label">
+                <div>状态</div>
+                <div>升坝</div>
+                <div>停止</div>
+                <div>降坝</div>
+              </div>
+              <div class="table-body" v-for="item in gateData" :key="item.id">
+                <div>
+                  <div>
+                    {{item.name}}#
+                  </div>
+                </div>
+                <div @click="gateUp([item])" class="pointer">
+                  <img :src="item.isUp ? './images/btn_升坝_点击.png' : './images/btn_升坝.png'" alt="">
+                </div>
+                <div @click="gateStop([item])" class="pointer">
+                  <img :src="item.isStop ? './images/btn_停止_点击.png' : './images/btn_停止.png'" alt="">
+                </div>
+                <div @click="gateDown([item])" class="pointer">
+                  <img :src="item.isDown ? './images/btn_降坝_点击.png' : './images/btn_降坝.png'" alt="">
+                </div>
+              </div>
+              <div class="table-button">
+                <div>批量操作</div>
+                <div>
+                  <div class="pointer up-all" @click="gateUp(gateData)">全部升坝</div>
+                </div>
+                <div>
+                  <div class="pointer up-all stop-all" @click="gateStop(gateData)">全部停止</div>
+                </div>
+                <div>
+                  <div class="pointer up-all" @click="gateDown(gateData)">全部降坝</div>
+                </div>
+              </div>
+            </div>
+            <div class="message-table">
+              <div class="message-item" v-for="item in messageData" :key="item.id">
+                <div class="label">
+                  {{item.label}}
+                </div>
+                <div class="value">
+                  {{item.value}}
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+      <transition name="fade">
+        <div v-show="isWarning" :class="{warning: true, success: isSuccess, error: !isSuccess}">
+          {{isWarningText}}
+        </div>
+      </transition>
+      <div v-show="isConfirm" class="confirm-bg">
+        <div class="confirm">
+          <div class="confirm-title">
+            <div>执行操作</div>
+            <img src="./images/close.svg" alt="" @click="cancel">
+          </div>
+          <div class="confirm-content">
+            <img src="./images/警示.png" alt="">
+            确定要执行 
+            <span>{{actionText}}</span> 
+            操作?
+          </div>
+          <div class="confirm-button">
+            <div @click="cancel">
+              暂不执行
+            </div>
+            <div @click="ok">
+              确定执行
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script src="./gate.js"></script>
