@@ -1,6 +1,6 @@
 <template>
   <div :class="$style['container']">
-    <div :class="$style['box']"></div>
+    <div :class="$style['box']" v-drag></div>
     <div>
       <div>
         <Button @click="setTheme('red')">红色主题</Button>
@@ -8,11 +8,21 @@
       </div>
       <div :class="$style['theme']">
         <h3 :class="$style['theme_title']">标题</h3>
-        <div :class="$style['theme_content']">
+        <div ref="scrollContent" :class="$style['theme_content']">
+          <p>第一行第一行第一行第一行第一行</p>
+          <p>第二行第二行第二行第二行第二行</p>
+          <p>第三行第三行第三行第三行第三行</p>
+          <p>第一行第一行第一行第一行第一行</p>
+          <p>第二行第二行第二行第二行第二行</p>
+          <p>第三行第三行第三行第三行第三行</p>
+          <p>第一行第一行第一行第一行第一行</p>
+          <p>第二行第二行第二行第二行第二行</p>
+          <p>第三行第三行第三行第三行第三行</p>
           <p>第一行第一行第一行第一行第一行</p>
           <p>第二行第二行第二行第二行第二行</p>
           <p>第三行第三行第三行第三行第三行</p>
         </div>
+        <Button @click="resetScroll">重置scrollTop</Button>
       </div>
     </div>
   </div>
@@ -153,6 +163,9 @@ export default {
         }
       }
       return result;
+    },
+    resetScroll() {
+      this.$refs.scrollContent.scrollTop = 0;
     }
   }
 };
@@ -188,6 +201,10 @@ export default {
     background-color: hsl(var(--main-hue), 100%, 90%);
     color: hsl(var(--main-hue), 100%, 50%);
     filter: invert(hsl(var(--main-hue), 50%, 100%));
+  }
+  .theme_content {
+    max-height: 100px;
+    overflow: auto;
   }
 }
 </style>

@@ -45,6 +45,14 @@ export default {
         document.documentElement.style.setProperty("--main-color", "#0000ff");
         document.documentElement.style.setProperty("--main-filter", "50%");
       }
+      this.mockSetTimeOut(() => {
+        console.log('1s后', 'mockSetTimeOut');
+      }, 1000)
+      let id = 0;
+      this.mockSetInterval(() => {
+        id += 1;
+        console.log(`${id}s后`, 'mockSetInterval');
+      }, 1000)
     },
     randomColor() {
       let arr = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
@@ -58,6 +66,31 @@ export default {
       setInterval(() => {
         document.documentElement.style.setProperty("--main-color", this.randomColor());
       }, 1000);
+    },
+    mockSetTimeOut(cb,time = 0) {
+      let t = 0;
+      let timer = () => {
+        t += 1;
+        if ((t * (1000 / 60)) > time) {
+          cb();
+          cancelAnimationFrame(timer);
+        } else {
+          requestAnimationFrame(timer);
+        }
+      }
+      requestAnimationFrame(timer);
+    },
+    mockSetInterval(cb,time = 0) {
+      let t = 0;
+      let timer = () => {
+        t += 1;
+        requestAnimationFrame(timer);
+        if ((t * (1000 / 60)) > time) {
+          t = 0;
+          cb();
+        }
+      };
+      requestAnimationFrame(timer);
     }
   }
 };

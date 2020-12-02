@@ -1,6 +1,29 @@
-import { compileToFunctions } from "vue-template-compiler";
-import { compile } from "vue/types/umd";
+// 运行时版本
+Vue.prototype.$mount = function(el) {
+    el = el && inBrowser ? query(el) : undefined;
+    return mountComponent(this, el);
+}
+function mountComponent(vm, el) {
+    if (!vm.#options.render) { 
+        vm.$options.render = createEmptyVNode;
+        if (process.env.NODE_ENV !== 'production') {
+            // 开发环境发出警告
+        }
+    }
+    // 触发生命周期钩子beforeMount
+    callHook(vm, 'beforeMount');
 
+    // 挂载
+    vm._watcher = new Watcher(bm, () => {
+        vm._update(vm._render())
+    }, noop)
+
+    // 触发生命周期钩子mouted
+    callHook(vm, 'mounted');
+    return vm;
+}
+
+// 完整版
 const mount = Vue.prototype.$mount;
 Vue.prototype.$mount = function(el) {
     el = el && query(el)
@@ -27,7 +50,7 @@ Vue.prototype.$mount = function(el) {
         if(template) {
             const {render} = compileToFunctions(
                 template, 
-                {...}, 
+                {...options}, 
                 this
             )
             options.render = render;
@@ -65,7 +88,22 @@ function idToTemplate(id) {
 
 function compileToFunctions(template, options, vm) {
     options = extend({}, options);
-    
+    // 检查缓存
+    const key = options.delimiters ? String(options.delimiters) + template : template;
+    if (cache[key]) {
+        return cache[key];
+    }
+
+    // 编译
+    const compiled = compile(template, options);
+
+    // 将代码字符串转化为函数
+    const res = {};
+    res.render = createFunction(compiled.render);
+    return (cache[key] = res)
+}
+function createFunction(code) {
+    return new Function(code)
 }
 
 export { mount }

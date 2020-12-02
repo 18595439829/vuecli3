@@ -6,6 +6,7 @@ import api from '@/api'
 import axios from 'axios'
 import '@/plugins/iview'
 import Progress from '@/components/progress/index.ts';
+import '@/common/directives.js';
 
 console.log(App,document.getElementById('app1'));
 Vue.use(Progress);
