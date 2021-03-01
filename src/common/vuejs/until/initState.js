@@ -1,4 +1,3 @@
-import { isPlainObject } from "jquery";
 import { observable } from "vue/types/umd";
 
 export function initState(vm) {
@@ -17,7 +16,7 @@ export function initState(vm) {
     };
 }
 
-function normaloizeProps(options, vm) {
+export function normaloizeProps(options, vm) {
     const props = options.props;
     if (!props) {
         return;
@@ -45,4 +44,30 @@ function normaloizeProps(options, vm) {
         warn('props属性无效,请使用字符串或者数组或者对象')
     }
     options.props = res;
+}
+
+
+export function ininProps(vn, propsOptions) {
+    const propsData = vm.$options.propsData || {}
+    const props = vm._props = {};
+    // 缓存porpsde key
+    const keys = vm.$options._propsKeys = [];
+    const isRoot = !vm.$parent;
+    // root实例的props属性应该被转换成响应式数据
+    if(!isRoot) {
+        toggleObserving(false);
+    }
+    for (const key in propsOptions) {
+        keys.push(key);
+        const value = validateProp(key, propsOptions, propsData, vm);
+        defineReactive(props, key, value);
+        if (!(key in vm)) {
+            proxy(vm,`_props`, key)
+        }
+    }
+    toggleObserving(true);
+}
+
+export function validateProp() {
+    
 }
