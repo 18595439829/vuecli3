@@ -46,7 +46,6 @@ export function normaloizeProps(options, vm) {
     options.props = res;
 }
 
-
 export function ininProps(vn, propsOptions) {
     const propsData = vm.$options.propsData || {}
     const props = vm._props = {};
@@ -69,5 +68,5 @@ export function ininProps(vn, propsOptions) {
 }
 
 export function validateProp() {
-    
+
 }
