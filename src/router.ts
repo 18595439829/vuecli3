@@ -219,6 +219,11 @@ export default new Router({
           component: () => import("./views/vueProperty/Chapter2.vue")
         }
       ]
-    }
+    },
+    {
+      path: "/position",
+      name: "position",
+      component: () => import("./views/TheTestPosition.vue"),
+    },
   ]
 });

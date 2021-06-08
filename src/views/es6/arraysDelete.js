@@ -13,4 +13,4 @@ const deleteItem = (arr, label = null, value) => {
     }
   }
 };
-export default {deleteItem};
+export {deleteItem};

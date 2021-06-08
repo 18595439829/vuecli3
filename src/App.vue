@@ -95,6 +95,10 @@ export default {
           path: '/vueProperty',
           name: '深入浅出vue.js',
         },
+        {
+          path: '/position',
+          name: '测试定位优先级',
+        },
       ]
     }
   },

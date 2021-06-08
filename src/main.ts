@@ -15,6 +15,10 @@ Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 Vue.prototype.$api = api
 Vue.prototype.$store = store
+// router.beforeEach((to, from, next) => {
+//   console.log(to, from);
+//   next()
+// })
 new Vue({
   router,
   store,
