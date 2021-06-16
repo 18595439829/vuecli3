@@ -5,8 +5,9 @@ import store from '@/store'
 import api from '@/api'
 import axios from 'axios'
 import '@/plugins/iview'
-import Progress from '@/components/progress/index.ts';
+import Progress from '@/components/progress/index';
 import '@/common/directives.js';
+import confirm from '@/components/confirm/confirm'
 
 console.log(App,document.getElementById('app1'));
 Vue.use(Progress);
@@ -15,6 +16,7 @@ Vue.config.productionTip = false
 Vue.prototype.$axios = axios
 Vue.prototype.$api = api
 Vue.prototype.$store = store
+Vue.prototype.$confirm = confirm
 // router.beforeEach((to, from, next) => {
 //   console.log(to, from);
 //   next()

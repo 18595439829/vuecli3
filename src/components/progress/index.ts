@@ -6,11 +6,9 @@ class Pro {
     this.instense = new Pro({
       propsData: options,
     });
-      let progress = document.createElement("div");
-      let id = `progress${Math.ceil(Math.random() * 10000)}`
-      progress.setAttribute("id", id);
-      document.body.appendChild(progress);
-      this.instense.$mount(`#${id}`);
+    let progress = document.createElement("div");
+    document.body.appendChild(progress);
+    this.instense.$mount(progress);
   }
   start() {
     this.instense.start();
@@ -22,8 +20,8 @@ class Pro {
     this.instense.fail();
   }
 }
-const install = function(Vue: any) {
-  const progress = new Pro(Vue);
+const install = function(Vue: any, options: {}) {
+  const progress = new Pro(Vue, options);
   //  通过原型对象去拓展对应的插件，可以使得所有的vue实例直接访问
   Vue.prototype.$progress = progress;
 };

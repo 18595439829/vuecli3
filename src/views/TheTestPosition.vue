@@ -1,18 +1,22 @@
 <template>
   <div :class="$style['container']">
-    <div :class="$style['content']" :style="contentStyle">content</div>
+    <div ref="content" :class="$style['content']" :style="contentStyle">
+        <textarea ref="textarea" name="" id="" cols="30" rows="10" @input="mousemove"></textarea>
+    </div>
   </div>
 </template>
 
 <script>
+import {debounce} from 'lodash-es'
 export default {
   name: "Index",
   data() {
-    return {
+    return {debounce,
         contentStyle: {}
     };
   },
   mounted() {
+    //   this.$refs.textarea.addEventListener('input', debounce(this.mousemove, 200))
     window.addEventListener("resize", (e) => {
     //   console.log(e);
       let height = (e.target.innerWidth - 200) / (16 / 9)
@@ -34,7 +38,15 @@ export default {
       console.log(this.contentStyle)
     });
   },
-  methods: {},
+  methods: {
+      
+      mousemove() {
+          console.log(11111)
+          debounce(() => {
+              console.log(22222)
+          }, 200)
+      }
+  },
 };
 </script>
 

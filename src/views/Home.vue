@@ -39,6 +39,7 @@
         <TestLess></TestLess>
       </div>
     </div>
+    <Button @click="addConfirm">自定义confirm</Button>
   </div>
 </template>
 
@@ -98,6 +99,12 @@ export default {
 
       this.items.push(item);
       div.scrollTop = div.scrollHeight;
+    },
+    addConfirm() {
+      this.$confirm({
+        title: '确认提示',
+        content: '你确定要删除xxx?'
+      })
     }
   },
   mounted() {
