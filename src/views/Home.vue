@@ -40,6 +40,7 @@
       </div>
     </div>
     <Button @click="addConfirm">自定义confirm</Button>
+    <BaseCropper :class="$style['cropper']"/>
   </div>
 </template>
 
@@ -49,12 +50,14 @@ import treeSearch from "@/views/treeSearch";
 import Stylus from '@/components/Stylus';
 import TestLess from '@/components/TestLess';
 import "../assets/css/iconfont/iconfont";
+import BaseCropper from '@/components/BaseCropper.vue'
 export default {
   name: "home",
   components: {
     treeSearch,
     Stylus,
-    TestLess
+    TestLess,
+    BaseCropper
   },
   data() {
     return {
@@ -153,6 +156,9 @@ export default {
     flex: 1;
     margin: 0 10px;
   }
+}
+.cropper {
+  width: 50vw;
 }
 </style>
 
