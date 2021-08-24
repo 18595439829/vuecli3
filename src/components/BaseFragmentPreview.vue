@@ -1,6 +1,6 @@
 <template>
   <div :class="$style['container']">
-    <div :class="$style['form']" :contenteditable="true" >
+    <div :class="$style['form']" :contenteditable="true">
       <draggable v-model="list">
         <transition-group ref="form">
           <div
@@ -15,7 +15,7 @@
             >
               <img src="@/assets/img/点选_03.png" alt="" />
             </div>
-            <div :contenteditable="true" :class="$style['content']">
+            <div :contenteditable="true" :class="$style['content']" @keypress.enter="enter(item, $event)">
               {{ item.content }}
             </div>
           </div>
@@ -48,6 +48,9 @@ export default {
     this.list = this.data
   },
   methods: {
+    enter(item, event) {
+      console.log(item, event)
+    },
     output() {
       console.log(this.$refs.form.$el.children)
       let children = Array.from(this.$refs.form.$el.children);
