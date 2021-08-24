@@ -1,86 +1,58 @@
 <template>
-  <div class="drag">
-    <div class="dragParent">
-      <div class="dragChild">
-        <div class="child" v-for="item in leftDragArr">
-          {{`${item.id}---${item.label}`}}
+  <div :class="$style['container']">
+    <draggable v-model="myArray">
+      <transition-group>
+        <div v-for="element in myArray" :key="element.id">
+          {{ element.name }}
         </div>
-      </div>
-      <div class="dragChild">
-        <div class="child" v-for="item in rightDragArr">
-          {{`${item.id}---${item.label}`}}
-        </div>
-      </div>
-    </div>
+      </transition-group>
+    </draggable>
   </div>
 </template>
+
 <script>
+import draggable from "vuedraggable";
+
 export default {
-  name: 'drag',
+  name: "TheDrag",
+  components: {
+    draggable,
+  },
   data() {
     return {
-      leftDragArr: [
+      myArray: [
         {
           id: '001',
-          label: '一号宇宙飞船'
+          name: '一号宇宙飞船'
         },
         {
           id: '002',
-          label: '二哥洛溪'
+          name: '二哥洛溪'
         },
         {
           id: '003',
-          label: '三沙发公开课'
+          name: '三沙发公开课'
         },
         {
           id: '004',
-          label: '四更省道加深入'
+          name: '四更省道加深入'
         },
         {
           id: '005',
-          label: '五电费124卡立方'
+          name: '五电费124卡立方'
         },
         {
           id: '006',
-          label: '六fsf地方'
-        }
-      ],
-      rightDragArr: [
-        {
-          id: '100',
-          label: '100三季度福克斯是'
-        },
-        {
-          id: '200',
-          label: '200dfs大师傅'
+          name: '六fsf地方'
         }
       ]
-    }
-  }
-}
+    };
+  },
+  methods: {},
+};
 </script>
-<style lang="less">
-.drag{
-  margin: 10px
-}
-  .dragParent{
-    display: flex ;
-    width: 400px;
-  }
-    .dragChild{
-      flex: 1;
-      width: 200px;
-      height: 300px;
-      margin: 0 10px;
-      border: solid  1px black ;
-    }
-      .child {
-        cursor: pointer;
-        height: 20px;
-        margin: 5px;
-        padding: 0 5px;
-        border: solid  1px gray;
-        border-radius: 2px;
-      }
-</style>
 
+<style lang="less" module>
+.container {
+}
+</style>
