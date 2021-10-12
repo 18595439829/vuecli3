@@ -4,6 +4,7 @@ import router from '@/router'
 import store from '@/store'
 import api from '@/api'
 import axios from 'axios'
+import '@/assets/css/main.less';
 import '@/plugins/iview'
 import Progress from '@/components/progress/index';
 import '@/common/directives.js';

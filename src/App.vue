@@ -99,6 +99,10 @@ export default {
           path: '/position',
           name: '测试定位优先级',
         },
+        {
+          path: '/color-picker',
+          name: 'color-picker',
+        },
       ]
     }
   },
@@ -115,7 +119,7 @@ export default {
           mobile: { show: true },
           log: false
           })
-      }, 1000)
+      })
   },
 };
 </script>

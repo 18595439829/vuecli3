@@ -11,18 +11,18 @@
       <Button @click="pause">暂停</Button>
       <Button @click="play">播放</Button>
       <Button @click="progress">下载</Button>
-      <video style="width: 100%" controls="controls">
+      <video ref="video" style="width: 100%" controls="controls">
                                  
         <source src="@/assets/movie.ogg" type="video/ogg" autostart="false" />
         您的浏览器不支持 vodeo 标签。</video
       >  
     </div>
+    <Button @click="getVideoWidthHeight">获取视频宽高</Button>
     <a href="www/baidu.com">fsafds</a>
     <input v-focus type="text" />
     <TestUpload @on-add="add" />
     <TestUpload @on-add="getAge" />
     <base-fragment-preview :data="fragmentList"/> 
-    <div v-html="label"></div>
     <TheFirstComp />
   </div>
 </template>
@@ -57,10 +57,7 @@ export default {
           id: '4',
           content: '不怕风雨不怕累，快快把本领都学会'
         }
-      ],
-      label: `
-      <div>先帝创业未半而中道崩殂，今天下三分，益州疲弊，此诚危急存亡之秋也。</div>
-      `
+      ]
     }
   },
   methods: {
@@ -73,6 +70,9 @@ export default {
     play() {
       this.$refs.music.play();
       console.log("播放", this.$refs.music.currentSrc);
+    },
+    getVideoWidthHeight() {
+      console.log(this.$refs.video.offsetWidth,this.$refs.video.offsetHeight)
     },
     progress() {
       window.open(this.$refs.music.currentSrc);

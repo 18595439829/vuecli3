@@ -225,5 +225,10 @@ export default new Router({
       name: "position",
       component: () => import("./views/TheTestPosition.vue"),
     },
+    {
+      path: '/color-picker',
+      name: 'color-picker',
+      component: () => import('@/views/color-pikcer/TheIndex.vue')
+    }
   ]
 });

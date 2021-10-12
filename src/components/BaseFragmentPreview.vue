@@ -15,19 +15,21 @@
             >
               <img src="@/assets/img/点选_03.png" alt="" />
             </div>
-            <div :contenteditable="true" :class="$style['content']" @keypress.enter="enter(item, $event)">
-              {{ item.content }}
-            </div>
+            <div :contenteditable="true" :class="$style['content']" @click="enter(item, $event)">{{ item.content }}</div>
           </div>
         </transition-group>
       </draggable>
     </div>
-    <button @click="output">输出</button>
+    <div>
+      <Button @click="output">输出</Button>
+      <pre v-html="result"></pre>
+    </div>
   </div>
 </template>
 
 <script>
 import draggable from "vuedraggable";
+import { syntaxHighlight } from "@/common/json";
 export default {
   name: "BaseFragmentPreview",
   components: {
@@ -44,12 +46,19 @@ export default {
       list: []
     };
   },
+  computed: {
+    result() {
+      return syntaxHighlight(this.list)
+    }
+  },
   created() {
     this.list = this.data
   },
   methods: {
     enter(item, event) {
-      console.log(item, event)
+      let selection = window.getSelection ? window.getSelection() : document.selection
+      let range = selection.createRange ? selection.createRange() : selection.getRangeAt(0)
+      console.log(item, event, range)
     },
     output() {
       console.log(this.$refs.form.$el.children)
@@ -57,7 +66,7 @@ export default {
       let list = children.map((item) => {
         return {
           id: item.id,
-          content: item.innerText,
+          content: item.innerText.replace(/\n/gm, ""),
         };
       });
       this.list = list
@@ -66,12 +75,16 @@ export default {
   },
 };
 </script>
-
 <style lang="less" module>
 .container {
+  display: flex;
   .form {
+    margin-right: 20px;
+    &:focus-visible {
+        outline: none;
+      }
     .form-item {
-      display: flex;
+      position: relative;
       &:focus-visible {
         outline: none;
       }
@@ -84,10 +97,18 @@ export default {
         cursor: move;
         user-select: none;
         visibility: hidden;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
         img {
+          width: 40px;
           height: 20px;
           user-select: none;
         }
+      }
+      .content {
+        margin-left: 40px;
       }
     }
   }
