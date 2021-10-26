@@ -16,6 +16,10 @@
         />
       </div>
     </div>
+    <BaseColorPicker v-model="colorValue">
+      颜色选择器
+      {{colorValue}}
+    </BaseColorPicker>
   </div>
 </template>
 
@@ -31,6 +35,7 @@ import {
   Sketch,
   Chrome,
 } from "vue-color";
+import BaseColorPicker from '@/components/color-picker/BaseColorPicker.vue'
 
 export default {
   name: "TheIndex",
@@ -44,10 +49,12 @@ export default {
     Photoshop,
     Sketch,
     Chrome,
+    BaseColorPicker
   },
   data() {
     return {
       color: "",
+      colorValue: '',
       componentList: [
         {
           name: "Compact",
@@ -107,8 +114,6 @@ export default {
       .title {
         padding: 12px;
         font-size: 16px;
-      }
-      .comp {
       }
     }
   }

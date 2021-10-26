@@ -3,9 +3,9 @@ module.exports = {
     indexPath: 'index.html',
     publicPath: '/vuecli3/',
     runtimeCompiler: true,
-    chainWebpack: (config) => {
-        config.resolve.symlinks(true) // 修复热更新失效
-      },
+    // chainWebpack: (config) => {
+    //     config.resolve.symlinks(true) // 修复热更新失效
+    //   },
     css: {
         loaderOptions: { // 向 CSS 相关的 loader 传递选项
           less: {
