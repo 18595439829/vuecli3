@@ -12,7 +12,7 @@
 
 <script>
 import TheSecondComp from "@/components/slot/TheSecondComp.vue";
-import { testJson, syntaxHighlight } from "@/common/json";
+import {syntaxHighlight } from "@/common/json";
 export default {
   name: "TheFirstComp",
   components: {
@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     json() {
-      return syntaxHighlight(testJson);
+      return syntaxHighlight();
     },
   },
   methods: {},
