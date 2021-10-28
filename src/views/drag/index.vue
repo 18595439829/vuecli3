@@ -7,16 +7,19 @@
         </div>
       </transition-group>
     </draggable>
+    <TheMoveable />
   </div>
 </template>
 
 <script>
 import draggable from "vuedraggable";
+import TheMoveable from '@/views/drag/TheMoveable.vue'
 
 export default {
   name: "TheDrag",
   components: {
     draggable,
+    TheMoveable
   },
   data() {
     return {
