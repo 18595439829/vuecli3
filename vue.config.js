@@ -1,5 +1,5 @@
 module.exports = {
-    outputDir: 'dist',
+    outputDir: 'dist/vuecli3',
     indexPath: 'index.html',
     publicPath: '/vuecli3/',
     runtimeCompiler: true,

@@ -3,11 +3,16 @@
     <div ref="content" :class="$style['content']">
       <div ref="drag" data-moveable="true" :class="$style['example']">
         draggable
+        <input type="text">
+        <button @click="dragClick">dragClick</button>
       </div>
       <div ref="resize" data-moveable="true" :class="$style['example']">
-        所谓特殊字符，就是一些有特殊含义的字符，如上面说的 runoo*b 中的 *，简单的说就是表示任何字符串的意思。如果要查找字符串中的 * 符号，则需要对 * 进行转义，即在其前加一个 \，runo\*ob 匹配字符串 runo*ob。
-
-许多元字符要求在试图匹配它们时特别对待。若要匹配这些特殊字符，必须首先使字符"转义"，即，将反斜杠字符\ 放在它们前面。下表列出了正则表达式中的特殊字符：
+        所谓特殊字符，就是一些有特殊含义的字符，如上面说的 runoo*b 中的
+        *，简单的说就是表示任何字符串的意思。如果要查找字符串中的 *
+        符号，则需要对 * 进行转义，即在其前加一个 \，runo\*ob 匹配字符串
+        runo*ob。
+        许多元字符要求在试图匹配它们时特别对待。若要匹配这些特殊字符，必须首先使字符"转义"，即，将反斜杠字符\
+        放在它们前面。下表列出了正则表达式中的特殊字符：
       </div>
     </div>
     <div>
@@ -94,23 +99,31 @@ export default {
       // }
       let translateX = beforeTranslate[0];
       let translateY = beforeTranslate[1];
-      let translate = this.dragBorderCheck({translateX, translateY, width, height})
+      let translate = this.dragBorderCheck({
+        translateX,
+        translateY,
+        width,
+        height,
+      });
       target.style.transform = `translate(${translate.translateX}px, ${translate.translateY}px)`;
     },
-    dragBorderCheck({translateX, translateY, width, height}) {
-      if (translateX < 0) {
+    dragBorderCheck({ translateX, translateY, width, height }) {
+      if (translateX <= 0) {
         translateX = 0;
       }
-      if (translateX > this.content.width - width) {
+      if (translateX >= this.content.width - width) {
         translateX = this.content.width - width;
       }
-      if (translateY < 0) {
+      if (translateY <= 0) {
         translateY = 0;
       }
-      if (translateY > this.content.height - height) {
+      if (translateY >= this.content.height - height) {
         translateY = this.content.height - height;
       }
-      return {translateX, translateY}
+      return { translateX, translateY };
+    },
+    dragClick() {
+      alert('dragClick')
     },
     dragRequest() {
       const requester = this.moveable.request("draggable");
@@ -122,11 +135,11 @@ export default {
       currentTarget, // moveable实例,即this.moveable
       moveable, // moveable的manager对象, const manager = this.moveable.getManager();
       target, // DOM 初始化moveable的target元素
-      clientX, // number moveable实例所在屏幕的横坐标
-      clientY, // number moveable实例所在屏幕的纵坐标
+      clientX, // number 鼠标所在屏幕的横坐标
+      clientY, // number 鼠标实例所在屏幕的纵坐标
       datas,
       inputEvent, // Event 鼠标事件mousemove
-      direction, // resize的方向[**暂未证实具体作用**]
+      direction, // [numberX, numberY] resize的方向 [1,1]表示resize操作xy轴是正向,例如往右下更改大小,[-1,-1]表示resize操作xy轴是反向,例如往左上更改大小
       width, // number 元素(target)的css宽度
       height, // number 元素(target)的css高度
       offsetWidth, // number 元素(target)的offsetWidth(padding + width + border)
@@ -136,29 +149,61 @@ export default {
       isPinch, // 元素是否被压缩,不包括resize,scale所引起的形变[**暂未证实具体作用**]
       drag, // 元素的拖拽事件,同onDrag的参数
     }) {
-      let widthHeight  = this.resizeBorderCheck({width,height})
+      let widthHeight = this.resizeBorderCheck({
+        width,
+        height,
+        clientX,
+        clientY,
+        target,
+      });
       target.style.width = `${widthHeight.width}px`;
       target.style.height = `${widthHeight.height}px`;
       let translateX = drag.beforeTranslate[0];
       let translateY = drag.beforeTranslate[1];
-      let translate = this.dragBorderCheck({translateX, translateY, width: widthHeight.width, height: widthHeight.height})
+      console.log('beforeTranslate', translateX, translateY)
+      let translate = this.dragBorderCheck({
+        translateX,
+        translateY,
+        width: widthHeight.width,
+        height: widthHeight.height,
+      });
       target.style.transform = `translate(${translate.translateX}px, ${translate.translateY}px)`;
     },
-    resizeBorderCheck({width, height}) {
-      let minWidth=100, minHeight = 100
-      if (width < minWidth) {
-        width = minWidth
+    resizeBorderCheck({ width, height, clientX, clientY, target }) {
+      let {left, top, bottom, right} = target.getBoundingClientRect();
+      
+      let minWidth = 100,
+        minHeight = 100;
+      if (width <= minWidth) {
+        width = minWidth;
       }
       if (width > this.content.width) {
-        width = this.content.width
+        width = this.content.width;
       }
-      if (height < minHeight) {
-        height = minHeight
+      if(clientX <= this.content.left) {
+        console.log(clientX, clientY, right);
+        width = right - this.content.left
+      }
+      if(clientX >= this.content.right) {
+        console.log(clientX, clientY, left);
+        width =  this.content.right - left
+      }
+      if (height <= minHeight) {
+        height = minHeight;
       }
       if (height > this.content.height) {
-        height = this.content.height
+        height = this.content.height;
       }
-      return {width, height}
+      if(clientY <= this.content.top) {
+        console.log(clientX, clientY, bottom);
+        height = bottom - this.content.top
+      }
+      if(clientY >= this.content.bottom) {
+        console.log(clientX, clientY, top);
+        height =  this.content.bottom - top
+      }
+      console.log('resizeBorderCheck', width, height)
+      return { width, height };
     },
     resizeRequest() {
       const requester = this.moveable.request("resizable");
@@ -177,12 +222,10 @@ export default {
     },
     setMoveableVisiable(e) {
       if (this.moveable.target) {
-           this.moveable.target.style.zIndex = 0
-        }
-      if (
-        e.target.dataset.moveable === 'true'
-      ) {
-        e.target.style.zIndex = 1
+        this.moveable.target.style.zIndex = 0;
+      }
+      if (e.target.dataset.moveable === "true") {
+        e.target.style.zIndex = 1;
         this.setMoveableTarget(e.target);
       } else if (this.moveable) {
         this.moveable.target = null;
