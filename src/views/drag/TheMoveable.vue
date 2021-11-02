@@ -2,8 +2,8 @@
   <div :class="$style['container']">
     <div ref="content" :class="$style['content']">
       <div ref="drag" data-moveable="true" :class="$style['example']">
-        draggable
-        <input type="text">
+        <div ref="example">draggable</div>
+        <input type="text" />
         <button @click="dragClick">dragClick</button>
       </div>
       <div ref="resize" data-moveable="true" :class="$style['example']">
@@ -57,6 +57,7 @@ export default {
         {
           className: "moveable", // 可交互组件的class名称
           // target: this.$refs.example, // movable元素
+          // dragTarget: this.$refs.example,
           origin: false, // movable元素的中心点是否可见,default: true
           /**拖拽属性 */
           draggable: true, // 是否支持可拖拽,default: false
@@ -123,7 +124,7 @@ export default {
       return { translateX, translateY };
     },
     dragClick() {
-      alert('dragClick')
+      alert("dragClick");
     },
     dragRequest() {
       const requester = this.moveable.request("draggable");
@@ -160,7 +161,7 @@ export default {
       target.style.height = `${widthHeight.height}px`;
       let translateX = drag.beforeTranslate[0];
       let translateY = drag.beforeTranslate[1];
-      console.log('beforeTranslate', translateX, translateY)
+      console.log("beforeTranslate", translateX, translateY);
       let translate = this.dragBorderCheck({
         translateX,
         translateY,
@@ -170,8 +171,7 @@ export default {
       target.style.transform = `translate(${translate.translateX}px, ${translate.translateY}px)`;
     },
     resizeBorderCheck({ width, height, clientX, clientY, target }) {
-      let {left, top, bottom, right} = target.getBoundingClientRect();
-      
+      let { left, top, bottom, right } = target.getBoundingClientRect();
       let minWidth = 100,
         minHeight = 100;
       if (width <= minWidth) {
@@ -180,13 +180,13 @@ export default {
       if (width > this.content.width) {
         width = this.content.width;
       }
-      if(clientX <= this.content.left) {
+      if (clientX <= this.content.left) {
         console.log(clientX, clientY, right);
-        width = right - this.content.left
+        width = right - this.content.left;
       }
-      if(clientX >= this.content.right) {
+      if (clientX >= this.content.right) {
         console.log(clientX, clientY, left);
-        width =  this.content.right - left
+        width = this.content.right - left;
       }
       if (height <= minHeight) {
         height = minHeight;
@@ -194,15 +194,15 @@ export default {
       if (height > this.content.height) {
         height = this.content.height;
       }
-      if(clientY <= this.content.top) {
+      if (clientY <= this.content.top) {
         console.log(clientX, clientY, bottom);
-        height = bottom - this.content.top
+        height = bottom - this.content.top;
       }
-      if(clientY >= this.content.bottom) {
+      if (clientY >= this.content.bottom) {
         console.log(clientX, clientY, top);
-        height =  this.content.bottom - top
+        height = this.content.bottom - top;
       }
-      console.log('resizeBorderCheck', width, height)
+      console.log("resizeBorderCheck", width, height);
       return { width, height };
     },
     resizeRequest() {
@@ -223,9 +223,11 @@ export default {
     setMoveableVisiable(e) {
       if (this.moveable.target) {
         this.moveable.target.style.zIndex = 0;
+        this.moveable.target.style.cursor = "move";
       }
       if (e.target.dataset.moveable === "true") {
         e.target.style.zIndex = 1;
+        e.target.style.cursor = "move";
         this.setMoveableTarget(e.target);
       } else if (this.moveable) {
         this.moveable.target = null;
