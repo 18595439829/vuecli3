@@ -1,61 +1,88 @@
 <template>
   <div :class="$style['container']">
-    <draggable v-model="myArray">
-      <transition-group>
-        <div v-for="element in myArray" :key="element.id">
-          {{ element.name }}
-        </div>
-      </transition-group>
-    </draggable>
-    <TheMoveable />
+    <div :class="$style['tab']" @click="tabClick">
+      <div
+        v-for="tab in tabList"
+        :data-id="tab.id"
+        :key="tab.id"
+        :selected="tabComp === tab.component"
+      >
+        {{ tab.name }}
+      </div>
+    </div>
+    <component :is="tabComp" :class="$style['view']"/>
   </div>
 </template>
 
 <script>
-import draggable from "vuedraggable";
-import TheMoveable from '@/views/drag/TheMoveable.vue'
+import TheDragSort from "@/views/drag/TheDragSort.vue";
+import TheMoveable from "@/views/drag/TheMoveable.vue";
+// import TheFreeEdit from "@/views/drag/TheFreeEdit.vue";
+import TheCroppr from '@/views/drag/TheCropper.vue'
 
 export default {
   name: "TheDrag",
-  components: {
-    draggable,
-    TheMoveable
-  },
+  components: {},
   data() {
     return {
-      myArray: [
+      tabList: [
         {
-          id: '001',
-          name: '一号宇宙飞船'
+          id: "drag-sort",
+          name: "DragSort",
+          component: TheDragSort,
         },
         {
-          id: '002',
-          name: '二哥洛溪'
+          id: "moveable",
+          name: "moveable",
+          component: TheMoveable,
         },
         {
-          id: '003',
-          name: '三沙发公开课'
+          id: "free-edit",
+          name: "FreeEdit",
+          component: TheCroppr,
         },
-        {
-          id: '004',
-          name: '四更省道加深入'
-        },
-        {
-          id: '005',
-          name: '五电费124卡立方'
-        },
-        {
-          id: '006',
-          name: '六fsf地方'
-        }
-      ]
+      ],
+      tabComp: null,
     };
   },
-  methods: {},
+  created() {
+    this.tabComp = this.tabList[2].component;
+  },
+  methods: {
+    tabClick(e) {
+      let tabComp = this.tabList.find(
+        (item) => item.id === e.target.dataset.id
+      );
+      this.tabComp =
+        tabComp && tabComp.component
+          ? tabComp.component
+          : this.tabList[0].component;
+    },
+  },
 };
 </script>
 
 <style lang="less" module>
 .container {
+  .tab {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    box-shadow: 0 1px #ccc;
+    margin: 12px 0;
+    color: #333;
+    & > div {
+      margin-right: 16px;
+      cursor: pointer;
+      &[selected] {
+        color: #3360ff;
+      }
+    }
+  }
+  .view {
+    width: 100%;
+    height: calc(100vh - 48px);
+  }
 }
 </style>

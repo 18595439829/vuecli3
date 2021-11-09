@@ -177,31 +177,31 @@ export default {
       if (width <= minWidth) {
         width = minWidth;
       }
-      if (width > this.content.width) {
-        width = this.content.width;
-      }
-      if (clientX <= this.content.left) {
-        console.log(clientX, clientY, right);
-        width = right - this.content.left;
-      }
-      if (clientX >= this.content.right) {
-        console.log(clientX, clientY, left);
-        width = this.content.right - left;
-      }
+      // if (width > this.content.width) {
+      //   width = this.content.width;
+      // }
+      // if (clientX <= this.content.left) {
+      //   console.log(clientX, clientY, right);
+      //   width = right - this.content.left;
+      // }
+      // if (clientX >= this.content.right) {
+      //   console.log(clientX, clientY, left);
+      //   width = this.content.right - left;
+      // }
       if (height <= minHeight) {
         height = minHeight;
       }
-      if (height > this.content.height) {
-        height = this.content.height;
-      }
-      if (clientY <= this.content.top) {
-        console.log(clientX, clientY, bottom);
-        height = bottom - this.content.top;
-      }
-      if (clientY >= this.content.bottom) {
-        console.log(clientX, clientY, top);
-        height = this.content.bottom - top;
-      }
+      // if (height > this.content.height) {
+      //   height = this.content.height;
+      // }
+      // if (clientY <= this.content.top) {
+      //   console.log(clientX, clientY, bottom);
+      //   height = bottom - this.content.top;
+      // }
+      // if (clientY >= this.content.bottom) {
+      //   console.log(clientX, clientY, top);
+      //   height = this.content.bottom - top;
+      // }
       console.log("resizeBorderCheck", width, height);
       return { width, height };
     },
