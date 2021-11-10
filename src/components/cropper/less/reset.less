@@ -1,0 +1,143 @@
+/deep/ .moveable {
+  position: relative;
+
+  .moveable-control {
+    margin-top: 0px !important;
+    margin-left: 0px !important;
+
+    &.moveable-n,
+    &.moveable-e,
+    &.moveable-s,
+    &.moveable-w {
+      border-color: #0000ff;
+      background: #fff;
+      border-radius: 6px !important;
+    }
+
+    &.moveable-nw,
+    &.moveable-ne,
+    &.moveable-se,
+    &.moveable-sw {
+      border-radius: 0px;
+      background-color: unset;
+      border: none;
+      width: 14px !important;
+      height: 14px !important;
+    }
+
+    &.moveable-n,
+    &.moveable-s {
+      width: 14px !important;
+      height: 6px !important;
+      margin-left: -7px !important;
+    }
+
+    &.moveable-e,
+    &.moveable-w {
+      height: 14px !important;
+      width: 6px !important;
+      margin-left: -5px !important;
+    }
+
+    &.moveable-n {
+      margin-top: -5px !important;
+    }
+
+    &.moveable-e {
+      margin-top: -7px !important;
+      margin-left: -5px !important;
+    }
+
+    &.moveable-s {
+      margin-top: -5px !important;
+    }
+
+    &.moveable-w {
+      top: 50% !important;
+      margin-top: -7px !important;
+    }
+
+    &.moveable-nw {
+      margin-top: -4px !important;
+      margin-left: -4px !important;
+      background-image: url("../assets/img/cut.png");
+      background-image:
+        image-set(url("../assets/img/cut.png") 1x,
+          url("../assets/img/cut@2x.png") 2x);
+    }
+
+    &.moveable-ne {
+      margin-top: -4px !important;
+      margin-left: -10px !important;
+      background-image: url("../assets/img/cut-ne.png");
+      background-image:
+        image-set(url("../assets/img/cut-ne.png") 1x,
+          url("../assets/img/cut-ne@2x.png") 2x);
+    }
+
+    &.moveable-se {
+      margin-top: -10px !important;
+      margin-left: -10px !important;
+      background-image: url("../assets/img/cut-se.png");
+      background-image:
+        image-set(url("../assets/img/cut-se.png") 1x,
+          url("../assets/img/cut-se@2x.png") 2x);
+    }
+
+    &.moveable-sw {
+      margin-top: -10px !important;
+      margin-left: -4px !important;
+      background-image: url("../assets/img/cut-sw.png");
+      background-image:
+        image-set(url("../assets/img/cut-sw.png") 1x,
+          url("../assets/img/cut-sw@2x.png") 2x);
+    }
+  }
+
+  .moveable-line {
+    background: #00f !important;
+  }
+}
+
+/deep/ .moveable.moveable-background {
+  .moveable-control {
+    &.moveable-nw,
+    &.moveable-ne,
+    &.moveable-se,
+    &.moveable-sw {
+      border-radius: 50%;
+      background-image: none;
+      background-color: #fff;
+      border: 1px solid #00f;
+      box-sizing: border-box;
+      width: 10px !important;
+      height: 10px !important;
+    }
+    &.moveable-nw {
+      margin-top: -5px !important;
+      margin-left: -5px !important;
+    }
+
+    &.moveable-ne {
+      margin-top: -5px !important;
+      margin-left: -5px !important;
+    }
+
+    &.moveable-se {
+      margin-top: -5px !important;
+      margin-left: -5px !important;
+    }
+
+    &.moveable-sw {
+      margin-top: -5px !important;
+      margin-left: -5px !important;
+    }
+  }
+}
+// /deep/ .moveable.moveable-view {
+//   .moveable-line {
+//     background: none;
+//     border-left: 1px dashed #00f;
+//     border-style: dashed !important;
+//   }
+// }

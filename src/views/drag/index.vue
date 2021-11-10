@@ -17,7 +17,7 @@
 <script>
 import TheDragSort from "@/views/drag/TheDragSort.vue";
 import TheMoveable from "@/views/drag/TheMoveable.vue";
-// import TheFreeEdit from "@/views/drag/TheFreeEdit.vue";
+import TheClip from "@/views/drag/TheClip.vue";
 import TheCroppr from '@/views/drag/TheCropper.vue'
 
 export default {
@@ -37,8 +37,13 @@ export default {
           component: TheMoveable,
         },
         {
-          id: "free-edit",
-          name: "FreeEdit",
+          id: "clipable",
+          name: "clipable",
+          component: TheClip,
+        },
+        {
+          id: "cropper",
+          name: "cropper",
           component: TheCroppr,
         },
       ],
@@ -46,7 +51,7 @@ export default {
     };
   },
   created() {
-    this.tabComp = this.tabList[2].component;
+    this.tabComp = this.tabList[3].component;
   },
   methods: {
     tabClick(e) {
