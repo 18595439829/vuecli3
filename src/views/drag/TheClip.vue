@@ -1,22 +1,24 @@
 <template>
-    <div :class="$style['container']">
-        <div ref="content" :class="$style['content']">
-            <div ref="clip" data-moveable="true" :class="$style['example']">
-                所谓特殊字符，就是一些有特殊含义的字符，如上面说的 runoo*b 中的 *，简单的说就是表示任何字符串的意思。如果要查找字符串中的 * 符号，则需要对 * 进行转义，即在其前加一个 \，runo\*ob 匹配字符串 runo*ob。 许多元字符要求在试图匹配它们时特别对待。若要匹配这些特殊字符，必须首先使字符"转义"，即，将反斜杠字符\ 放在它们前面。下表列出了正则表达式中的特殊字符：
-            </div>
-        </div>
+  <div :class="$style['container']">
+    <div ref="content" :class="$style['content']" >
+      <div ref="clip" data-moveable="true" :class="$style['example']" :style="{backgroundImage: `url(${KAOLA})`}">
+        <img :src="KAOLA" alt="">
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
+import KAOLA from "@/assets/img/Koala.jpg";
 import Moveable from "moveable";
 
 export default {
   name: "TheMoveable",
   data() {
     return {
+      KAOLA,
       moveable: undefined,
-      content: {}
+      content: {},
     };
   },
   mounted() {
@@ -37,29 +39,30 @@ export default {
           defaultClipPath: "inset",
           customClipPath: "",
           clipRelative: false,
-          clipArea: false,
-          dragWithClip: true
+          clipArea: true,
+          dragWithClip: true,
         }
       );
-      this.moveable;
-      on("clipStart", e => {
-        console.log(e);
-      })
-        .on("clip", e => {
-          if (e.clipType === "rect") {
-            e.target.style.clip = e.clipStyle;
-          } else {
-            e.target.style.clipPath = e.clipStyle;
-          }
+      this.moveable
+        .on("clipStart", (e) => {
+          console.log(e);
         })
-        .on("clipEnd", e => {
+        .on("clip", (e) => {
+          console.log(e)
+          // if (e.clipType === "rect") {
+          //   e.target.style.clip = e.clipStyle;
+          // } else {
+          //   e.target.style.clipPath = e.clipStyle;
+          // }
+        })
+        .on("clipEnd", (e) => {
           console.log(e);
         });
     },
     setMoveableTarget(target) {
       this.moveable.target = target;
-    }
-  }
+    },
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -80,6 +83,7 @@ export default {
     background: #dddddd;
     position: absolute;
     overflow: hidden;
+    background-position: 100%;
   }
 }
 </style>

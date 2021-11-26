@@ -22,14 +22,12 @@
     </div>
     <div>
       <Button @click="output">输出</Button>
-      <pre v-html="result"></pre>
     </div>
   </div>
 </template>
 
 <script>
 import draggable from "vuedraggable";
-import { syntaxHighlight } from "@/common/json";
 export default {
   name: "BaseFragmentPreview",
   components: {
@@ -45,14 +43,6 @@ export default {
     return {
       list: []
     };
-  },
-  computed: {
-    result() {
-      return syntaxHighlight(this.list)
-    }
-  },
-  created() {
-    this.list = this.data
   },
   methods: {
     enter(item, event) {

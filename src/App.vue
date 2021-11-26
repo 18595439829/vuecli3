@@ -5,9 +5,7 @@
         <router-link :to="item.path">{{item.name}}</router-link>
       </div>
     </div>
-    <div class="view">
-      <router-view />
-    </div>
+      <router-view class="view"/>
   </div>
 </template>
 
@@ -103,6 +101,10 @@ export default {
           path: '/color-picker',
           name: 'color-picker',
         },
+        {
+          path: '/json',
+          name: 'json'
+        }
       ]
     }
   },
@@ -154,5 +156,7 @@ export default {
 }
 .view {
   flex: 1;
+  height: 100vh;
+  overflow-y: auto;
 }
 </style>

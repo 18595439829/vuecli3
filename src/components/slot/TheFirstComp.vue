@@ -6,13 +6,13 @@
         {{ data.name }}
       </template>
     </TheSecondComp>
-    <pre :class="$style['json']" v-html="json"></pre>
+
   </div>
 </template>
 
 <script>
 import TheSecondComp from "@/components/slot/TheSecondComp.vue";
-import {syntaxHighlight } from "@/common/json";
+
 export default {
   name: "TheFirstComp",
   components: {
@@ -20,11 +20,6 @@ export default {
   },
   data() {
     return {};
-  },
-  computed: {
-    json() {
-      return syntaxHighlight();
-    },
   },
   methods: {},
 };

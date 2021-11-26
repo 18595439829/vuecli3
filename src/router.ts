@@ -229,6 +229,11 @@ export default new Router({
       path: '/color-picker',
       name: 'color-picker',
       component: () => import('@/views/color-pikcer/TheIndex.vue')
+    },
+    {
+      path: '/json',
+      name: 'json',
+      component: () => import('@/views/json/TheJsonView.vue')
     }
   ]
 });
