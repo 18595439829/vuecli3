@@ -1,39 +1,27 @@
 <template>
   <div :class="$style['container']">
-    <draggable
-    v-show="isRemove"
-      :list="myArray1"
-      group="list"
-      :class="$style[('drag-group', 'drag-group-remove')]"
-    >
-      <div v-for="element in myArray1" :key="element.id">
+    <BaseDrag v-model="list" :canRemove="true" :class="$style['drag']">
+      <div v-for="element in list" :key="element.id" >
         <img :src="KAOLA" alt="" />
         {{ element.name }}
       </div>
-    </draggable>
-    <div v-show="isRemove" ref="remove" :class="$style['remove']">拖拽到此处删除</div>
-    <draggable :list="myArray" group="list" :class="$style['drag-group']" @change="change">
-      <div v-for="element in myArray" :key="element.id" @mousedown="mousedown">
-        <img :src="KAOLA" alt="" />
-        {{ element.name }}
-      </div>
-    </draggable>
+    </BaseDrag>
   </div>
 </template>
 
 <script>
-import draggable from "vuedraggable";
+import BaseDrag from '@/components/BaseDrag.vue'
 import KAOLA from "@/assets/img/Koala.jpg";
 
 export default {
-  name: "TheDrag",
+  name: 'TheDragSort',
   components: {
-    draggable,
+    BaseDrag
   },
   data() {
     return {
       KAOLA,
-      myArray: [
+      list: [
         {
           id: "001",
           name: "一号宇宙飞船",
@@ -58,69 +46,17 @@ export default {
           id: "006",
           name: "六fsf地方",
         },
-      ],
-      myArray1: [
-        {
-          id: "007",
-          name: "七号宇宙飞船",
-        },
-      ],
-      elementId: null,
-      isRemove: false
+      ]
     };
   },
-  computed: {
-    removeEleBoundary() {
-      return this.$refs.remove.getBoundingClientRect();
-    },
-  },
-  methods: {
-    mousedown() {
-      this.isRemove = true
-      document.body.addEventListener('mouseup', this.change)
-    },
-    change() {
-      console.log('change')
-      this.isRemove = false
-    }
-  },
+  methods: {},
 };
 </script>
 
 <style lang="less" module>
-.container {
-  .drag-group {
-    display: flex;
-    & > div {
-      width: 100px;
-      height: 100px;
-      box-shadow: 0px 0px 3px #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    img {
-      width: 50px;
-    }
-  }
-  .remove {
-    width: 100%;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.8);
-    text-align: center;
-    line-height: 50px;
-    font-size: 20px;
-    border: 1px dashed #dddddd;
-    position: fixed;
-    top: 48px;
-    pointer-events: none;
-  }
-  .drag-group-remove {
-    .remove;
-    opacity: 0;
-    pointer-events: auto;
-    overflow: hidden;
-  }
-}
+ .container {
+   .drag {
+     width: 50vw;
+   }
+ }
 </style>

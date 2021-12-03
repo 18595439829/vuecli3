@@ -51,7 +51,7 @@ export default {
     };
   },
   created() {
-    this.tabComp = this.tabList[3].component;
+    this.tabComp = this.tabList[0].component;
   },
   methods: {
     tabClick(e) {
