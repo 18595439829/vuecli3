@@ -31,6 +31,7 @@ import mixins from "@/common/mixin.js";
 import TestUpload from "@/components/TestUpload.vue";
 import BaseFragmentPreview from '@/components/BaseFragmentPreview.vue';
 import TheFirstComp from '@/components/slot/TheFirstComp.vue'
+
 export default {
   components: {
     TestUpload,

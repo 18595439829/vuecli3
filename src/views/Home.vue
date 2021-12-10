@@ -51,6 +51,8 @@ import Stylus from '@/components/Stylus';
 import TestLess from '@/components/TestLess';
 import "../assets/css/iconfont/iconfont";
 import BaseCropper from '@/components/BaseCropper.vue'
+import EventBus from '@/common/eventBus.js'
+
 export default {
   name: "home",
   components: {
@@ -66,6 +68,7 @@ export default {
   },
   methods: {
     btnClick() {
+      EventBus.emit('home-change', '来自Home的事件emit')
       homeJS.btnClick();
     },
     serverClick() {

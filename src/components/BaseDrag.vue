@@ -1,5 +1,9 @@
 <template>
-  <div :class="$style['container']" @mousedown="mousedown" @mouseup="mouseup">
+  <div
+    :class="$style['container']"
+    @mousedown="mousedown"
+    @mouseup="mouseup"
+  >
     <draggable
       v-if="canRemove"
       v-show="isRemove"
@@ -7,7 +11,10 @@
       group="list"
       :class="[$style['drag-group'], $style['drag-group-remove']]"
     >
-      <div v-for="element in myArray1" :key="element.dragId">
+      <div
+        v-for="element in myArray1"
+        :key="element.dragId"
+      >
         <!-- {{ element.dragId }} -->
       </div>
     </draggable>
@@ -15,11 +22,12 @@
       v-if="canRemove"
       v-show="isRemove"
       ref="remove"
-      :class="$style['remove']"
+      :class="['can-remove',$style['remove']]"
     >
       {{ placeholder }}
     </div>
     <draggable
+      ref="draggable"
       :list="myArray"
       group="list"
       :class="$style['drag-group']"
@@ -27,108 +35,97 @@
       @end="end"
       @change="change"
     >
-      <slot />
+      <slot class="draggable-item" />
     </draggable>
   </div>
 </template>
 
 <script>
-import draggable from "vuedraggable";
+import draggable from 'vuedraggable'
 
 export default {
-  name: "BaseDrag",
+  name: 'BaseDrag',
   components: {
-    draggable,
+    draggable
   },
   model: {
-    prop: "list",
-    event: "change",
+    prop: 'list',
+    event: 'change'
   },
   props: {
     list: {
       type: Array,
-      required: true,
+      required: true
     },
     canRemove: {
       type: Boolean,
       required: false,
-      default: false,
-    },
+      default: false
+    }
   },
-  data() {
+  data () {
     return {
       myArray1: [
         {
-          dragId: Math.random(),
-        },
+          dragId: Math.random()
+        }
       ],
       isRemove: false,
-      placeholder: "拖拽到此处删除",
-    };
+      placeholder: '拖拽到此处删除'
+    }
   },
   computed: {
-    myArray() {
+    myArray () {
       return this.list.map((item) => {
-        item.dragId = Math.random();
-        return item;
-      });
+        item.dragId = Math.random()
+        return item
+      })
     }
   },
   methods: {
-    mousedown(e) {
-      if (!this.canRemove) {
-        return;
+    mousedown (e) {
+      if (!this.canRemove || !this.$refs.draggable.$el.contains(e.target) || e.target === this.$refs.draggable.$el) {
+        return
       }
-      this.isRemove = true;
+      this.isRemove = true
     },
     mouseup () {
-        if (!this.canRemove) {
-        return;
-      }
-      this.isRemove = false;
-    },
-    end() {
       if (!this.canRemove) {
-        return;
+        return
       }
-      this.isRemove = false;
+      this.isRemove = false
     },
-    move(e) {
+    end () {
       if (!this.canRemove) {
-        return;
+        return
       }
-      if (e.to.className.indexOf("drag-group-remove") !== -1) {
-        this.placeholder = "松开鼠标,即可移除";
+      this.isRemove = false
+    },
+    move (e) {
+      if (!this.canRemove) {
+        return
+      }
+      if (e.to.className.indexOf('drag-group-remove') !== -1) {
+        this.placeholder = '松开鼠标,即可移除'
       } else {
-        this.placeholder = "拖拽到此处删除";
+        this.placeholder = '拖拽到此处删除'
       }
     },
-    change() {
-      this.$emit("change", this.myArray);
-    },
-  },
-};
+    change () {
+      this.$emit('change', this.myArray)
+    }
+  }
+}
 </script>
 
 <style lang="less" module>
 .container {
-  position: relative;
+  width: 100%;
+  height: 100%;
   .drag-group {
     display: flex;
+    flex-wrap: wrap;
     width: 100%;
-    position: absolute;
-    & > div {
-      width: 100px;
-      height: 100px;
-      box-shadow: 0px 0px 3px #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    img {
-      width: 50px;
-    }
   }
   .remove {
     width: 100%;
@@ -139,9 +136,8 @@ export default {
     font-size: 20px;
     border: 1px dashed #dddddd;
     box-sizing: border-box;
-    position: absolute;
-    top: 0;
     pointer-events: none;
+    position: absolute;
     z-index: 1;
   }
   .drag-group-remove {

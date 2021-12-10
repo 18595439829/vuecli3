@@ -87,3 +87,8 @@ class EventBus {
       }
     }
   }
+const Bus = new EventBus()
+if (!Bus) {
+  Bus = new EventBus()
+}
+export default Bus

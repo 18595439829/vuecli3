@@ -55,6 +55,7 @@ export default {
 
 <style lang="less" module>
  .container {
+   position: relative;
    .drag {
      width: 50vw;
    }

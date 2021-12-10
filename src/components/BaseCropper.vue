@@ -7,6 +7,7 @@
 <script>
 import "cropperjs/dist/cropper.css";
 import Cropper from "cropperjs";
+import EventBus from '@/common/eventBus.js'
 
 export default {
   name: "BaseCropper",
@@ -28,6 +29,9 @@ export default {
         console.log(event.detail.scaleY);
       },
     });
+    EventBus.on('home-change', (e) => {
+      console.log(e)
+    })
   },
   methods: {},
 };

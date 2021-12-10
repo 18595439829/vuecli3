@@ -29,6 +29,7 @@
 </template>
 <script>
 import treeJson from "@/test/TreeList.json";
+
 export default {
   name: "TestLess",
   data() {

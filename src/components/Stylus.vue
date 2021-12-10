@@ -25,7 +25,6 @@
 </template>
 <script>
 import Kaola from "@/assets/img/Koala.jpg";
-import { setInterval } from 'timers';
 export default {
   name: "Stylus",
   data() {
