@@ -41,6 +41,7 @@
     </div>
     <Button @click="addConfirm">自定义confirm</Button>
     <BaseCropper :class="$style['cropper']"/>
+    <TheTree />
   </div>
 </template>
 
@@ -51,6 +52,7 @@ import Stylus from '@/components/Stylus';
 import TestLess from '@/components/TestLess';
 import "../assets/css/iconfont/iconfont";
 import BaseCropper from '@/components/BaseCropper.vue'
+import TheTree from '@/views/ant-design/TheTree.vue'
 import EventBus from '@/common/eventBus.js'
 
 export default {
@@ -59,7 +61,8 @@ export default {
     treeSearch,
     Stylus,
     TestLess,
-    BaseCropper
+    BaseCropper,
+    TheTree
   },
   data() {
     return {

@@ -9,7 +9,10 @@ import '@/plugins/iview'
 import Progress from '@/components/progress/index';
 import '@/common/directives.js';
 import confirm from '@/components/confirm/confirm'
+import { Button, Tree } from 'ant-design-vue';
 
+Vue.use(Button)
+Vue.use(Tree)
 console.log(App,document.getElementById('app1'));
 Vue.use(Progress);
 
