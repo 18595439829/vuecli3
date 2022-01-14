@@ -104,6 +104,10 @@ export default {
         {
           path: '/json',
           name: 'json'
+        },
+        {
+          path: '/gif',
+          name: 'gif'
         }
       ]
     }

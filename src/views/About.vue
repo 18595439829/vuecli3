@@ -24,6 +24,8 @@
     <TestUpload @on-add="getAge" />
     <base-fragment-preview :data="fragmentList"/> 
     <TheFirstComp />
+    <hr />
+    <BaseEditor />
   </div>
 </template>
 <script>
@@ -31,12 +33,14 @@ import mixins from "@/common/mixin.js";
 import TestUpload from "@/components/TestUpload.vue";
 import BaseFragmentPreview from '@/components/BaseFragmentPreview.vue';
 import TheFirstComp from '@/components/slot/TheFirstComp.vue'
+import BaseEditor from '@/components/BaseEditor.vue';
 
 export default {
   components: {
     TestUpload,
     BaseFragmentPreview,
-    TheFirstComp
+    TheFirstComp,
+    BaseEditor
   },
   mixins: [mixins],
   data() {
@@ -107,7 +111,7 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="less" scoped>
 .music {
   width: 500px;
   background: url("../assets/logo.png");

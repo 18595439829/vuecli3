@@ -17,6 +17,10 @@ export default {
               {
                   title: '1.交错动画',
                   name: 'staggetAnimate'
+              },
+              {
+                  title: 'css-module@keyframes',
+                  name: 'keyframes'
               }
           ]
       }

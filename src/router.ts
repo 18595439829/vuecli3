@@ -123,6 +123,11 @@ export default new Router({
           path: "staggetAnimate",
           name: "staggetAnimate",
           component: () => import("./views/css/1-交错动画/StaggerAnimate.vue")
+        },
+        {
+          path: "keyframes",
+          name: "keyframes",
+          component: () => import("./views/css/TheCssModule@keyFrames.vue")
         }
       ]
     },
@@ -234,6 +239,11 @@ export default new Router({
       path: '/json',
       name: 'json',
       component: () => import('@/views/json/TheJsonView.vue')
+    },
+    {
+      path: '/gif',
+      name: 'gif',
+      component: () => import('@/views/gif/TheGifIndex.vue')
     }
   ]
 });
