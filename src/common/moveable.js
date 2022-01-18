@@ -25,5 +25,34 @@ export default class Move {
         resizable: this.options.resizable, // 是否支持更改大小
       }
     );
+    this.moveable
+      .on(
+        "resize",
+        ({
+          target, // DOM 初始化moveable的target元素
+          width, // number 元素(target)的css宽度
+          height, // number 元素(target)的css高度
+          drag, // 元素的拖拽事件,同onDrag的参数
+        }) => {
+          target.style.width = `${width}px`;
+          target.style.height = `${height}px`;
+          target.style.transform = `translate(${drag.beforeTranslate[0]}px, ${drag.beforeTranslate[1]}px)`;
+        }
+      )
+      .on(
+        "drag",
+        ({
+          target, // DOM 初始化moveable的target元素
+          beforeTranslate, // [left, top] 元素相较于起始位置的平移数据
+        }) => {
+          target.style.transform = `translate(${beforeTranslate[0]}px, ${beforeTranslate[1]}px)`;
+        }
+      );
+  }
+  getMoveable() {
+    return this.moveable
+  }
+  destroy() {
+    this.moveable.destroy()
   }
 }
