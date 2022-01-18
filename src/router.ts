@@ -244,6 +244,11 @@ export default new Router({
       path: '/gif',
       name: 'gif',
       component: () => import('@/views/gif/TheGifIndex.vue')
+    },
+    {
+      path: '/layer',
+      name: 'layer',
+      component: () => import('@/views/layer/TheLayerIndex.vue')
     }
   ]
 });

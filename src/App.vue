@@ -108,6 +108,10 @@ export default {
         {
           path: '/gif',
           name: 'gif'
+        },
+        {
+          path: '/layer',
+          name: 'layer'
         }
       ]
     }
