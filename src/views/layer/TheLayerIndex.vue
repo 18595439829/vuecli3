@@ -1,18 +1,21 @@
 <template>
   <div ref="container" :class="$style['container']" @click="closeMoveable">
-    <div ref="canvas-container" :class="$style['canvas']">
-      <TheLayerElement
-        :class="$style['element']"
-        :style="{ transform: `scale(${scale})` }"
-      />
+    <div
+      :class="$style['canvas']"
+      :style="{
+        transform: `scale(${canvasStyle.scale})`,
+        left: `${canvasStyle.left}px`,
+        top: `${canvasStyle.top}px`,
+      }"
+    >
+      <TheLayerElement ref="canvas-container" :class="$style['element']" />
     </div>
     <div
-      ref="moveable-container"
       v-show="isMoveable"
-      :class="$style['moveable']"
-    >
-      <div ref="moveable" :style="{ ...selectLayerStyle }"></div>
-    </div>
+      ref="moveable-container"
+      :class="$style['moveable-layer']"
+      :style="{ ...selectLayerStyle }"
+    ></div>
   </div>
 </template>
 
@@ -28,7 +31,11 @@ export default {
   },
   data() {
     return {
-      scale: 0.5,
+      canvasStyle: {
+        scale: 0.5,
+        left: 100,
+        top: 100,
+      },
       ctrlDown: false,
       selectLayerStyle: {},
       isMoveable: false,
@@ -39,6 +46,8 @@ export default {
   },
   watch: {
     cropperData(v) {
+      this.moveableDestroy()
+      this.isMoveable = false;
       this.layerSelect(v);
     },
   },
@@ -57,15 +66,15 @@ export default {
             if (e.keyCode === 107 || e.keyCode === 187) {
               // 放大
               e.preventDefault();
-              this.scale += speed;
+              this.canvasStyle.scale += speed;
             }
             if (e.keyCode === 109 || e.keyCode === 189) {
               // 缩小
               e.preventDefault();
-              this.scale -= speed;
+              this.canvasStyle.scale -= speed;
             }
-            if (this.scale <= 0.1) {
-              this.scale = 0.1;
+            if (this.canvasStyle.scale <= 0.1) {
+              this.canvasStyle.scale = 0.1;
             }
           }
         },
@@ -81,68 +90,98 @@ export default {
             e.preventDefault();
             if (e.wheelDeltaY > 0) {
               // 放大
-              this.scale += speed;
+              this.canvasStyle.scale += speed;
             } else {
               // 缩小
-              this.scale -= speed;
+              this.canvasStyle.scale -= speed;
             }
-            if (this.scale <= 0.1) {
-              this.scale = 0.1;
+            if (this.canvasStyle.scale <= 0.1) {
+              this.canvasStyle.scale = 0.1;
             }
           }
         },
         { passive: false, capture: false }
       );
+      if (this.moveable) {
+        const requester = moveable.request("draggable");
+        requester.request({
+          width: this.selectLayerStyle.width * (1 + speed),
+          height: this.selectLayerStyle.height * (1 + speed),
+        });
+        requester.requestEnd();
+      }
     },
     init() {
       this.moveable = new Moveable(this.$refs.container, {
-        target: this.$refs.moveable,
+        target: this.$refs["moveable-container"],
       }).getMoveable();
       this.moveable.on("drag", ({ beforeTranslate }) => {
-        this.cropperData.data.left = beforeTranslate[0] / this.scale;
-        this.cropperData.data.top = beforeTranslate[1] / this.scale;
+        this.cropperData.data.left =
+          beforeTranslate[0] / this.canvasStyle.scale;
+        this.cropperData.data.top = beforeTranslate[1] / this.canvasStyle.scale;
         console.log(beforeTranslate);
-      });
-      this.moveable.on("resize", ({ width, height, drag }) => {
+      }).on("resize", ({ width, height, drag }) => {
         let { beforeTranslate } = drag;
-        this.cropperData.data.width = width / this.scale;
-        this.cropperData.data.height = height / this.scale;
-        this.cropperData.data.left = beforeTranslate[0] / this.scale;
-        this.cropperData.data.top = beforeTranslate[1] / this.scale;
+        this.cropperData.data.width = width / this.canvasStyle.scale;
+        this.cropperData.data.height = height / this.canvasStyle.scale;
+        this.cropperData.data.left =
+          beforeTranslate[0] / this.canvasStyle.scale;
+        this.cropperData.data.top = beforeTranslate[1] / this.canvasStyle.scale;
         console.log(beforeTranslate);
       });
     },
     layerSelect({ type, data }) {
       this.isMoveable = true;
-      let scale = this.scale;
       switch (type) {
         case "background":
           this.selectLayerStyle = {
-            width: `${1920 * scale}px`,
-            height: `${1080 * scale}px`,
-            backgroundColor: data.color,
-            backgroundImage: `url(${data.url})`,
-            backgroundSize: data.isBlur ? "110%" : "100%",
-            backgroundOrigin: "center",
-            filter: data.isBlur ? `${20 * scale}px` : "",
+            width: `${1920 * this.canvasStyle.scale}px`,
+            height: `${1080 * this.canvasStyle.scale}px`,
+            left: `${this.canvasStyle.left}px`,
+            top: `${this.canvasStyle.top}px`,
+            transform: '',
           };
           this.$nextTick(() => {
             this.init();
           });
+          break;
+        case "media":
+          this.selectLayerStyle = {
+            width: `${data.inner.width * this.canvasStyle.scale}px`,
+            height: `${data.inner.height * this.canvasStyle.scale}px`,
+            left: `${
+              data.inner.left * this.canvasStyle.scale + this.canvasStyle.left
+            }px`,
+            top: `${
+              data.inner.top * this.canvasStyle.scale + this.canvasStyle.left
+            }px`,
+            transform: '',
+          };
+          this.$nextTick(() => {
+            this.init();
+          });
+          break;
       }
     },
     closeMoveable(e) {
       if (
-        e.target !== this.$refs["canvas-container"] &&
-        !this.$refs["canvas-container"].contains(e.target) &&
+        e.target !== this.$refs["canvas-container"].$el &&
+        !this.$refs["canvas-container"].$el.contains(e.target) &&
         e.target !== this.$refs["moveable-container"] &&
         !this.$refs["moveable-container"].contains(e.target)
       ) {
+        this.moveableDestroy()
         this.isMoveable = false;
-        this.moveable.destroy();
-        this.cropperData.data.isShow = true;
       }
     },
+    moveableDestroy() {
+      if (this.moveable) {
+        this.moveable.target.style.transform = ''
+        this.moveable.target = null;
+        this.moveable.destroy()
+        this.moveable = null
+      }
+    }
   },
 };
 </script>
@@ -153,21 +192,18 @@ export default {
   // width: 100%;
   height: 100vh;
   .canvas {
-    width: 100%;
-    height: 100%;
+    // width: 100%;
+    // height: 100%;
     position: absolute;
-    top: 100px;
-    left: 100px;
+    transform-origin: left top;
     z-index: 0;
     .element {
       width: 1920px;
       height: 1080px;
-      transform: scale(0.5);
-      transform-origin: left top;
     }
   }
-  .moveable {
-    .canvas;
+  .moveable-layer {
+    position: absolute;
     z-index: 1;
   }
 }

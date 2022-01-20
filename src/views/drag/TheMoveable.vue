@@ -253,6 +253,8 @@ export default {
     border: 1px solid #ccc;
     background: #dddddd;
     position: absolute;
+    left: 10px;
+    top: 10px;
     overflow: hidden;
   }
 }

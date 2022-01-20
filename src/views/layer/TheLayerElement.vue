@@ -1,16 +1,11 @@
 <template>
   <div :class="$style['container']">
-    <div
-      v-if="info.background"
-      :class="$style['background']"
-      @click="backgroundClick"
-    >
+    <template v-if="info.background && info.background.length">
       <div
-        :class="$style['background-item']"
-        :data-id="item.id"
-        :show="item.isShow"
         v-for="item in info.background"
         :key="item.id"
+        :class="$style['background-item']"
+        :data-id="item.id"
         :blur="item.isBlur"
         :style="{
           backgroundColor: item.color,
@@ -19,10 +14,39 @@
           width: `${item.width}px`,
           height: `${item.height}px`,
           left: `${item.left}px`,
-          top: `${item.top}px`
+          top: `${item.top}px`,
         }"
+        @click="backgroundClick"
       ></div>
-    </div>
+    </template>
+    <template v-if="info.medias && info.medias.length">
+      <div
+        v-for="item in info.medias"
+        :key="item.id"
+        :data-id="item.id"
+        :class="$style['layer-img']"
+        :style="{
+          zIndex: item.zIndex,
+          width: `${item.inner.width}px`,
+          height: `${item.inner.height}px`,
+          left: `${item.inner.left}px`,
+          top: `${item.inner.top}px`,
+        }"
+        @click="mediaClick"
+      >
+        <img
+          :src="item.url"
+          alt=""
+          :style="{
+            zIndex: item.zIndex,
+            width: `${item.outer.width}px`,
+            height: `${item.outer.height}px`,
+            left: `${item.outer.left}px`,
+            top: `${item.outer.top}px`,
+          }"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -45,28 +69,27 @@ export default {
             height: 1080,
             left: 0,
             top: 0,
-            isShow: true,
           },
           {
             id: "142314",
-            isBlur: false,
+            isBlur: true,
             url: KAOLA,
             zIndex: 1,
             width: 1920,
             height: 1080,
             left: 0,
             top: 0,
-            isShow: true,
           },
         ],
         medias: [
           {
+            id: "media-1",
             url: KAOLA,
-            isShow: true,
+            zIndex: 1,
             inner: {
               width: 960,
               height: 1080,
-              left: 0,
+              left: 960,
               top: 0,
             },
             outer: {
@@ -77,8 +100,8 @@ export default {
             },
           },
           {
+            id: "media-2",
             url: FISH,
-            isShow: true,
             inner: {
               width: 960,
               height: 540,
@@ -112,9 +135,17 @@ export default {
       let layer = this.info.background.find(
         (item) => item.id === e.target.dataset.id
       );
-      layer.isShow = false;
       this.emit({
         type: "background",
+        data: layer,
+      });
+    },
+    mediaClick(e) {
+      let layer = this.info.medias.find(
+        (item) => item.id === e.target.dataset.id
+      );
+      this.emit({
+        type: "media",
         data: layer,
       });
     },
@@ -131,24 +162,25 @@ export default {
   height: 1080px;
   position: relative;
   overflow: hidden;
-  .background {
+  .background-item {
+    width: 100%;
+    height: 100%;
+    background-size: 100%;
+    position: absolute;
+    &[blur="true"] {
+      background-size: 110%;
+      background-origin: center;
+      filter: blur(20px);
+    }
+  }
+  .layer-img {
     width: 100%;
     height: 100%;
     position: absolute;
-    .background-item {
-      width: 100%;
-      height: 100%;
-      background-size: 100%;
+    z-index: 1;
+    img {
       position: absolute;
-      display: none;
-      &[blur="true"] {
-        background-size: 110%;
-        background-origin: center;
-        filter: blur(20px);
-      }
-      &[show="true"] {
-        display: block;
-      }
+      pointer-events: none;
     }
   }
 }
