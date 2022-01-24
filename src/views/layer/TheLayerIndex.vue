@@ -115,19 +115,20 @@ export default {
       this.moveable = new Moveable(this.$refs.container, {
         target: this.$refs["moveable-container"],
       }).getMoveable();
-      this.moveable.on("drag", ({ beforeTranslate }) => {
-        this.cropperData.data.left =
-          beforeTranslate[0] / this.canvasStyle.scale;
-        this.cropperData.data.top = beforeTranslate[1] / this.canvasStyle.scale;
-        console.log(beforeTranslate);
-      }).on("resize", ({ width, height, drag }) => {
+      this.moveable.on("drag", ({target, beforeTranslate }) => {
+        this.cropperData.data.inner.left = (Number(target.style.left) +
+          beforeTranslate[0]) / this.canvasStyle.scale;
+        this.cropperData.data.inner.top = (Number(target.style.top) + beforeTranslate[1]) / this.canvasStyle.scale;
+        this.updateCropperData(this.cropperData)
+      }).on("resize", ({ target, width, height, drag }) => {
+        console.log(target.style)
         let { beforeTranslate } = drag;
-        this.cropperData.data.width = width / this.canvasStyle.scale;
-        this.cropperData.data.height = height / this.canvasStyle.scale;
-        this.cropperData.data.left =
-          beforeTranslate[0] / this.canvasStyle.scale;
-        this.cropperData.data.top = beforeTranslate[1] / this.canvasStyle.scale;
-        console.log(beforeTranslate);
+        this.cropperData.data.inner.width = width / this.canvasStyle.scale;
+        this.cropperData.data.inner.height = height / this.canvasStyle.scale;
+        this.cropperData.data.inner.left = (Number(target.style.left) +
+          beforeTranslate[0]) / this.canvasStyle.scale;
+        this.cropperData.data.inner.top = (Number(target.style.top)  + beforeTranslate[1]) / this.canvasStyle.scale;
+        this.updateCropperData(this.cropperData)
       });
     },
     layerSelect({ type, data }) {
