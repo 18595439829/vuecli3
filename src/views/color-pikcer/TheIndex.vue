@@ -20,6 +20,7 @@
       颜色选择器
       {{colorValue}}
     </BaseColorPicker>
+    <input type="color">
   </div>
 </template>
 

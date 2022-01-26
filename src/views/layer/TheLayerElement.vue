@@ -129,6 +129,27 @@ export default {
   computed: {
     ...mapState(["cropperData"]),
   },
+  watch: {
+    cropperData: {
+      handler(v) {
+        switch (v.type) {
+          case "background":
+            let backgroundIndex = this.info.background.findIndex(
+              (item) => item.id === v.data.id
+            );
+            this.$set(this.info.medias, backgroundIndex, v.data);
+            break;
+          case "media":
+            let mediaIndex = this.info.medias.findIndex(
+              (item) => item.id === v.data.id
+            );
+            this.$set(this.info.medias, mediaIndex, v.data);
+            break;
+        }
+      },
+      deep: true,
+    },
+  },
   methods: {
     ...mapMutations(["updateCropperData"]),
     backgroundClick(e) {
@@ -178,6 +199,7 @@ export default {
     height: 100%;
     position: absolute;
     z-index: 1;
+    overflow: hidden;
     img {
       position: absolute;
       pointer-events: none;

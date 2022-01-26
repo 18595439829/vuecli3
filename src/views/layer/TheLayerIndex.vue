@@ -15,7 +15,9 @@
       ref="moveable-container"
       :class="$style['moveable-layer']"
       :style="{ ...selectLayerStyle }"
-    ></div>
+    >
+      <img src="" alt="" />
+    </div>
   </div>
 </template>
 
@@ -46,7 +48,7 @@ export default {
   },
   watch: {
     cropperData(v) {
-      this.moveableDestroy()
+      this.moveableDestroy();
       this.isMoveable = false;
       this.layerSelect(v);
     },
@@ -76,6 +78,14 @@ export default {
             if (this.canvasStyle.scale <= 0.1) {
               this.canvasStyle.scale = 0.1;
             }
+            if (this.moveable) {
+              const requester = this.moveable.request("resizeable");
+              requester.request({
+                width: this.selectLayerStyle.width * (1 + speed),
+                height: this.selectLayerStyle.height * (1 + speed),
+              });
+              requester.requestEnd();
+            }
           }
         },
         false
@@ -103,7 +113,7 @@ export default {
         { passive: false, capture: false }
       );
       if (this.moveable) {
-        const requester = moveable.request("draggable");
+        const requester = this.moveable.request("resizeable");
         requester.request({
           width: this.selectLayerStyle.width * (1 + speed),
           height: this.selectLayerStyle.height * (1 + speed),
@@ -115,21 +125,36 @@ export default {
       this.moveable = new Moveable(this.$refs.container, {
         target: this.$refs["moveable-container"],
       }).getMoveable();
-      this.moveable.on("drag", ({target, beforeTranslate }) => {
-        this.cropperData.data.inner.left = (Number(target.style.left) +
-          beforeTranslate[0]) / this.canvasStyle.scale;
-        this.cropperData.data.inner.top = (Number(target.style.top) + beforeTranslate[1]) / this.canvasStyle.scale;
-        this.updateCropperData(this.cropperData)
-      }).on("resize", ({ target, width, height, drag }) => {
-        console.log(target.style)
-        let { beforeTranslate } = drag;
-        this.cropperData.data.inner.width = width / this.canvasStyle.scale;
-        this.cropperData.data.inner.height = height / this.canvasStyle.scale;
-        this.cropperData.data.inner.left = (Number(target.style.left) +
-          beforeTranslate[0]) / this.canvasStyle.scale;
-        this.cropperData.data.inner.top = (Number(target.style.top)  + beforeTranslate[1]) / this.canvasStyle.scale;
-        this.updateCropperData(this.cropperData)
-      });
+      this.moveable
+        .on("drag", ({ target, beforeTranslate }) => {
+          this.cropperData.data.inner.left =
+            (Number(target.style.left.split("px")[0]) +
+              beforeTranslate[0] -
+              this.canvasStyle.left) /
+            this.canvasStyle.scale;
+          this.cropperData.data.inner.top =
+            (Number(target.style.top.split("px")[0]) +
+              beforeTranslate[1] -
+              this.canvasStyle.top) /
+            this.canvasStyle.scale;
+          this.updateCropperData(this.cropperData);
+        })
+        .on("resize", ({ target, width, height, drag }) => {
+          let { beforeTranslate } = drag;
+          this.cropperData.data.inner.width = width / this.canvasStyle.scale;
+          this.cropperData.data.inner.height = height / this.canvasStyle.scale;
+          this.cropperData.data.inner.left =
+            (Number(target.style.left.split("px")[0]) +
+              beforeTranslate[0] -
+              this.canvasStyle.left) /
+            this.canvasStyle.scale;
+          this.cropperData.data.inner.top =
+            (Number(target.style.top.split("px")[0]) +
+              beforeTranslate[1] -
+              this.canvasStyle.top) /
+            this.canvasStyle.scale;
+          this.updateCropperData(this.cropperData);
+        });
     },
     layerSelect({ type, data }) {
       this.isMoveable = true;
@@ -140,7 +165,7 @@ export default {
             height: `${1080 * this.canvasStyle.scale}px`,
             left: `${this.canvasStyle.left}px`,
             top: `${this.canvasStyle.top}px`,
-            transform: '',
+            transform: "",
           };
           this.$nextTick(() => {
             this.init();
@@ -156,7 +181,7 @@ export default {
             top: `${
               data.inner.top * this.canvasStyle.scale + this.canvasStyle.left
             }px`,
-            transform: '',
+            transform: "",
           };
           this.$nextTick(() => {
             this.init();
@@ -171,18 +196,18 @@ export default {
         e.target !== this.$refs["moveable-container"] &&
         !this.$refs["moveable-container"].contains(e.target)
       ) {
-        this.moveableDestroy()
+        this.moveableDestroy();
         this.isMoveable = false;
       }
     },
     moveableDestroy() {
       if (this.moveable) {
-        this.moveable.target.style.transform = ''
+        this.moveable.target.style.transform = "";
         this.moveable.target = null;
-        this.moveable.destroy()
-        this.moveable = null
+        this.moveable.destroy();
+        this.moveable = null;
       }
-    }
+    },
   },
 };
 </script>
@@ -206,6 +231,11 @@ export default {
   .moveable-layer {
     position: absolute;
     z-index: 1;
+    img {
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+    }
   }
 }
 </style>

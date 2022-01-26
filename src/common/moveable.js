@@ -6,11 +6,12 @@ export default class Move {
       className: "draggable", // 可交互组件的class名称
       target: null, // 响应moveable操作结果的元素,如包裹一个可拖拽图钉的方块
       origin: false, // moveable元素的中心点是否可见,default: true
-      edge: true, // resize,scale是否支持通过边框操作
+      edge: false, // resize,scale是否支持通过边框操作
       zoom: 1, // moeable组件的元素缩放比例,default: 1,即边框或者四角和边框的句柄等
       draggable: true, // 是否支持可拖拽
-      edgeDraggable: true, // 是否支持拖拽边框移动, default: false
+      edgeDraggable: false, // 是否支持拖拽边框移动, default: false
       resizable: true, // 是否支持更改大小
+      renderDirections: ["n", "nw", "ne", "s", "se", "sw", "e", "w"]
     };
     Object.assign(this.options, options);
     this.moveable = new Moveable(
