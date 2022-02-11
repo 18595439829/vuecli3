@@ -11,7 +11,10 @@ export default class Move {
       draggable: true, // 是否支持可拖拽
       edgeDraggable: false, // 是否支持拖拽边框移动, default: false
       resizable: true, // 是否支持更改大小
-      renderDirections: ["n", "nw", "ne", "s", "se", "sw", "e", "w"]
+      // renderDirections: ["n", "nw", "ne", "s", "se", "sw", "e", "w"]
+      renderDirections: ["nw", "ne", "se", "sw"],
+      snappable: true,
+      elementSnapDirections: true,
     };
     Object.assign(this.options, options);
     this.moveable = new Moveable(
@@ -26,7 +29,6 @@ export default class Move {
         target, // DOM 初始化moveable的target元素
         beforeTranslate, // [left, top] 元素相较于起始位置的平移数据
       }) => {
-        console.log(beforeTranslate);
         target.style.transform = `translate(${beforeTranslate[0]}px, ${beforeTranslate[1]}px)`;
       }
     );

@@ -207,12 +207,12 @@ export default {
     },
     resizeRequest() {
       const requester = this.moveable.request("resizable");
-      requester.request({
-        direction: [100, 1],
-        deltaWidth: 100,
-        deltaHeight: 50,
-      });
-      // requester.request({ offsetWidth: 300, offsetHeight: 300 });
+      // requester.request({
+      //   direction: [1, 1],
+      //   deltaWidth: 100,
+      //   deltaHeight: 50,
+      // });
+      requester.request({ offsetWidth: 300, offsetHeight: 300 });
       requester.requestEnd();
     },
     scale({ target, scale, drag, width, height }) {
@@ -230,7 +230,7 @@ export default {
         e.target.style.cursor = "move";
         this.setMoveableTarget(e.target);
       } else if (this.moveable) {
-        this.moveable.target = null;
+        // this.moveable.target = null;
       }
     },
   },

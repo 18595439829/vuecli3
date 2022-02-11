@@ -11,6 +11,14 @@
       <TheLayerElement ref="canvas-container" :class="$style['element']" />
     </div>
     <div
+      ref="toolbar"
+      v-show="isToolbar"
+      :class="$style['toolbar']"
+      :style="{ ...toolbarStyle }"
+    >
+      工具栏
+    </div>
+    <div
       v-show="isMoveable"
       ref="moveable-container"
       :class="$style['moveable-layer']"
@@ -33,13 +41,16 @@ export default {
   },
   data() {
     return {
+      moveable: null,
       canvasStyle: {
         scale: 0.5,
         left: 100,
         top: 100,
       },
       ctrlDown: false,
+      toolbarStyle: {},
       selectLayerStyle: {},
+      isToolbar: false,
       isMoveable: false,
     };
   },
@@ -78,14 +89,7 @@ export default {
             if (this.canvasStyle.scale <= 0.1) {
               this.canvasStyle.scale = 0.1;
             }
-            if (this.moveable) {
-              const requester = this.moveable.request("resizeable");
-              requester.request({
-                width: this.selectLayerStyle.width * (1 + speed),
-                height: this.selectLayerStyle.height * (1 + speed),
-              });
-              requester.requestEnd();
-            }
+            this.setMoveableRequest();
           }
         },
         false
@@ -109,16 +113,23 @@ export default {
               this.canvasStyle.scale = 0.1;
             }
           }
+          this.setMoveableRequest();
         },
         { passive: false, capture: false }
       );
+    },
+    setMoveableRequest() {
       if (this.moveable) {
-        const requester = this.moveable.request("resizeable");
-        requester.request({
-          width: this.selectLayerStyle.width * (1 + speed),
-          height: this.selectLayerStyle.height * (1 + speed),
+        this.moveableDestroy();
+        this.isMoveable = false;
+        this.$nextTick(() => {
+          this.layerSelect(this.cropperData);
         });
-        requester.requestEnd();
+      } else if (this.cropperData.type === 'caption') {
+        this.isToolbar = false
+        this.$nextTick(() => {
+          this.layerSelect(this.cropperData);
+        });
       }
     },
     init() {
@@ -127,32 +138,42 @@ export default {
       }).getMoveable();
       this.moveable
         .on("drag", ({ target, beforeTranslate }) => {
-          this.cropperData.data.inner.left =
+          this.cropperData.data.inner.left = Math.floor(
             (Number(target.style.left.split("px")[0]) +
               beforeTranslate[0] -
               this.canvasStyle.left) /
-            this.canvasStyle.scale;
-          this.cropperData.data.inner.top =
+              this.canvasStyle.scale
+          );
+          this.cropperData.data.inner.top = Math.floor(
             (Number(target.style.top.split("px")[0]) +
               beforeTranslate[1] -
               this.canvasStyle.top) /
-            this.canvasStyle.scale;
+              this.canvasStyle.scale
+          );
+          this.setToolbarStyle();
           this.updateCropperData(this.cropperData);
         })
         .on("resize", ({ target, width, height, drag }) => {
           let { beforeTranslate } = drag;
-          this.cropperData.data.inner.width = width / this.canvasStyle.scale;
-          this.cropperData.data.inner.height = height / this.canvasStyle.scale;
-          this.cropperData.data.inner.left =
+          this.cropperData.data.inner.width = Math.floor(
+            width / this.canvasStyle.scale
+          );
+          this.cropperData.data.inner.height = Math.floor(
+            height / this.canvasStyle.scale
+          );
+          this.cropperData.data.inner.left = Math.floor(
             (Number(target.style.left.split("px")[0]) +
               beforeTranslate[0] -
               this.canvasStyle.left) /
-            this.canvasStyle.scale;
-          this.cropperData.data.inner.top =
+              this.canvasStyle.scale
+          );
+          this.cropperData.data.inner.top = Math.floor(
             (Number(target.style.top.split("px")[0]) +
               beforeTranslate[1] -
               this.canvasStyle.top) /
-            this.canvasStyle.scale;
+              this.canvasStyle.scale
+          );
+          this.setToolbarStyle();
           this.updateCropperData(this.cropperData);
         });
     },
@@ -185,19 +206,61 @@ export default {
           };
           this.$nextTick(() => {
             this.init();
+            this.isToolbar = true;
+            this.setToolbarStyle();
           });
           break;
+        case "caption":
+          let { height, top } =
+          data.ref.getBoundingClientRect();
+          this.selectLayerStyle = {
+            width: `${1920 * 0.8 * this.canvasStyle.scale}px`,
+            height: `${height}px`,
+            left: `${
+              1920 * 0.1 * this.canvasStyle.scale + this.canvasStyle.left
+            }px`,
+            top: `${top}px`,
+            outline: "1px solid #3360ff",
+            transform: "",
+          };
+          this.$nextTick(() => {
+            this.isToolbar = true;
+            this.toolbarStyle = {
+              left: `${
+                1920 * 0.1 * this.canvasStyle.scale + this.canvasStyle.left
+              }px`,
+              top: `${top}px`,
+            };
+          });
+          break;
+      }
+    },
+    setToolbarStyle() {
+      if (this.isToolbar) {
+        this.toolbarStyle = {
+          left: `${
+            this.cropperData.data.inner.left * this.canvasStyle.scale +
+            this.canvasStyle.left
+          }px`,
+          top: `${
+            this.cropperData.data.inner.top * this.canvasStyle.scale +
+            this.canvasStyle.left
+          }px`,
+        };
       }
     },
     closeMoveable(e) {
       if (
         e.target !== this.$refs["canvas-container"].$el &&
         !this.$refs["canvas-container"].$el.contains(e.target) &&
+        e.target !== this.$refs["toolbar"] &&
+        !this.$refs["toolbar"].contains(e.target) &&
         e.target !== this.$refs["moveable-container"] &&
         !this.$refs["moveable-container"].contains(e.target)
       ) {
         this.moveableDestroy();
         this.isMoveable = false;
+        this.isToolbar = false;
       }
     },
     moveableDestroy() {
@@ -227,6 +290,14 @@ export default {
       width: 1920px;
       height: 1080px;
     }
+  }
+  .toolbar {
+    position: absolute;
+    z-index: 1;
+    transform: translateY(-100%);
+    padding: 5px 10px;
+    outline: 1px solid #3360ff;
+    background: #f3f3f3;
   }
   .moveable-layer {
     position: absolute;

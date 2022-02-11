@@ -47,6 +47,18 @@
         />
       </div>
     </template>
+    <template v-if="info.captions && info.captions.length">
+      <div ref="layer-caption" :class="$style['layer-captions']">
+        <div
+          v-for="(text, index) in info.captions[captionIndex].content"
+          :key="text + index"
+          :data-id="info.captions[captionIndex].id"
+          @click="captionsClick"
+        >
+          {{ text }}
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -118,12 +130,23 @@ export default {
         ],
         texts: [
           {
+            id: "213445234",
             content: "我是一个文本",
             color: "#333",
             fontSize: 30,
           },
         ],
+        captions: [
+          {
+            id: "13313443411",
+            content: [
+              "第一行字幕居中",
+              "第二行字幕惆怅长岑长错错错错错错错错错",
+            ],
+          },
+        ],
       },
+      captionIndex: 0,
     };
   },
   computed: {
@@ -137,7 +160,7 @@ export default {
             let backgroundIndex = this.info.background.findIndex(
               (item) => item.id === v.data.id
             );
-            this.$set(this.info.medias, backgroundIndex, v.data);
+            this.$set(this.info.background, backgroundIndex, v.data);
             break;
           case "media":
             let mediaIndex = this.info.medias.findIndex(
@@ -170,6 +193,15 @@ export default {
         data: layer,
       });
     },
+    captionsClick(e) {
+      let layer = this.info.captions.find(
+        (item) => item.id === e.target.dataset.id
+      );
+      this.emit({
+        type: "caption",
+        data: { ...layer, ref: this.$refs['layer-caption'] },
+      });
+    },
     emit(e) {
       this.updateCropperData(e);
     },
@@ -200,10 +232,27 @@ export default {
     position: absolute;
     z-index: 1;
     overflow: hidden;
+    &:hover {
+      outline: 1px solid #3360ff;
+    }
     img {
       position: absolute;
       pointer-events: none;
       user-select: none;
+    }
+  }
+  .layer-captions {
+    position: absolute;
+    z-index: 2;
+    font-size: 52px;
+    color: black;
+    bottom: 58px;
+    text-align: center;
+    left: 50%;
+    width: 1920px * 0.8;
+    transform: translateX(-50%);
+    &:hover {
+      outline: 2px solid #3360ff;
     }
   }
 }
