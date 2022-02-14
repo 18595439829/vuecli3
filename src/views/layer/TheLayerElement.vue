@@ -1,8 +1,8 @@
 <template>
   <div :class="$style['container']">
-    <template v-if="info.background && info.background.length">
+    <template v-if="info.backgrounds && info.backgrounds.length">
       <div
-        v-for="item in info.background"
+        v-for="item in info.backgrounds"
         :key="item.id"
         :class="$style['background-item']"
         :data-id="item.id"
@@ -77,7 +77,7 @@ export default {
   data() {
     return {
       info: {
-        background: [
+        backgrounds: [
           {
             id: "123",
             isBlur: false,
@@ -156,19 +156,19 @@ export default {
     };
   },
   computed: {
-    ...mapState(["cropperData"]),
+    ...mapState(["cropperData", "deleteData"]),
   },
   watch: {
     cropperData: {
       handler(v) {
         switch (v.type) {
-          case "background":
-            let backgroundIndex = this.info.background.findIndex(
+          case "backgrounds":
+            let backgroundIndex = this.info.backgrounds.findIndex(
               (item) => item.id === v.data.id
             );
-            this.$set(this.info.background, backgroundIndex, v.data);
+            this.$set(this.info.backgrounds, backgroundIndex, v.data);
             break;
-          case "media":
+          case "medias":
             let mediaIndex = this.info.medias.findIndex(
               (item) => item.id === v.data.id
             );
@@ -178,27 +178,35 @@ export default {
       },
       deep: true,
     },
+    deleteData: {
+      handler(v) {
+        let index = this.info[v.type].findIndex(item => item.id === v.data.id)
+        this.info[v.type].splice(index, 1)
+        this.updateCropperData({type: '', data: undefined})
+      },
+      deep: true
+    }
   },
   methods: {
     ...mapMutations(["updateCropperData", "updateHoverData"]),
     backgroundClick(e) {
-      let layer = this.info.background.find(
+      let layer = this.info.backgrounds.find(
         (item) => item.id === e.target.dataset.id
       );
       this.emit({
-        type: "background",
+        type: "backgrounds",
         data: layer,
       });
     },
     backgroundHover(e, type) {
       let layer;
       if (type) {
-        layer = this.info.background.find(
+        layer = this.info.backgrounds.find(
           (item) => item.id === e.target.dataset.id
         );
       }
       this.hover({
-        type: "background",
+        type: "backgrounds",
         data: layer,
       });
     },
@@ -207,7 +215,7 @@ export default {
         (item) => item.id === e.target.dataset.id
       );
       this.emit({
-        type: "media",
+        type: "medias",
         data: layer,
       });
     },
@@ -219,7 +227,7 @@ export default {
         );
       }
       this.hover({
-        type: "media",
+        type: "medias",
         data: layer,
       });
     },
@@ -228,7 +236,7 @@ export default {
         (item) => item.id === e.target.dataset.id
       );
       this.emit({
-        type: "caption",
+        type: "captions",
         data: { ...layer, ref: this.$refs["layer-caption"] },
       });
     },
@@ -240,7 +248,7 @@ export default {
         );
       }
       this.hover({
-        type: "caption",
+        type: "captions",
         data: type ? { ...layer, ref: this.$refs["layer-caption"] } : undefined,
       });
     },
@@ -276,12 +284,12 @@ export default {
     }
   }
   .layer-img {
-    width: 100%;
-    height: 100%;
     position: absolute;
     z-index: 1;
     overflow: hidden;
     img {
+      width: 100%;
+      height: 100%;
       position: absolute;
       pointer-events: none;
       user-select: none;

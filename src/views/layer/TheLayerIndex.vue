@@ -69,7 +69,7 @@ export default {
   },
   watch: {
     cropperData(v) {
-      this.moveableDestroy();
+      this.destroyMoveable();
       this.isMoveable = false;
       this.layerSelect(v);
     },
@@ -80,8 +80,15 @@ export default {
   created() {
     this.setElementScale();
   },
+  mounted() {
+    this.initDelete();
+  },
+  destroy() {
+    this.destroyDelete();
+    this.destroyMoveable();
+  },
   methods: {
-    ...mapMutations(["updateCropperData"]),
+    ...mapMutations(["updateCropperData", "updateDeleteData"]),
     setElementScale() {
       let speed = 0.1;
       document.body.addEventListener(
@@ -133,7 +140,7 @@ export default {
     },
     setMoveableRequest() {
       if (this.moveable) {
-        this.moveableDestroy();
+        this.destroyMoveable();
         this.isMoveable = false;
         this.$nextTick(() => {
           this.layerSelect(this.cropperData);
@@ -145,7 +152,7 @@ export default {
         });
       }
     },
-    init() {
+    initMoveable() {
       this.moveable = new Moveable(this.$refs.container, {
         target: this.$refs["moveable-container"],
       }).getMoveable();
@@ -168,45 +175,62 @@ export default {
         })
         .on("resize", ({ target, width, height, drag }) => {
           let { beforeTranslate } = drag;
-          this.cropperData.data.inner.width = Math.floor(
+          let scale =
+            width / this.canvasStyle.scale / this.cropperData.data.inner.width;
+          this.cropperData.data.inner.width = Math.round(
             width / this.canvasStyle.scale
           );
-          this.cropperData.data.inner.height = Math.floor(
+          this.cropperData.data.inner.height = Math.round(
             height / this.canvasStyle.scale
           );
-          this.cropperData.data.inner.left = Math.floor(
+          this.cropperData.data.inner.left = Math.round(
             (Number(target.style.left.split("px")[0]) +
               beforeTranslate[0] -
               this.canvasStyle.left) /
               this.canvasStyle.scale
           );
-          this.cropperData.data.inner.top = Math.floor(
+          this.cropperData.data.inner.top = Math.round(
             (Number(target.style.top.split("px")[0]) +
               beforeTranslate[1] -
               this.canvasStyle.top) /
               this.canvasStyle.scale
           );
+          this.cropperData.data.outer.width = Math.round(
+            this.cropperData.data.outer.width * scale
+          );
+          this.cropperData.data.outer.height = Math.round(
+            this.cropperData.data.outer.height * scale
+          );
+          this.cropperData.data.outer.left = Math.round(
+            this.cropperData.data.outer.left * scale
+          );
+          this.cropperData.data.outer.top = Math.round(
+            this.cropperData.data.outer.top * scale
+          );
           this.setToolbarStyle();
           this.updateCropperData(this.cropperData);
         });
+    },
+    initDelete() {
+      document.body.addEventListener("keydown", this.keydown);
     },
     layerSelect({ type, data }) {
       this.isMoveable = true;
       this.selectLayerStyle = { ...this.getLayerStyle({ type, data }) };
       switch (type) {
-        case "background":
+        case "backgrounds":
           this.$nextTick(() => {
-            this.init();
+            this.initMoveable();
           });
           break;
-        case "media":
+        case "medias":
           this.$nextTick(() => {
-            this.init();
+            this.initMoveable();
             this.isToolbar = true;
             this.setToolbarStyle();
           });
           break;
-        case "caption":
+        case "captions":
           this.$nextTick(() => {
             this.isToolbar = true;
             this.toolbarStyle = {
@@ -217,6 +241,9 @@ export default {
             };
           });
           break;
+        default:
+          this.isToolbar = false;
+          this.isMoveable = false;
       }
     },
     layerHover({ type, data }) {
@@ -230,7 +257,7 @@ export default {
     getLayerStyle({ type, data }) {
       let style;
       switch (type) {
-        case "background":
+        case "backgrounds":
           style = {
             width: `${1920 * this.canvasStyle.scale}px`,
             height: `${1080 * this.canvasStyle.scale}px`,
@@ -239,7 +266,7 @@ export default {
             transform: "",
           };
           break;
-        case "media":
+        case "medias":
           style = {
             width: `${data.inner.width * this.canvasStyle.scale}px`,
             height: `${data.inner.height * this.canvasStyle.scale}px`,
@@ -252,7 +279,7 @@ export default {
             transform: "",
           };
           break;
-        case "caption":
+        case "captions":
           let { height, top } = data.ref.getBoundingClientRect();
           style = {
             width: `${1920 * 0.8 * this.canvasStyle.scale}px`,
@@ -291,18 +318,64 @@ export default {
         e.target !== this.$refs["moveable-container"] &&
         !this.$refs["moveable-container"].contains(e.target)
       ) {
-        this.moveableDestroy();
+        this.destroyMoveable();
         this.isMoveable = false;
         this.isToolbar = false;
       }
     },
-    moveableDestroy() {
+    destroyMoveable() {
       if (this.moveable) {
         this.moveable.target.style.transform = "";
         this.moveable.target = null;
         this.moveable.destroy();
         this.moveable = null;
       }
+    },
+    destroyDelete() {
+      document.body.removeEventListener("keydown", this.keydown);
+    },
+    keydown(e) {
+      if (this.cropperData && this.cropperData.data) {
+        if (e.key === "Backspace" || e.key === "Delete") {
+          this.updateDeleteData({ ...this.cropperData });
+        } else if (
+          e.key === "ArrowRight" ||
+          e.key === "ArrowLeft" ||
+          e.key === "ArrowUp" ||
+          e.key === "ArrowDown"
+        ) {
+          let distance = 1,
+            type = "deltaX",
+            symbol = 1;
+          switch (e.key) {
+            case "ArrowRight":
+              type = "deltaX";
+              symbol = 1;
+              break;
+            case "ArrowLeft":
+              type = "deltaX";
+              symbol = -1;
+              break;
+            case "ArrowUp":
+              type = "deltaY";
+              symbol = -1;
+              break;
+            case "ArrowDown":
+              type = "deltaY";
+              symbol = 1;
+              break;
+          }
+          if (e.shiftKey) {
+            distance = 10;
+          }
+          this.setLayerPosition({ type, distance: distance * symbol });
+        }
+      }
+    },
+    setLayerPosition({ type, distance }) {
+      let requester = this.moveable.request("draggable");
+      requester.request({ [type]: distance });
+      requester.requestEnd();
     },
   },
 };

@@ -11,6 +11,7 @@ export default class Move {
       draggable: true, // 是否支持可拖拽
       edgeDraggable: false, // 是否支持拖拽边框移动, default: false
       resizable: true, // 是否支持更改大小
+      keepRatio: true,
       // renderDirections: ["n", "nw", "ne", "s", "se", "sw", "e", "w"]
       renderDirections: ["nw", "ne", "se", "sw"],
       snappable: true,

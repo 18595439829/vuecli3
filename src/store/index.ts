@@ -6,7 +6,8 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     cropperData: {},
-    hoverData: {}
+    hoverData: {},
+    deleteData: {}
   },
   mutations: {
     updateCropperData (state, data) {
@@ -14,6 +15,9 @@ const store = new Vuex.Store({
     },
     updateHoverData (state, data) {
       state.hoverData = data
+    },
+    updateDeleteData(state, data) {
+      state.deleteData = data
     }
   }
 })
