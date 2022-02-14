@@ -17,6 +17,8 @@
           top: `${item.top}px`,
         }"
         @click="backgroundClick"
+        @mouseenter="backgroundHover($event, true)"
+        @mouseleave="backgroundHover($event, false)"
       ></div>
     </template>
     <template v-if="info.medias && info.medias.length">
@@ -33,6 +35,8 @@
           top: `${item.inner.top}px`,
         }"
         @click="mediaClick"
+        @mouseenter="mediaHover($event, true)"
+        @mouseleave="mediaHover($event, false)"
       >
         <img
           :src="item.url"
@@ -54,6 +58,8 @@
           :key="text + index"
           :data-id="info.captions[captionIndex].id"
           @click="captionsClick"
+          @mouseenter="captionsHover($event, true)"
+          @mouseleave="captionsHover($event, false)"
         >
           {{ text }}
         </div>
@@ -174,12 +180,24 @@ export default {
     },
   },
   methods: {
-    ...mapMutations(["updateCropperData"]),
+    ...mapMutations(["updateCropperData", "updateHoverData"]),
     backgroundClick(e) {
       let layer = this.info.background.find(
         (item) => item.id === e.target.dataset.id
       );
       this.emit({
+        type: "background",
+        data: layer,
+      });
+    },
+    backgroundHover(e, type) {
+      let layer;
+      if (type) {
+        layer = this.info.background.find(
+          (item) => item.id === e.target.dataset.id
+        );
+      }
+      this.hover({
         type: "background",
         data: layer,
       });
@@ -193,17 +211,48 @@ export default {
         data: layer,
       });
     },
+    mediaHover(e, type) {
+      let layer;
+      if (type) {
+        layer = this.info.medias.find(
+          (item) => item.id === e.target.dataset.id
+        );
+      }
+      this.hover({
+        type: "media",
+        data: layer,
+      });
+    },
     captionsClick(e) {
       let layer = this.info.captions.find(
         (item) => item.id === e.target.dataset.id
       );
       this.emit({
         type: "caption",
-        data: { ...layer, ref: this.$refs['layer-caption'] },
+        data: { ...layer, ref: this.$refs["layer-caption"] },
+      });
+    },
+    captionsHover(e, type) {
+      let layer;
+      if (type) {
+        layer = this.info.captions.find(
+          (item) => item.id === e.target.dataset.id
+        );
+      }
+      this.hover({
+        type: "caption",
+        data: type ? { ...layer, ref: this.$refs["layer-caption"] } : undefined,
       });
     },
     emit(e) {
       this.updateCropperData(e);
+      this.hover({
+        type: '',
+        data: undefined
+      })
+    },
+    hover(e) {
+      this.updateHoverData(e);
     },
   },
 };
@@ -232,9 +281,6 @@ export default {
     position: absolute;
     z-index: 1;
     overflow: hidden;
-    &:hover {
-      outline: 1px solid #3360ff;
-    }
     img {
       position: absolute;
       pointer-events: none;
@@ -251,9 +297,6 @@ export default {
     left: 50%;
     width: 1920px * 0.8;
     transform: translateX(-50%);
-    &:hover {
-      outline: 2px solid #3360ff;
-    }
   }
 }
 </style>

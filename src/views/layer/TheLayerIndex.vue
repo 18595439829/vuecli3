@@ -22,7 +22,15 @@
       v-show="isMoveable"
       ref="moveable-container"
       :class="$style['moveable-layer']"
+      :ishover="isHover"
       :style="{ ...selectLayerStyle }"
+    >
+      <img src="" alt="" />
+    </div>
+    <div
+      v-show="isHover"
+      :class="$style['hover-layer']"
+      :style="{ ...hoverLayerStyle }"
     >
       <img src="" alt="" />
     </div>
@@ -50,18 +58,23 @@ export default {
       ctrlDown: false,
       toolbarStyle: {},
       selectLayerStyle: {},
+      hoverLayerStyle: {},
       isToolbar: false,
       isMoveable: false,
+      isHover: false,
     };
   },
   computed: {
-    ...mapState(["cropperData"]),
+    ...mapState(["cropperData", "hoverData"]),
   },
   watch: {
     cropperData(v) {
       this.moveableDestroy();
       this.isMoveable = false;
       this.layerSelect(v);
+    },
+    hoverData(v) {
+      this.layerHover(v);
     },
   },
   created() {
@@ -125,8 +138,8 @@ export default {
         this.$nextTick(() => {
           this.layerSelect(this.cropperData);
         });
-      } else if (this.cropperData.type === 'caption') {
-        this.isToolbar = false
+      } else if (this.cropperData.type === "caption") {
+        this.isToolbar = false;
         this.$nextTick(() => {
           this.layerSelect(this.cropperData);
         });
@@ -179,31 +192,14 @@ export default {
     },
     layerSelect({ type, data }) {
       this.isMoveable = true;
+      this.selectLayerStyle = { ...this.getLayerStyle({ type, data }) };
       switch (type) {
         case "background":
-          this.selectLayerStyle = {
-            width: `${1920 * this.canvasStyle.scale}px`,
-            height: `${1080 * this.canvasStyle.scale}px`,
-            left: `${this.canvasStyle.left}px`,
-            top: `${this.canvasStyle.top}px`,
-            transform: "",
-          };
           this.$nextTick(() => {
             this.init();
           });
           break;
         case "media":
-          this.selectLayerStyle = {
-            width: `${data.inner.width * this.canvasStyle.scale}px`,
-            height: `${data.inner.height * this.canvasStyle.scale}px`,
-            left: `${
-              data.inner.left * this.canvasStyle.scale + this.canvasStyle.left
-            }px`,
-            top: `${
-              data.inner.top * this.canvasStyle.scale + this.canvasStyle.left
-            }px`,
-            transform: "",
-          };
           this.$nextTick(() => {
             this.init();
             this.isToolbar = true;
@@ -211,18 +207,6 @@ export default {
           });
           break;
         case "caption":
-          let { height, top } =
-          data.ref.getBoundingClientRect();
-          this.selectLayerStyle = {
-            width: `${1920 * 0.8 * this.canvasStyle.scale}px`,
-            height: `${height}px`,
-            left: `${
-              1920 * 0.1 * this.canvasStyle.scale + this.canvasStyle.left
-            }px`,
-            top: `${top}px`,
-            outline: "1px solid #3360ff",
-            transform: "",
-          };
           this.$nextTick(() => {
             this.isToolbar = true;
             this.toolbarStyle = {
@@ -234,6 +218,55 @@ export default {
           });
           break;
       }
+    },
+    layerHover({ type, data }) {
+      if (!data) {
+        this.isHover = false;
+        return;
+      }
+      this.hoverLayerStyle = { ...this.getLayerStyle({ type, data }) };
+      this.isHover = true;
+    },
+    getLayerStyle({ type, data }) {
+      let style;
+      switch (type) {
+        case "background":
+          style = {
+            width: `${1920 * this.canvasStyle.scale}px`,
+            height: `${1080 * this.canvasStyle.scale}px`,
+            left: `${this.canvasStyle.left}px`,
+            top: `${this.canvasStyle.top}px`,
+            transform: "",
+          };
+          break;
+        case "media":
+          style = {
+            width: `${data.inner.width * this.canvasStyle.scale}px`,
+            height: `${data.inner.height * this.canvasStyle.scale}px`,
+            left: `${
+              data.inner.left * this.canvasStyle.scale + this.canvasStyle.left
+            }px`,
+            top: `${
+              data.inner.top * this.canvasStyle.scale + this.canvasStyle.left
+            }px`,
+            transform: "",
+          };
+          break;
+        case "caption":
+          let { height, top } = data.ref.getBoundingClientRect();
+          style = {
+            width: `${1920 * 0.8 * this.canvasStyle.scale}px`,
+            height: `${height}px`,
+            left: `${
+              1920 * 0.1 * this.canvasStyle.scale + this.canvasStyle.left
+            }px`,
+            top: `${top}px`,
+            outline: "1px solid #3360ff",
+            transform: "",
+          };
+          break;
+      }
+      return style;
     },
     setToolbarStyle() {
       if (this.isToolbar) {
@@ -307,6 +340,11 @@ export default {
       height: 100%;
       opacity: 0;
     }
+  }
+  .hover-layer {
+    .moveable-layer;
+    outline: 3px solid #3360ff;
+    pointer-events: none;
   }
 }
 </style>
