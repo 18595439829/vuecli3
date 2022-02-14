@@ -1,7 +1,7 @@
 const loader = require("sass-loader");
 
 module.exports = {
-  outputDir: "dist/vuecli3",
+  outputDir: "docs",
   indexPath: "index.html",
   publicPath: "/vuecli3/",
   runtimeCompiler: true,
