@@ -73,6 +73,11 @@ export default {
           // scalable: true, // 是否支持缩放
           //   rotatable: true, // 是否支持旋转
           //   warpable: true,  // 是否支持折叠,3d效果,增加Z轴
+          snappable: true,
+          snapContainer: document.body,
+          bounds: [
+            {left: 100, right: 300, top: 0, bottom: 200}
+          ]
         }
       );
       this.moveable

@@ -58,6 +58,9 @@ export default {
    position: relative;
    .drag {
      width: 50vw;
+     img {
+       width: 100px;
+     }
    }
  }
 </style>

@@ -17,6 +17,7 @@
 <script>
 import TheDragSort from "@/views/drag/TheDragSort.vue";
 import TheMoveable from "@/views/drag/TheMoveable.vue";
+import TheSnappable from "@/views/drag/TheSnappable.vue";
 import TheClip from "@/views/drag/TheClip.vue";
 import TheCroppr from '@/views/drag/TheCropper.vue'
 
@@ -35,6 +36,11 @@ export default {
           id: "moveable",
           name: "moveable",
           component: TheMoveable,
+        },
+        {
+          id: "snappable",
+          name: "snappable",
+          component: TheSnappable,
         },
         {
           id: "clipable",
