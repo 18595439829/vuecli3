@@ -62,6 +62,7 @@ export default {
       isToolbar: false,
       isMoveable: false,
       isHover: false,
+      isMoveableAction: false,
     };
   },
   computed: {
@@ -156,6 +157,18 @@ export default {
       this.moveable = new Moveable(this.$refs.container, {
         target: this.$refs["moveable-container"],
       }).getMoveable();
+      this.moveable.on('dragStart', () => {
+        this.isMoveableAction = true
+      })
+      this.moveable.on('dragEnd', () => {
+        this.isMoveableAction = false
+      })
+      this.moveable.on('resizeStart', () => {
+        this.isMoveableAction = true
+      })
+      this.moveable.on('resizeEnd', () => {
+        this.isMoveableAction = false
+      })
       this.moveable
         .on("drag", ({ target, beforeTranslate }) => {
           this.cropperData.data.inner.left = Math.floor(
@@ -247,7 +260,7 @@ export default {
       }
     },
     layerHover({ type, data }) {
-      if (!data) {
+      if (!data || this.isMoveableAction) {
         this.isHover = false;
         return;
       }

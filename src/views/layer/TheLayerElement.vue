@@ -111,7 +111,7 @@ export default {
               top: 0,
             },
             outer: {
-              width: 960,
+              width: 1440,
               height: 1080,
               left: 0,
               top: 0,
