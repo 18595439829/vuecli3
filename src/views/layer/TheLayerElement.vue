@@ -16,9 +16,7 @@
           left: `${item.left}px`,
           top: `${item.top}px`,
         }"
-        @click="backgroundClick"
-        @mouseenter="backgroundHover($event, true)"
-        @mouseleave="backgroundHover($event, false)"
+        @mousedown="backgroundClick"
       ></div>
     </template>
     <template v-if="info.medias && info.medias.length">
@@ -28,21 +26,18 @@
         :data-id="item.id"
         :class="$style['layer-img']"
         :style="{
-          zIndex: item.zIndex,
+          zIndex: item.zIndex + zIndex.medias,
           width: `${item.inner.width}px`,
           height: `${item.inner.height}px`,
           left: `${item.inner.left}px`,
           top: `${item.inner.top}px`,
         }"
-        @click="mediaClick"
-        @mouseenter="mediaHover($event, true)"
-        @mouseleave="mediaHover($event, false)"
+        @mousedown="mediaClick"
       >
         <img
           :src="item.url"
           alt=""
           :style="{
-            zIndex: item.zIndex,
             width: `${item.outer.width}px`,
             height: `${item.outer.height}px`,
             left: `${item.outer.left}px`,
@@ -52,14 +47,12 @@
       </div>
     </template>
     <template v-if="info.captions && info.captions.length">
-      <div ref="layer-caption" :class="$style['layer-captions']">
+      <div ref="layer-caption" :class="$style['layer-captions']" :style="{zIndex: zIndex.captions}">
         <div
           v-for="(text, index) in info.captions[captionIndex].content"
           :key="text + index"
           :data-id="info.captions[captionIndex].id"
           @click="captionsClick"
-          @mouseenter="captionsHover($event, true)"
-          @mouseleave="captionsHover($event, false)"
         >
           {{ text }}
         </div>
@@ -70,93 +63,30 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import KAOLA from "@/assets/img/Koala.jpg";
-import FISH from "@/assets/img/Jellyfish.jpg";
+
 export default {
   name: "TheLayerElement",
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
-      info: {
-        backgrounds: [
-          {
-            id: "123",
-            isBlur: false,
-            color: "#f1f1f1",
-            zIndex: 0,
-            width: 1920,
-            height: 1080,
-            left: 0,
-            top: 0,
-          },
-          {
-            id: "142314",
-            isBlur: true,
-            url: KAOLA,
-            zIndex: 1,
-            width: 1920,
-            height: 1080,
-            left: 0,
-            top: 0,
-          },
-        ],
-        medias: [
-          {
-            id: "media-1",
-            url: KAOLA,
-            zIndex: 1,
-            inner: {
-              width: 960,
-              height: 1080,
-              left: 960,
-              top: 0,
-            },
-            outer: {
-              width: 1440,
-              height: 1080,
-              left: 0,
-              top: 0,
-            },
-          },
-          {
-            id: "media-2",
-            url: FISH,
-            inner: {
-              width: 960,
-              height: 540,
-              left: 0,
-              top: 0,
-            },
-            outer: {
-              width: 960,
-              height: 540,
-              left: 0,
-              top: 0,
-            },
-          },
-        ],
-        texts: [
-          {
-            id: "213445234",
-            content: "我是一个文本",
-            color: "#333",
-            fontSize: 30,
-          },
-        ],
-        captions: [
-          {
-            id: "13313443411",
-            content: [
-              "第一行字幕居中",
-              "第二行字幕惆怅长岑长错错错错错错错错错",
-            ],
-          },
-        ],
+      zIndex: {
+        medias: 100,
+        texts: 200,
+        captions: 300
       },
       captionIndex: 0,
     };
   },
   computed: {
-    ...mapState(["cropperData", "deleteData"]),
+    ...mapState(["cropperData"]),
+    info() {
+      return this.data
+    }
   },
   watch: {
     cropperData: {
@@ -188,7 +118,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["updateCropperData", "updateHoverData"]),
+    ...mapMutations(["updateCropperData"]),
     backgroundClick(e) {
       let layer = this.info.backgrounds.find(
         (item) => item.id === e.target.dataset.id
@@ -196,18 +126,7 @@ export default {
       this.emit({
         type: "backgrounds",
         data: layer,
-      });
-    },
-    backgroundHover(e, type) {
-      let layer;
-      if (type) {
-        layer = this.info.backgrounds.find(
-          (item) => item.id === e.target.dataset.id
-        );
-      }
-      this.hover({
-        type: "backgrounds",
-        data: layer,
+        event: e
       });
     },
     mediaClick(e) {
@@ -217,18 +136,7 @@ export default {
       this.emit({
         type: "medias",
         data: layer,
-      });
-    },
-    mediaHover(e, type) {
-      let layer;
-      if (type) {
-        layer = this.info.medias.find(
-          (item) => item.id === e.target.dataset.id
-        );
-      }
-      this.hover({
-        type: "medias",
-        data: layer,
+        event: e
       });
     },
     captionsClick(e) {
@@ -238,29 +146,11 @@ export default {
       this.emit({
         type: "captions",
         data: { ...layer, ref: this.$refs["layer-caption"] },
-      });
-    },
-    captionsHover(e, type) {
-      let layer;
-      if (type) {
-        layer = this.info.captions.find(
-          (item) => item.id === e.target.dataset.id
-        );
-      }
-      this.hover({
-        type: "captions",
-        data: type ? { ...layer, ref: this.$refs["layer-caption"] } : undefined,
+        event: e
       });
     },
     emit(e) {
       this.updateCropperData(e);
-      this.hover({
-        type: '',
-        data: undefined
-      })
-    },
-    hover(e) {
-      this.updateHoverData(e);
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" :class="$style['container']" @click="closeMoveable">
+  <div ref="container" :class="$style['container']" @mousedown="closeMoveable">
     <div
       :class="$style['canvas']"
       :style="{
@@ -8,7 +8,11 @@
         top: `${canvasStyle.top}px`,
       }"
     >
-      <TheLayerElement ref="canvas-container" :class="$style['element']" />
+      <TheLayerElement
+        ref="canvas-container"
+        :class="$style['element']"
+        :data="layerData"
+      />
     </div>
     <div
       ref="toolbar"
@@ -25,7 +29,7 @@
       :ishover="isHover"
       :style="{ ...selectLayerStyle }"
     >
-      <img src="" alt="" />
+      <img src alt="" />
     </div>
     <div
       v-show="isHover"
@@ -41,6 +45,7 @@
 import TheLayerElement from "@/views/layer/TheLayerElement.vue";
 import Moveable from "@/common/moveable.js";
 import { mapState, mapMutations } from "vuex";
+import { searchLayerByPx, layerData } from "@/common/layer-utils.js";
 
 export default {
   name: "TheLayerIndex",
@@ -49,6 +54,7 @@ export default {
   },
   data() {
     return {
+      layerData,
       moveable: null,
       canvasStyle: {
         scale: 0.5,
@@ -72,7 +78,7 @@ export default {
     cropperData(v) {
       this.destroyMoveable();
       this.isMoveable = false;
-      this.layerSelect(v);
+      this.layerSelect(v, true);
     },
     hoverData(v) {
       this.layerHover(v);
@@ -144,31 +150,32 @@ export default {
         this.destroyMoveable();
         this.isMoveable = false;
         this.$nextTick(() => {
-          this.layerSelect(this.cropperData);
+          this.layerSelect(this.cropperData, false);
         });
       } else if (this.cropperData.type === "caption") {
         this.isToolbar = false;
         this.$nextTick(() => {
-          this.layerSelect(this.cropperData);
+          this.layerSelect(this.cropperData, false);
         });
       }
     },
-    initMoveable() {
+    initMoveable({event, isStrat}) {
       this.moveable = new Moveable(this.$refs.container, {
         target: this.$refs["moveable-container"],
       }).getMoveable();
-      this.moveable.on('dragStart', () => {
-        this.isMoveableAction = true
-      })
-      this.moveable.on('dragEnd', () => {
-        this.isMoveableAction = false
-      })
-      this.moveable.on('resizeStart', () => {
-        this.isMoveableAction = true
-      })
-      this.moveable.on('resizeEnd', () => {
-        this.isMoveableAction = false
-      })
+      isStrat && this.moveable.dragStart(event)
+      this.moveable.on("dragStart", () => {
+        this.isMoveableAction = true;
+      });
+      this.moveable.on("dragEnd", () => {
+        this.isMoveableAction = false;
+      });
+      this.moveable.on("resizeStart", () => {
+        this.isMoveableAction = true;
+      });
+      this.moveable.on("resizeEnd", () => {
+        this.isMoveableAction = false;
+      });
       this.moveable
         .on("drag", ({ target, beforeTranslate }) => {
           this.cropperData.data.inner.left = Math.floor(
@@ -227,18 +234,18 @@ export default {
     initDelete() {
       document.body.addEventListener("keydown", this.keydown);
     },
-    layerSelect({ type, data }) {
+    layerSelect({ type, data, event }, isStrat) {
       this.isMoveable = true;
       this.selectLayerStyle = { ...this.getLayerStyle({ type, data }) };
       switch (type) {
         case "backgrounds":
           this.$nextTick(() => {
-            this.initMoveable();
+            this.initMoveable({event, isStrat});
           });
           break;
         case "medias":
           this.$nextTick(() => {
-            this.initMoveable();
+            this.initMoveable({event, isStrat});
             this.isToolbar = true;
             this.setToolbarStyle();
           });

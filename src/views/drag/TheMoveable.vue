@@ -24,6 +24,7 @@
 
 <script>
 import Moveable from "moveable";
+import Move from '@/common/moveable';
 
 export default {
   name: "TheMoveable",
@@ -88,7 +89,7 @@ export default {
           console.log("beforeRenderEnd", e);
         });
       const manager = this.moveable.getManager();
-      console.log(manager);
+      console.log(this.moveable, this.moveable instanceof Moveable, manager instanceof Moveable );
     },
     setMoveableTarget(target) {
       this.moveable.target = target;
