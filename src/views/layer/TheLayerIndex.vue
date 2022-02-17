@@ -1,6 +1,7 @@
 <template>
   <div ref="container" :class="$style['container']" @mousedown="closeMoveable">
     <div
+      ref="canvas"
       :class="$style['canvas']"
       :style="{
         transform: `scale(${canvasStyle.scale})`,
@@ -45,7 +46,12 @@
 import TheLayerElement from "@/views/layer/TheLayerElement.vue";
 import Moveable from "@/common/moveable.js";
 import { mapState, mapMutations } from "vuex";
-import { searchLayerByPx, layerData } from "@/common/layer-utils.js";
+import {
+  getLayerCaptionBounding,
+  getLayerTextBounding,
+  searchLayerByPx,
+  layerData,
+} from "@/common/layer-utils.js";
 
 export default {
   name: "TheLayerIndex",
@@ -72,7 +78,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["cropperData", "hoverData"]),
+    ...mapState(["cropperData"]),
   },
   watch: {
     cropperData(v) {
@@ -80,15 +86,13 @@ export default {
       this.isMoveable = false;
       this.layerSelect(v, true);
     },
-    hoverData(v) {
-      this.layerHover(v);
-    },
   },
   created() {
     this.setElementScale();
   },
   mounted() {
     this.initDelete();
+    this.initHover();
   },
   destroy() {
     this.destroyDelete();
@@ -159,11 +163,11 @@ export default {
         });
       }
     },
-    initMoveable({event, isStrat}) {
+    initMoveable({ event, isStrat }) {
       this.moveable = new Moveable(this.$refs.container, {
         target: this.$refs["moveable-container"],
       }).getMoveable();
-      isStrat && this.moveable.dragStart(event)
+      isStrat && this.moveable.dragStart(event);
       this.moveable.on("dragStart", () => {
         this.isMoveableAction = true;
       });
@@ -234,18 +238,21 @@ export default {
     initDelete() {
       document.body.addEventListener("keydown", this.keydown);
     },
+    initHover() {
+      document.body.addEventListener("mousemove", this.getHoverData);
+    },
     layerSelect({ type, data, event }, isStrat) {
       this.isMoveable = true;
       this.selectLayerStyle = { ...this.getLayerStyle({ type, data }) };
       switch (type) {
         case "backgrounds":
           this.$nextTick(() => {
-            this.initMoveable({event, isStrat});
+            this.initMoveable({ event, isStrat });
           });
           break;
         case "medias":
           this.$nextTick(() => {
-            this.initMoveable({event, isStrat});
+            this.initMoveable({ event, isStrat });
             this.isToolbar = true;
             this.setToolbarStyle();
           });
@@ -267,12 +274,26 @@ export default {
       }
     },
     layerHover({ type, data }) {
-      if (!data || this.isMoveableAction) {
+      if (
+        !data ||
+        this.isMoveableAction ||
+        data.id === (this.cropperData.data ? this.cropperData.data.id : "")
+      ) {
         this.isHover = false;
         return;
       }
       this.hoverLayerStyle = { ...this.getLayerStyle({ type, data }) };
       this.isHover = true;
+    },
+    getHoverData({ clientX, clientY }) {
+      if (this.isMoveableAction) {
+        return;
+      }
+      let result = searchLayerByPx({
+        position: { x: clientX, y: clientY },
+        data: this.layerData,
+      });
+      this.layerHover(result);
     },
     getLayerStyle({ type, data }) {
       let style;
@@ -300,17 +321,35 @@ export default {
           };
           break;
         case "captions":
-          let { height, top } = data.ref.getBoundingClientRect();
-          style = {
-            width: `${1920 * 0.8 * this.canvasStyle.scale}px`,
-            height: `${height}px`,
-            left: `${
-              1920 * 0.1 * this.canvasStyle.scale + this.canvasStyle.left
-            }px`,
-            top: `${top}px`,
-            outline: "1px solid #3360ff",
-            transform: "",
-          };
+          {
+            let { height, top } = getLayerCaptionBounding();
+            style = {
+              width: `${1920 * 0.8 * this.canvasStyle.scale}px`,
+              height: `${height}px`,
+              left: `${
+                1920 * 0.1 * this.canvasStyle.scale + this.canvasStyle.left
+              }px`,
+              top: `${top}px`,
+              outline: "1px solid #3360ff",
+              transform: "",
+            };
+          }
+          break;
+        case "texts":
+          {
+            let result = getLayerTextBounding(data.id);
+            let { width, height, top } = result;
+            style = {
+              width: `${width}px`,
+              height: `${height}px`,
+              left: `${
+                data.left * this.canvasStyle.scale + this.canvasStyle.left
+              }px`,
+              top: `${top}px`,
+              outline: "1px solid #3360ff",
+              transform: "",
+            };
+          }
           break;
       }
       return style;
@@ -341,6 +380,10 @@ export default {
         this.destroyMoveable();
         this.isMoveable = false;
         this.isToolbar = false;
+        this.updateCropperData({
+          type: "",
+          data: undefined,
+        });
       }
     },
     destroyMoveable() {
@@ -353,6 +396,9 @@ export default {
     },
     destroyDelete() {
       document.body.removeEventListener("keydown", this.keydown);
+    },
+    destroyHover() {
+      document.body.removeEventListener("mousemove", this.getHoverData);
     },
     keydown(e) {
       if (this.cropperData && this.cropperData.data) {

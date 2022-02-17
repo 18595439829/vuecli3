@@ -4,6 +4,7 @@
       <div
         v-for="item in info.backgrounds"
         :key="item.id"
+        name="layer-backgrounds"
         :class="$style['background-item']"
         :data-id="item.id"
         :blur="item.isBlur"
@@ -23,6 +24,7 @@
       <div
         v-for="item in info.medias"
         :key="item.id"
+        name="layer-medias"
         :data-id="item.id"
         :class="$style['layer-img']"
         :style="{
@@ -46,8 +48,28 @@
         />
       </div>
     </template>
+    <template v-if="info.texts && info.texts.length">
+      <div
+        v-for="item in info.texts"
+        :key="item.id"
+        name="layer-texts"
+        :data-id="item.id"
+        :class="$style['layer-img']"
+        :style="{
+          zIndex: item.zIndex + zIndex.texts,
+          left: `${item.left}px`,
+          top: `${item.top}px`,
+          fontSize: `${item.fontSize}px`
+        }"
+        @mousedown="mediaClick"
+      >
+      <div v-for="text in item.content" :key="text">
+        {{text}}
+      </div>
+      </div>
+    </template>
     <template v-if="info.captions && info.captions.length">
-      <div ref="layer-caption" :class="$style['layer-captions']" :style="{zIndex: zIndex.captions}">
+      <div id="layer-captions" ref="layer-caption" :class="$style['layer-captions']" :style="{zIndex: zIndex.captions}">
         <div
           v-for="(text, index) in info.captions[captionIndex].content"
           :key="text + index"
@@ -115,6 +137,15 @@ export default {
         this.updateCropperData({type: '', data: undefined})
       },
       deep: true
+    },
+    captionIndex(v) {
+      this.info.forEach((item, index) => {
+        if (index === v) {
+          item.isCurrent = true
+        } else {
+          item.isCurrent = false
+        }
+      })
     }
   },
   methods: {
@@ -135,7 +166,7 @@ export default {
       );
       this.emit({
         type: "medias",
-        data: layer,
+        data: { ...layer},
         event: e
       });
     },
@@ -145,7 +176,7 @@ export default {
       );
       this.emit({
         type: "captions",
-        data: { ...layer, ref: this.$refs["layer-caption"] },
+        data: { ...layer},
         event: e
       });
     },
