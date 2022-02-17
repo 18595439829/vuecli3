@@ -80,7 +80,7 @@ const initLayerDataToBounding = (data) => {
 const searchLayerByPx = ({ position, data }) => {
     let result = {
         type: '',
-        data: null
+        data: undefined
     }
     let { x, y } = position
     // captions层级最高
@@ -134,20 +134,24 @@ const layerData = {
             isBlur: false,
             color: "#f1f1f1",
             zIndex: 0,
-            width: 1920,
-            height: 1080,
-            left: 0,
-            top: 0,
+            inner: {
+                width: 1920,
+                height: 1080,
+                left: 0,
+                top: 0,
+            }
         },
         {
             id: "142314",
             isBlur: true,
             url: KAOLA,
             zIndex: 1,
-            width: 1920,
-            height: 1080,
-            left: 0,
-            top: 0,
+            inner: {
+                width: 1920,
+                height: 1080,
+                left: 0,
+                top: 0,
+            }
         },
     ],
     medias: [
@@ -192,9 +196,11 @@ const layerData = {
             content: ["我是一个文本", '第二行文本规范归根到底'],
             color: "#333",
             fontSize: 30,
-            left: 960,
-            top: 540,
-            zIndex: 1
+            zIndex: 1,
+            inner: {
+                left: 960,
+                top: 540,
+            }
         },
     ],
     captions: [

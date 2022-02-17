@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" :class="$style['container']" @mousedown="closeMoveable">
+  <div ref="container" :class="$style['container']">
     <div
       ref="canvas"
       :class="$style['canvas']"
@@ -74,16 +74,16 @@ export default {
       isToolbar: false,
       isMoveable: false,
       isHover: false,
+      hoverData: {},
       isMoveableAction: false,
     };
   },
   computed: {
-    ...mapState(["cropperData"]),
+    ...mapState(["moveableData"]),
   },
   watch: {
-    cropperData(v) {
+    moveableData(v) {
       this.destroyMoveable();
-      this.isMoveable = false;
       this.layerSelect(v, true);
     },
   },
@@ -91,15 +91,17 @@ export default {
     this.setElementScale();
   },
   mounted() {
+    document.body.addEventListener("mousedown", this.init);
     this.initDelete();
     this.initHover();
   },
   destroy() {
+    document.body.removeEventListener("mousedown", this.init);
     this.destroyDelete();
     this.destroyMoveable();
   },
   methods: {
-    ...mapMutations(["updateCropperData", "updateDeleteData"]),
+    ...mapMutations(["updateMoveableData", "updateDeleteData"]),
     setElementScale() {
       let speed = 0.1;
       document.body.addEventListener(
@@ -152,87 +154,125 @@ export default {
     setMoveableRequest() {
       if (this.moveable) {
         this.destroyMoveable();
-        this.isMoveable = false;
         this.$nextTick(() => {
-          this.layerSelect(this.cropperData, false);
+          this.layerSelect(this.moveableData, false);
         });
-      } else if (this.cropperData.type === "caption") {
+      } else if (this.moveableData.type === "caption") {
         this.isToolbar = false;
         this.$nextTick(() => {
-          this.layerSelect(this.cropperData, false);
+          this.layerSelect(this.moveableData, false);
         });
       }
     },
-    initMoveable({ event, isStrat }) {
+    init(e) {
+      // 判断是否点击图层外,是则关闭moveable选中态
+      if (
+        !this.isMoveableAction &&
+        e.target !== this.$refs["canvas-container"].$el &&
+        !this.$refs["canvas-container"].$el.contains(e.target) &&
+        e.target !== this.$refs["toolbar"] &&
+        !this.$refs["toolbar"].contains(e.target) &&
+        e.target !== this.$refs["moveable-container"] &&
+        !this.$refs["moveable-container"].contains(e.target)
+      ) {
+        this.destroyMoveable();
+        this.isToolbar = false;
+        this.updateMoveableData({
+          type: "",
+          data: undefined,
+        });
+      }
+      if (this.isHover && this.hoverData.data) {
+        let data = this.layerData[this.hoverData.type].find(
+          (item) => item.id === this.hoverData.data.id
+        );
+        this.updateMoveableData({
+          type: this.hoverData.type,
+          data,
+          event: e,
+        });
+        this.layerHover({ type: "", data: undefined });
+      }
+    },
+    initMoveable({ event, isStrat, isResize }) {
       this.moveable = new Moveable(this.$refs.container, {
         target: this.$refs["moveable-container"],
+        resizeable: isResize !== null || isResize !== undefined ? isResize : true
       }).getMoveable();
-      isStrat && this.moveable.dragStart(event);
+      if (isStrat) {
+        this.moveable.dragStart(event);
+        this.isMoveableAction = true;
+        console.log("dragStart");
+      }
       this.moveable.on("dragStart", () => {
         this.isMoveableAction = true;
+        console.log("dragStart");
       });
       this.moveable.on("dragEnd", () => {
         this.isMoveableAction = false;
+        console.log("dragEnd");
       });
       this.moveable.on("resizeStart", () => {
         this.isMoveableAction = true;
+        console.log("resizeStart");
       });
       this.moveable.on("resizeEnd", () => {
         this.isMoveableAction = false;
+        console.log("resizeEnd");
       });
       this.moveable
         .on("drag", ({ target, beforeTranslate }) => {
-          this.cropperData.data.inner.left = Math.floor(
+          this.moveableData.data.inner.left = Math.floor(
             (Number(target.style.left.split("px")[0]) +
               beforeTranslate[0] -
               this.canvasStyle.left) /
               this.canvasStyle.scale
           );
-          this.cropperData.data.inner.top = Math.floor(
+          this.moveableData.data.inner.top = Math.floor(
             (Number(target.style.top.split("px")[0]) +
               beforeTranslate[1] -
               this.canvasStyle.top) /
               this.canvasStyle.scale
           );
           this.setToolbarStyle();
-          this.updateCropperData(this.cropperData);
+          this.updateMoveableData(this.moveableData);
         })
         .on("resize", ({ target, width, height, drag }) => {
           let { beforeTranslate } = drag;
           let scale =
-            width / this.canvasStyle.scale / this.cropperData.data.inner.width;
-          this.cropperData.data.inner.width = Math.round(
+            width / this.canvasStyle.scale / this.moveableData.data.inner.width;
+          this.moveableData.data.inner.width = Math.round(
             width / this.canvasStyle.scale
           );
-          this.cropperData.data.inner.height = Math.round(
+          this.moveableData.data.inner.height = Math.round(
             height / this.canvasStyle.scale
           );
-          this.cropperData.data.inner.left = Math.round(
+          this.moveableData.data.inner.left = Math.round(
             (Number(target.style.left.split("px")[0]) +
               beforeTranslate[0] -
               this.canvasStyle.left) /
               this.canvasStyle.scale
           );
-          this.cropperData.data.inner.top = Math.round(
+          this.moveableData.data.inner.top = Math.round(
             (Number(target.style.top.split("px")[0]) +
               beforeTranslate[1] -
               this.canvasStyle.top) /
               this.canvasStyle.scale
           );
-          this.cropperData.data.outer.width = Math.round(
-            this.cropperData.data.outer.width * scale
+          this.moveableData.data.outer.width = Math.round(
+            this.moveableData.data.outer.width * scale
           );
-          this.cropperData.data.outer.height = Math.round(
-            this.cropperData.data.outer.height * scale
+          this.moveableData.data.outer.height = Math.round(
+            this.moveableData.data.outer.height * scale
           );
-          this.cropperData.data.outer.left = Math.round(
-            this.cropperData.data.outer.left * scale
+          this.moveableData.data.outer.left = Math.round(
+            this.moveableData.data.outer.left * scale
           );
-          this.cropperData.data.outer.top = Math.round(
-            this.cropperData.data.outer.top * scale
+          this.moveableData.data.outer.top = Math.round(
+            this.moveableData.data.outer.top * scale
           );
           this.setToolbarStyle();
-          this.updateCropperData(this.cropperData);
+          this.updateMoveableData(this.moveableData);
         });
     },
     initDelete() {
@@ -245,11 +285,6 @@ export default {
       this.isMoveable = true;
       this.selectLayerStyle = { ...this.getLayerStyle({ type, data }) };
       switch (type) {
-        case "backgrounds":
-          this.$nextTick(() => {
-            this.initMoveable({ event, isStrat });
-          });
-          break;
         case "medias":
           this.$nextTick(() => {
             this.initMoveable({ event, isStrat });
@@ -264,7 +299,17 @@ export default {
               left: `${
                 1920 * 0.1 * this.canvasStyle.scale + this.canvasStyle.left
               }px`,
-              top: `${top}px`,
+              top: this.selectLayerStyle.top,
+            };
+          });
+          break;
+        case "texts":
+          this.$nextTick(() => {
+            this.initMoveable({ event, isStrat, isResize: false });
+            this.isToolbar = true;
+            this.toolbarStyle = {
+              left: this.selectLayerStyle.left,
+              top: this.selectLayerStyle.top,
             };
           });
           break;
@@ -274,15 +319,28 @@ export default {
       }
     },
     layerHover({ type, data }) {
+      // hoverData没值,moveable正在drag/resize等操作,hover值为已经执行moveable初始化的元素时,都不展示hover状态
       if (
         !data ||
         this.isMoveableAction ||
-        data.id === (this.cropperData.data ? this.cropperData.data.id : "")
+        data.id === (this.moveableData.data ? this.moveableData.data.id : "")
       ) {
         this.isHover = false;
+        this.hoverData = {
+          type: '',
+          data: undefined,
+        };
+        return;
+      }
+      // 如果查找结果为同一元素,则直接返回
+      if (this.hoverData.data && data.id === this.hoverData.data.id) {
         return;
       }
       this.hoverLayerStyle = { ...this.getLayerStyle({ type, data }) };
+      this.hoverData = {
+        type,
+        data,
+      };
       this.isHover = true;
     },
     getHoverData({ clientX, clientY }) {
@@ -343,7 +401,7 @@ export default {
               width: `${width}px`,
               height: `${height}px`,
               left: `${
-                data.left * this.canvasStyle.scale + this.canvasStyle.left
+                data.inner.left * this.canvasStyle.scale + this.canvasStyle.left
               }px`,
               top: `${top}px`,
               outline: "1px solid #3360ff",
@@ -358,32 +416,14 @@ export default {
       if (this.isToolbar) {
         this.toolbarStyle = {
           left: `${
-            this.cropperData.data.inner.left * this.canvasStyle.scale +
+            this.moveableData.data.inner.left * this.canvasStyle.scale +
             this.canvasStyle.left
           }px`,
           top: `${
-            this.cropperData.data.inner.top * this.canvasStyle.scale +
+            this.moveableData.data.inner.top * this.canvasStyle.scale +
             this.canvasStyle.left
           }px`,
         };
-      }
-    },
-    closeMoveable(e) {
-      if (
-        e.target !== this.$refs["canvas-container"].$el &&
-        !this.$refs["canvas-container"].$el.contains(e.target) &&
-        e.target !== this.$refs["toolbar"] &&
-        !this.$refs["toolbar"].contains(e.target) &&
-        e.target !== this.$refs["moveable-container"] &&
-        !this.$refs["moveable-container"].contains(e.target)
-      ) {
-        this.destroyMoveable();
-        this.isMoveable = false;
-        this.isToolbar = false;
-        this.updateCropperData({
-          type: "",
-          data: undefined,
-        });
       }
     },
     destroyMoveable() {
@@ -392,6 +432,8 @@ export default {
         this.moveable.target = null;
         this.moveable.destroy();
         this.moveable = null;
+        this.isMoveable = false;
+        this.isMoveableAction = false;
       }
     },
     destroyDelete() {
@@ -401,9 +443,9 @@ export default {
       document.body.removeEventListener("mousemove", this.getHoverData);
     },
     keydown(e) {
-      if (this.cropperData && this.cropperData.data) {
+      if (this.moveableData && this.moveableData.data) {
         if (e.key === "Backspace" || e.key === "Delete") {
-          this.updateDeleteData({ ...this.cropperData });
+          this.updateDeleteData({ ...this.moveableData });
         } else if (
           e.key === "ArrowRight" ||
           e.key === "ArrowLeft" ||

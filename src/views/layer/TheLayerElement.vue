@@ -12,12 +12,11 @@
           backgroundColor: item.color,
           backgroundImage: `url(${item.url})`,
           zIndex: item.zIndex,
-          width: `${item.width}px`,
-          height: `${item.height}px`,
-          left: `${item.left}px`,
-          top: `${item.top}px`,
+          width: `${item.inner.width}px`,
+          height: `${item.inner.height}px`,
+          left: `${item.inner.left}px`,
+          top: `${item.inner.top}px`,
         }"
-        @mousedown="backgroundClick"
       ></div>
     </template>
     <template v-if="info.medias && info.medias.length">
@@ -34,7 +33,6 @@
           left: `${item.inner.left}px`,
           top: `${item.inner.top}px`,
         }"
-        @mousedown="mediaClick"
       >
         <img
           :src="item.url"
@@ -57,11 +55,10 @@
         :class="$style['layer-img']"
         :style="{
           zIndex: item.zIndex + zIndex.texts,
-          left: `${item.left}px`,
-          top: `${item.top}px`,
+          left: `${item.inner.left}px`,
+          top: `${item.inner.top}px`,
           fontSize: `${item.fontSize}px`
         }"
-        @mousedown="mediaClick"
       >
       <div v-for="text in item.content" :key="text">
         {{text}}
@@ -74,7 +71,6 @@
           v-for="(text, index) in info.captions[captionIndex].content"
           :key="text + index"
           :data-id="info.captions[captionIndex].id"
-          @click="captionsClick"
         >
           {{ text }}
         </div>
@@ -105,13 +101,13 @@ export default {
     };
   },
   computed: {
-    ...mapState(["cropperData"]),
+    ...mapState(["moveableData"]),
     info() {
       return this.data
     }
   },
   watch: {
-    cropperData: {
+    moveableData: {
       handler(v) {
         switch (v.type) {
           case "backgrounds":
@@ -134,7 +130,7 @@ export default {
       handler(v) {
         let index = this.info[v.type].findIndex(item => item.id === v.data.id)
         this.info[v.type].splice(index, 1)
-        this.updateCropperData({type: '', data: undefined})
+        this.updateMoveableData({type: '', data: undefined})
       },
       deep: true
     },
@@ -149,40 +145,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["updateCropperData"]),
-    backgroundClick(e) {
-      let layer = this.info.backgrounds.find(
-        (item) => item.id === e.target.dataset.id
-      );
-      this.emit({
-        type: "backgrounds",
-        data: layer,
-        event: e
-      });
-    },
-    mediaClick(e) {
-      let layer = this.info.medias.find(
-        (item) => item.id === e.target.dataset.id
-      );
-      this.emit({
-        type: "medias",
-        data: { ...layer},
-        event: e
-      });
-    },
-    captionsClick(e) {
-      let layer = this.info.captions.find(
-        (item) => item.id === e.target.dataset.id
-      );
-      this.emit({
-        type: "captions",
-        data: { ...layer},
-        event: e
-      });
-    },
-    emit(e) {
-      this.updateCropperData(e);
-    },
   },
 };
 </script>
