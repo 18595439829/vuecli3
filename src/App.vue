@@ -18,7 +18,7 @@ export default {
     return {
       menu: [
         {
-          path: '/',
+          path: '/home',
           name: 'Home'
         },
         {
@@ -110,7 +110,7 @@ export default {
           name: 'gif'
         },
         {
-          path: '/layer',
+          path: '/',
           name: 'layer'
         }
       ]

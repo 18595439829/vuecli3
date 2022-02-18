@@ -104,13 +104,9 @@ export default {
         .on("beforeRenderEnd", (e) => {
           console.log("beforeRenderEnd", e);
         });
-      console.log(this.moveable.isDragging());
-      this.moveable.on("dragStart", () => {
-        console.log(this.moveable.isDragging());
-      });
-      this.moveable.on("dragEnd", () => {
-        console.log(this.moveable.isDragging());
-      });
+      this.moveable.on('click', (e) => {
+        console.log(e)
+      })
     },
     setMoveableTarget(target) {
       this.moveable.target = target;
