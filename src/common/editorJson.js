@@ -106,3 +106,4 @@ const list = [
     duration: null,
   },
 ];
+export default list

@@ -57,22 +57,62 @@
           zIndex: item.zIndex + zIndex.texts,
           left: `${item.inner.left}px`,
           top: `${item.inner.top}px`,
-          fontSize: `${item.fontSize}px`
+          fontSize: `${item.fontSize}px`,
+          background: item.background,
         }"
       >
-      <div v-for="text in item.content" :key="text">
-        {{text}}
-      </div>
+        <div v-for="text in item.content" :key="text">
+          {{ text }}
+        </div>
       </div>
     </template>
-    <template v-if="info.captions && info.captions.length">
-      <div id="layer-captions" ref="layer-caption" :class="$style['layer-captions']" :style="{zIndex: zIndex.captions}">
+    <!-- <template v-if="info.captions && info.captions.length">
+      <div
+        id="layer-captions"
+        ref="layer-caption"
+        :class="$style['layer-captions']"
+        :style="{ zIndex: zIndex.captions }"
+      >
         <div
           v-for="(text, index) in info.captions[captionIndex].content"
           :key="text + index"
           :data-id="info.captions[captionIndex].id"
+          :style="{ height: `${fontSize * 1.2}px`, marginBottom: `12px`, fontSize: `${fontSize}px` }"
         >
-          {{ text }}
+          <svg width="1536" :height="svgHeight" :viewBox="`0 0 1536 ${svgHeight}`">
+            <text x="350" :y="fontSize">
+              <tspan x="350">
+                {{ text }}
+              </tspan>
+            </text>
+          </svg>
+        </div>
+      </div>
+    </template> -->
+    <template v-if="info.captions && info.captions.length">
+      <div
+        id="layer-captions"
+        ref="layer-caption"
+        :class="$style['layer-captions']"
+        :style="{ zIndex: zIndex.captions, fontSize: `${info.captions[captionIndex].fontSize}px` }"
+      >
+        <div :class="[$style['caption-item'], $style['stroke']]">
+          <div
+            v-for="(text, index) in info.captions[captionIndex].content"
+            :key="text + index"
+            :data-id="info.captions[captionIndex].id"
+          >
+            {{ text }}
+          </div>
+        </div>
+        <div :class="$style['caption-item']">
+          <div
+            v-for="(text, index) in info.captions[captionIndex].content"
+            :key="text + index"
+            :data-id="info.captions[captionIndex].id"
+          >
+            {{ text }}
+          </div>
         </div>
       </div>
     </template>
@@ -87,24 +127,26 @@ export default {
   props: {
     data: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       zIndex: {
         medias: 100,
         texts: 200,
-        captions: 300
+        captions: 300,
       },
       captionIndex: 0,
+      fontSize: 48,
+      svgHeight: 48 * 1.2, // 54
     };
   },
   computed: {
     ...mapState(["moveableData"]),
     info() {
-      return this.data
-    }
+      return this.data;
+    },
   },
   watch: {
     moveableData: {
@@ -128,27 +170,35 @@ export default {
     },
     deleteData: {
       handler(v) {
-        let index = this.info[v.type].findIndex(item => item.id === v.data.id)
-        this.info[v.type].splice(index, 1)
-        this.updateMoveableData({type: '', data: undefined})
+        let index = this.info[v.type].findIndex(
+          (item) => item.id === v.data.id
+        );
+        this.info[v.type].splice(index, 1);
+        this.updateMoveableData({ type: "", data: undefined });
       },
-      deep: true
+      deep: true,
     },
     captionIndex(v) {
       this.info.forEach((item, index) => {
         if (index === v) {
-          item.isCurrent = true
+          item.isCurrent = true;
         } else {
-          item.isCurrent = false
+          item.isCurrent = false;
         }
-      })
-    }
+      });
+    },
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>
-
+<style lang="less" scoped>
+input {
+  position: absolute;
+  z-index: 999;
+  top: -20px;
+  left: 0;
+}
+</style>
 <style lang="less" module>
 .container {
   width: 1920px;
@@ -181,13 +231,44 @@ export default {
   .layer-captions {
     position: absolute;
     z-index: 2;
-    font-size: 52px;
-    color: black;
-    bottom: 58px;
+    color: #fff;
+    bottom: 80px;
     text-align: center;
     left: 50%;
     width: 1920px * 0.8;
     transform: translateX(-50%);
+    letter-spacing: 1.1px;
+    font-weight: 500;
+    text-anchor: middle;
+    font-family: "SourceHanSansCN-Medium";
+    .caption-item {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 1920px * 0.8;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      text-align: center;
+    }
+    .stroke {
+      color: #000;
+      -webkit-text-stroke: 5px #000;
+    }
+
+    svg {
+      text-align: center;
+    }
+    text {
+      stroke-linejoin: round;
+      text-anchor: middle;
+      fill: #fff;
+      paint-order: stroke fill;
+      stroke: #000;
+      stroke-width: 6px;
+      font-size: 54px;
+      font-family: "SourceHanSansCN-Medium.otf";
+      letter-spacing: 1.2px;
+    }
   }
 }
 </style>

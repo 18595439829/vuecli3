@@ -8,12 +8,13 @@
         <source src="@/assets/music.mp3" type="audio/mpeg" />
         您的浏览器不支持 audio 标签。
       </audio>
+      <audio src="https://chengdu-nos-creative-video.nos-jd.163yun.com/20220218152520ba16d047cc884c13a0e81643130d09a4?download=1645169120804.mp3&Signature=RsKzTTWD0JRsiIvgh5YTE6xj2EelqteB3yZOM3jWY3k%3D&Expires=4105149920&NOSAccessKeyId=607a5bd56dc045088edd489fbdc36b92" controls @timeupdate="audioLoad"></audio>
       <Button @click="pause">暂停</Button>
       <Button @click="play">播放</Button>
       <Button @click="progress">下载</Button>
-      <video ref="video" style="width: 100%" controls="controls">
+      <video ref="video" style="width: 100%">
                                  
-        <source src="@/assets/movie.ogg" type="video/ogg" autostart="false" />
+        <source src="@/assets/size5.mp4"/>
         您的浏览器不支持 vodeo 标签。</video
       >  
     </div>
@@ -66,6 +67,9 @@ export default {
     }
   },
   methods: {
+    audioLoad(e) {
+      console.log(e)
+    },
     add() {
       console.log("add");
     },

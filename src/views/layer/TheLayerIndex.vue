@@ -39,11 +39,22 @@
     >
       <img src="" alt="" />
     </div>
+    <BaseScrollRow>
+      <div
+        v-for="(item, index) in 20"
+        :key="index"
+        :class="$style['card-item']"
+      >
+        {{ index }}
+      </div>
+    </BaseScrollRow>
+    <TheOpentype />
   </div>
 </template>
 
 <script>
 import TheLayerElement from "@/views/layer/TheLayerElement.vue";
+import TheOpentype from '@/views/layer/TheOpentype.vue'
 import Moveable from "@/common/moveable.js";
 import { mapState, mapMutations } from "vuex";
 import {
@@ -52,11 +63,14 @@ import {
   searchLayerByPx,
   layerData,
 } from "@/common/layer-utils.js";
+import BaseScrollRow from "@/components/BaseScrollRow.vue";
 
 export default {
   name: "TheLayerIndex",
   components: {
     TheLayerElement,
+    TheOpentype,
+    BaseScrollRow,
   },
   data() {
     return {
@@ -166,6 +180,7 @@ export default {
     },
     init(e) {
       // 判断是否点击图层外,是则关闭moveable选中态
+      console.log(this.$refs, this.$refs["canvas-container"]);
       if (
         !this.isMoveableAction &&
         e.target !== this.$refs["canvas-container"].$el &&
@@ -197,28 +212,24 @@ export default {
     initMoveable({ event, isStrat, isResize }) {
       this.moveable = new Moveable(this.$refs.container, {
         target: this.$refs["moveable-container"],
-        resizeable: isResize !== null || isResize !== undefined ? isResize : true
+        resizeable:
+          isResize !== null || isResize !== undefined ? isResize : true,
       }).getMoveable();
       if (isStrat) {
         this.moveable.dragStart(event);
         this.isMoveableAction = true;
-        console.log("dragStart");
       }
       this.moveable.on("dragStart", () => {
         this.isMoveableAction = true;
-        console.log("dragStart");
       });
       this.moveable.on("dragEnd", () => {
         this.isMoveableAction = false;
-        console.log("dragEnd");
       });
       this.moveable.on("resizeStart", () => {
         this.isMoveableAction = true;
-        console.log("resizeStart");
       });
       this.moveable.on("resizeEnd", () => {
         this.isMoveableAction = false;
-        console.log("resizeEnd");
       });
       this.moveable
         .on("drag", ({ target, beforeTranslate }) => {
@@ -327,7 +338,7 @@ export default {
       ) {
         this.isHover = false;
         this.hoverData = {
-          type: '',
+          type: "",
           data: undefined,
         };
         return;
@@ -347,8 +358,9 @@ export default {
       if (this.isMoveableAction) {
         return;
       }
+      let scrollTop = this.$refs.container.scrollTop;
       let result = searchLayerByPx({
-        position: { x: clientX, y: clientY },
+        position: { x: clientX, y: clientY + scrollTop },
         data: this.layerData,
       });
       this.layerHover(result);
@@ -526,6 +538,12 @@ export default {
     .moveable-layer;
     outline: 3px solid #3360ff;
     pointer-events: none;
+  }
+  .card-item {
+    width: 200px;
+    height: 50px;
+    border: 1px #3360ff solid;
+    margin-left: 10px;
   }
 }
 </style>
