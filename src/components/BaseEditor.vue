@@ -34,7 +34,7 @@ export default {
         let dom = "";
         if (json.text) {
           if (json.selected) {
-            dom = `<span data-symbol="${json.selected}" data-map="${JSON.stringify(json.map)}">${json.text}</span>`
+            dom = `<text data-symbol="${json.selected}" data-map="${JSON.stringify(json.map)}">${json.text}</text>`
           } else {
             dom = json.text
           }
@@ -71,8 +71,22 @@ export default {
       e.data = "";
     },
     addPause() {
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
+      let node = range.startContainer;
+      console.log(node)
+      if (node.editorJson) {
+
+      }
+      document.execCommand("insertText", false, '1'); 
+      this.seSelectionPosition(-1, -1)
+      // document.execCommand("insertText", false, '1'); 
       let img = `<img src=${KaoLa} data-time='300' style="width: 10px; height: 10px;"/>`;
       document.execCommand("insertHtml", false, img);
+      // this.seSelectionPosition(-1, 0)
+      // document.execCommand("delete", false);
+      this.seSelectionPosition(1, 2)
+      document.execCommand("delete", false);
     },
     addBold() {
       document.execCommand("bold", false);
@@ -89,6 +103,14 @@ export default {
         `<span data-polyphone="123">${text}</span>`
       );
     },
+    seSelectionPosition(start, end) {
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
+      let node = range.startContainer;
+      let position = range.startOffset;
+      range.setStart(position + start)
+      range.setEnd(position + end )
+    }
   },
 };
 </script>

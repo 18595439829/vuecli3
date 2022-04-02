@@ -210,8 +210,14 @@ export default {
       }
     },
     initMoveable({ event, isStrat, isResize }) {
+      let {left, top, bottom, right} = this.$refs.canvas.getBoundingClientRect()
       this.moveable = new Moveable(this.$refs.container, {
         target: this.$refs["moveable-container"],
+        bounds: {
+          top, bottom, 
+          right: right - 171,
+          left: left - 171
+        },
         resizeable:
           isResize !== null || isResize !== undefined ? isResize : true,
       }).getMoveable();

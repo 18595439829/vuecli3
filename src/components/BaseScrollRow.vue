@@ -10,7 +10,47 @@
 export default {
   name: "Index",
   data() {
-    return {};
+    return {
+      list: [
+        {
+          id: 1,
+          name: '定时揽收1',
+          formList: [
+            {
+              key: '1-1',
+              value: '京东1',
+              isChecked: true,
+              isDisabled: false,
+            },
+            {
+              key: '1-2',
+              value: '淘宝1',
+              isChecked: false,
+              isDisabled: false,
+            },
+          ] 
+        },
+        {
+          id: 2,
+          name: '定时揽收2',
+          isDisabled: false,
+          formList: [
+            {
+              key: '2-1',
+              value: '京东',
+              isChecked: false,
+              isDisabled: true,
+            },
+            {
+              key: '2-2',
+              value: '淘宝2',
+              isChecked: false,
+              isDisabled: false,
+            },
+          ] 
+        }
+      ]
+    }
   },
   mounted() {
     document.body.addEventListener("mousewheel", this.containerScroll);
