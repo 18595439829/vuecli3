@@ -112,6 +112,10 @@ export default {
         {
           path: '/',
           name: 'layer'
+        },
+        {
+          path: '/http',
+          name: 'http'
         }
       ]
     }

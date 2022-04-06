@@ -255,6 +255,11 @@ export default new Router({
       path: '/layer',
       name: 'layer',
       component: () => import('@/views/layer/TheLayerIndex.vue')
+    },
+    {
+      path: '/http',
+      name: 'http',
+      component: () => import('@/views/http/TheHttp.vue')
     }
   ]
 });
