@@ -113,6 +113,7 @@ export default {
     document.body.removeEventListener("mousedown", this.init);
     this.destroyDelete();
     this.destroyMoveable();
+    document.body.removeEventListener("mousemove", this.getHoverData);
   },
   methods: {
     ...mapMutations(["updateMoveableData", "updateDeleteData"]),

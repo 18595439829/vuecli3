@@ -1,20 +1,29 @@
 <template>
   <div :class="$style['container']">
-    <video ref="video" width="480" height="320" controls></video>
+    <video ref="video" controls :class="$style['video']"></video>
     <div>
       <button @click="captureClick">拍照</button>
     </div>
     <canvas ref="canvas" width="480" height="320"></canvas>
-    <div ref="response"></div>
+    <JsonView
+        :class="$style['json-view']"
+        :data="jsonData"
+        :deep="1"
+        icon-style="triangle"
+        theme="vs-code"
+      ></JsonView>
     <button @click="getAccessToken">获取access_token</button>
     <button @click="getCamera">点击</button>
   </div>
 </template>
 
 <script>
+import JsonView from 'vue-json-views'
 import Qs from "qs";
 import axios from "axios";
 import PEOPLE from "@/../public/people.png";
+
+
 const instance = axios.create({
   baseURL: "/bda",
   headers: {
@@ -24,10 +33,14 @@ const instance = axios.create({
 
 export default {
   name: "TheHttp",
+  components: {
+    JsonView
+  },
   data() {
     return {
       PEOPLE,
       access_token: "",
+      jsonData: {}
     };
   },
   created() {
@@ -101,6 +114,7 @@ export default {
         )
         .then((res) => {
           console.log(res);
+          this.jsonData = res.data
         });
     },
     success(stream) {
@@ -122,5 +136,9 @@ export default {
 
 <style lang="less" module>
 .container {
+  .video {
+    max-width: 480px;
+    max-height: 320px;
+  }
 }
 </style>
