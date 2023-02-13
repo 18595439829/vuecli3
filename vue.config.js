@@ -27,6 +27,7 @@ module.exports = {
 
   devServer: {
     hot: true,
+    // https: true,
     proxy: {
       "/api": {
         target: "http://openapi.tuling123.com/openapi/api/v2", //设置你调用的接口域名和端口号 别忘了加http

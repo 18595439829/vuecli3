@@ -1,28 +1,27 @@
 <template>
   <div :class="$style['container']">
-    <video ref="video" controls :class="$style['video']"></video>
+    <video ref="video" src="https://nos-creative-video-test.nos-jd.163yun.com/202203251108383ee3d0e4299a4407874f81874aa6c105?download=1648177718744.mp4&Signature=AzR0bhywzsBQAVdIDJMuttM06NNVyxE5c%2FUyvcaU3m8%3D&Expires=4105134518&NOSAccessKeyId=a2b368da8d27405fbe0e771bf7ab2cf9" controls :class="$style['video']"></video>
     <div>
-      <button @click="captureClick">拍照</button>
+      <Button @click="captureClick">拍照</Button>
     </div>
     <canvas ref="canvas" width="480" height="320"></canvas>
     <JsonView
-        :class="$style['json-view']"
-        :data="jsonData"
-        :deep="1"
-        icon-style="triangle"
-        theme="vs-code"
-      ></JsonView>
-    <button @click="getAccessToken">获取access_token</button>
-    <button @click="getCamera">点击</button>
+      :class="$style['json-view']"
+      :data="jsonData"
+      :deep="1"
+      icon-style="triangle"
+      theme="vs-code"
+    ></JsonView>
+    <Button @click="getCamera">检测</Button>
+    <Button @click="uploadWx">微信上传图片</Button>
   </div>
 </template>
 
 <script>
-import JsonView from 'vue-json-views'
+import JsonView from "vue-json-views";
 import Qs from "qs";
 import axios from "axios";
 import PEOPLE from "@/../public/people.png";
-
 
 const instance = axios.create({
   baseURL: "/bda",
@@ -30,46 +29,84 @@ const instance = axios.create({
     "Content-Type": "application/x-www-form-urlencoded",
   },
 });
-
+let wx;
 export default {
   name: "TheHttp",
   components: {
-    JsonView
+    JsonView,
   },
   data() {
     return {
       PEOPLE,
       access_token: "",
-      jsonData: {}
+      jsonData: {},
     };
   },
   created() {
-    if (
-      navigator.mediaDevices.getUserMedia ||
-      navigator.getUserMedia ||
-      navigator.webkitGetUserMedia ||
-      navigator.mozGetUserMedia
-    ) {
-      //调用用户媒体设备, 访问摄像头
-      this.getUserMedia(
-        { video: { width: 480, height: 320, facingMode: "user" } },
-        this.success,
-        this.error
-      );
-    } else {
-      alert("不支持访问用户媒体");
-    }
+    // if (
+    //   navigator.mediaDevices.getUserMedia ||
+    //   navigator.getUserMedia ||
+    //   navigator.webkitGetUserMedia ||
+    //   navigator.mozGetUserMedia
+    // ) {
+    //   //调用用户媒体设备, 访问摄像头
+    //   this.getUserMedia(
+    //     { video: { width: 480, height: 320, facingMode: "user" } },
+    //     this.success,
+    //     this.error
+    //   );
+    // } else {
+    //   alert("不支持访问用户媒体");
+    // }
+    // this.getAccessToken();
+  },
+  mounted() {
+    wx = require("weixin-js-sdk");
+    setTimeout(() => {
+      wx.config({
+        appid: "wxc60594de2f17db0f",
+        noncestr: "d886bfab-f9c5-439b-8092-4d05e80518bf",
+        signature: "268ED889BF393A87BFE737A0CDE2CCC255FCDE47",
+        timestamp: "1651046148",
+        jsApiList: [
+          "checkJsApi",
+          "updateAppMessageShareData",
+          "updateTimelineShareData",
+          "onMenuShareTimeline",
+          "onMenuShareAppMessage",
+          "onMenuShareQQ",
+          "onMenuShareWeibo",
+          "onMenuShareQZone",
+        ],
+        openTagList: ["wx-open-launch-weapp"],
+        success: function () {
+          alert("配置成功");
+        },
+        fail: function () {
+          alert("配置失败");
+        },
+      });
+      console.log(wx);
+    }, 1000);
   },
   methods: {
+    uploadWx() {
+      wx.chooseImage({
+        sourceType: ["album"],
+        success({ tempFiles }) {
+          console.log(tempFiles);
+        },
+      });
+    },
     captureClick() {
-      let width = this.$refs.video.width || 480;
-      let height = this.$refs.video.height || 320;
+      let width = this.$refs.video.offsetWidth || 480;
+      let height = this.$refs.video.offsetHeight || 320;
       let context = this.$refs.canvas.getContext("2d");
       context.drawImage(this.$refs.video, 0, 0, width, height);
       // this.PEOPLE = context.toDataUrl("image/png");
-      let dataURL = canvas.toDataURL("image/jpeg");
+      let dataURL = this.$refs.canvas.toDataURL("image/jpeg", 0.1);
       // return dataURL
-      this.PEOPLE = dataURL.replace("data:image/png;base64,", "");
+      this.PEOPLE = dataURL.replace("data:image/jpeg;base64,", "");
     },
     //访问用户媒体设备的兼容方法
     getUserMedia(constraints, success, error) {
@@ -114,7 +151,7 @@ export default {
         )
         .then((res) => {
           console.log(res);
-          this.jsonData = res.data
+          this.jsonData = res.data;
         });
     },
     success(stream) {

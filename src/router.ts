@@ -260,6 +260,11 @@ export default new Router({
       path: '/http',
       name: 'http',
       component: () => import('@/views/http/TheHttp.vue')
+    },
+    {
+      path: '/DocToJson',
+      name: 'DocToJson',
+      component: () => import('@/views/docToJson/index.vue')
     }
   ]
 });

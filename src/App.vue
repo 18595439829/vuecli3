@@ -116,6 +116,10 @@ export default {
         {
           path: '/http',
           name: 'http'
+        },
+        {
+          path: '/DocToJson',
+          name: 'DocToJson'
         }
       ]
     }
