@@ -4,6 +4,7 @@
       <div
         v-for="item in info.backgrounds"
         :key="item.id"
+        name="layer-backgrounds"
         :class="$style['background-item']"
         :data-id="item.id"
         :blur="item.isBlur"
@@ -11,38 +12,32 @@
           backgroundColor: item.color,
           backgroundImage: `url(${item.url})`,
           zIndex: item.zIndex,
-          width: `${item.width}px`,
-          height: `${item.height}px`,
-          left: `${item.left}px`,
-          top: `${item.top}px`,
+          width: `${item.inner.width}px`,
+          height: `${item.inner.height}px`,
+          left: `${item.inner.left}px`,
+          top: `${item.inner.top}px`,
         }"
-        @click="backgroundClick"
-        @mouseenter="backgroundHover($event, true)"
-        @mouseleave="backgroundHover($event, false)"
       ></div>
     </template>
     <template v-if="info.medias && info.medias.length">
       <div
         v-for="item in info.medias"
         :key="item.id"
+        name="layer-medias"
         :data-id="item.id"
         :class="$style['layer-img']"
         :style="{
-          zIndex: item.zIndex,
+          zIndex: item.zIndex + zIndex.medias,
           width: `${item.inner.width}px`,
           height: `${item.inner.height}px`,
           left: `${item.inner.left}px`,
           top: `${item.inner.top}px`,
         }"
-        @click="mediaClick"
-        @mouseenter="mediaHover($event, true)"
-        @mouseleave="mediaHover($event, false)"
       >
         <img
           :src="item.url"
           alt=""
           :style="{
-            zIndex: item.zIndex,
             width: `${item.outer.width}px`,
             height: `${item.outer.height}px`,
             left: `${item.outer.left}px`,
@@ -51,17 +46,73 @@
         />
       </div>
     </template>
-    <template v-if="info.captions && info.captions.length">
-      <div ref="layer-caption" :class="$style['layer-captions']">
+    <template v-if="info.texts && info.texts.length">
+      <div
+        v-for="item in info.texts"
+        :key="item.id"
+        name="layer-texts"
+        :data-id="item.id"
+        :class="$style['layer-img']"
+        :style="{
+          zIndex: item.zIndex + zIndex.texts,
+          left: `${item.inner.left}px`,
+          top: `${item.inner.top}px`,
+          fontSize: `${item.fontSize}px`,
+          background: item.background,
+        }"
+      >
+        <div v-for="text in item.content" :key="text">
+          {{ text }}
+        </div>
+      </div>
+    </template>
+    <!-- <template v-if="info.captions && info.captions.length">
+      <div
+        id="layer-captions"
+        ref="layer-caption"
+        :class="$style['layer-captions']"
+        :style="{ zIndex: zIndex.captions }"
+      >
         <div
           v-for="(text, index) in info.captions[captionIndex].content"
           :key="text + index"
           :data-id="info.captions[captionIndex].id"
-          @click="captionsClick"
-          @mouseenter="captionsHover($event, true)"
-          @mouseleave="captionsHover($event, false)"
+          :style="{ height: `${fontSize * 1.2}px`, marginBottom: `12px`, fontSize: `${fontSize}px` }"
         >
-          {{ text }}
+          <svg width="1536" :height="svgHeight" :viewBox="`0 0 1536 ${svgHeight}`">
+            <text x="350" :y="fontSize">
+              <tspan x="350">
+                {{ text }}
+              </tspan>
+            </text>
+          </svg>
+        </div>
+      </div>
+    </template> -->
+    <template v-if="info.captions && info.captions.length">
+      <div
+        id="layer-captions"
+        ref="layer-caption"
+        :class="$style['layer-captions']"
+        :style="{ zIndex: zIndex.captions, fontSize: `${info.captions[captionIndex].fontSize}px` }"
+      >
+        <div :class="[$style['caption-item'], $style['stroke']]">
+          <div
+            v-for="(text, index) in info.captions[captionIndex].content"
+            :key="text + index"
+            :data-id="info.captions[captionIndex].id"
+          >
+            {{ text }}
+          </div>
+        </div>
+        <div :class="$style['caption-item']">
+          <div
+            v-for="(text, index) in info.captions[captionIndex].content"
+            :key="text + index"
+            :data-id="info.captions[captionIndex].id"
+          >
+            {{ text }}
+          </div>
         </div>
       </div>
     </template>
@@ -70,96 +121,35 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import KAOLA from "@/assets/img/Koala.jpg";
-import FISH from "@/assets/img/Jellyfish.jpg";
+
 export default {
   name: "TheLayerElement",
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {
-      info: {
-        backgrounds: [
-          {
-            id: "123",
-            isBlur: false,
-            color: "#f1f1f1",
-            zIndex: 0,
-            width: 1920,
-            height: 1080,
-            left: 0,
-            top: 0,
-          },
-          {
-            id: "142314",
-            isBlur: true,
-            url: KAOLA,
-            zIndex: 1,
-            width: 1920,
-            height: 1080,
-            left: 0,
-            top: 0,
-          },
-        ],
-        medias: [
-          {
-            id: "media-1",
-            url: KAOLA,
-            zIndex: 1,
-            inner: {
-              width: 960,
-              height: 1080,
-              left: 960,
-              top: 0,
-            },
-            outer: {
-              width: 960,
-              height: 1080,
-              left: 0,
-              top: 0,
-            },
-          },
-          {
-            id: "media-2",
-            url: FISH,
-            inner: {
-              width: 960,
-              height: 540,
-              left: 0,
-              top: 0,
-            },
-            outer: {
-              width: 960,
-              height: 540,
-              left: 0,
-              top: 0,
-            },
-          },
-        ],
-        texts: [
-          {
-            id: "213445234",
-            content: "我是一个文本",
-            color: "#333",
-            fontSize: 30,
-          },
-        ],
-        captions: [
-          {
-            id: "13313443411",
-            content: [
-              "第一行字幕居中",
-              "第二行字幕惆怅长岑长错错错错错错错错错",
-            ],
-          },
-        ],
+      zIndex: {
+        medias: 100,
+        texts: 200,
+        captions: 300,
       },
       captionIndex: 0,
+      fontSize: 48,
+      svgHeight: 48 * 1.2, // 54
     };
   },
   computed: {
-    ...mapState(["cropperData", "deleteData"]),
+    ...mapState(["moveableData"]),
+    info() {
+      return this.data;
+    },
   },
   watch: {
-    cropperData: {
+    moveableData: {
       handler(v) {
         switch (v.type) {
           case "backgrounds":
@@ -180,92 +170,35 @@ export default {
     },
     deleteData: {
       handler(v) {
-        let index = this.info[v.type].findIndex(item => item.id === v.data.id)
-        this.info[v.type].splice(index, 1)
-        this.updateCropperData({type: '', data: undefined})
+        let index = this.info[v.type].findIndex(
+          (item) => item.id === v.data.id
+        );
+        this.info[v.type].splice(index, 1);
+        this.updateMoveableData({ type: "", data: undefined });
       },
-      deep: true
-    }
-  },
-  methods: {
-    ...mapMutations(["updateCropperData", "updateHoverData"]),
-    backgroundClick(e) {
-      let layer = this.info.backgrounds.find(
-        (item) => item.id === e.target.dataset.id
-      );
-      this.emit({
-        type: "backgrounds",
-        data: layer,
+      deep: true,
+    },
+    captionIndex(v) {
+      this.info.forEach((item, index) => {
+        if (index === v) {
+          item.isCurrent = true;
+        } else {
+          item.isCurrent = false;
+        }
       });
-    },
-    backgroundHover(e, type) {
-      let layer;
-      if (type) {
-        layer = this.info.backgrounds.find(
-          (item) => item.id === e.target.dataset.id
-        );
-      }
-      this.hover({
-        type: "backgrounds",
-        data: layer,
-      });
-    },
-    mediaClick(e) {
-      let layer = this.info.medias.find(
-        (item) => item.id === e.target.dataset.id
-      );
-      this.emit({
-        type: "medias",
-        data: layer,
-      });
-    },
-    mediaHover(e, type) {
-      let layer;
-      if (type) {
-        layer = this.info.medias.find(
-          (item) => item.id === e.target.dataset.id
-        );
-      }
-      this.hover({
-        type: "medias",
-        data: layer,
-      });
-    },
-    captionsClick(e) {
-      let layer = this.info.captions.find(
-        (item) => item.id === e.target.dataset.id
-      );
-      this.emit({
-        type: "captions",
-        data: { ...layer, ref: this.$refs["layer-caption"] },
-      });
-    },
-    captionsHover(e, type) {
-      let layer;
-      if (type) {
-        layer = this.info.captions.find(
-          (item) => item.id === e.target.dataset.id
-        );
-      }
-      this.hover({
-        type: "captions",
-        data: type ? { ...layer, ref: this.$refs["layer-caption"] } : undefined,
-      });
-    },
-    emit(e) {
-      this.updateCropperData(e);
-      this.hover({
-        type: '',
-        data: undefined
-      })
-    },
-    hover(e) {
-      this.updateHoverData(e);
     },
   },
+  methods: {},
 };
 </script>
-
+<style lang="less" scoped>
+input {
+  position: absolute;
+  z-index: 999;
+  top: -20px;
+  left: 0;
+}
+</style>
 <style lang="less" module>
 .container {
   width: 1920px;
@@ -298,13 +231,44 @@ export default {
   .layer-captions {
     position: absolute;
     z-index: 2;
-    font-size: 52px;
-    color: black;
-    bottom: 58px;
+    color: #fff;
+    bottom: 80px;
     text-align: center;
     left: 50%;
     width: 1920px * 0.8;
     transform: translateX(-50%);
+    letter-spacing: 1.1px;
+    font-weight: 500;
+    text-anchor: middle;
+    font-family: "SourceHanSansCN-Medium";
+    .caption-item {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 1920px * 0.8;
+      transform: translateX(-50%);
+      white-space: nowrap;
+      text-align: center;
+    }
+    .stroke {
+      color: #000;
+      -webkit-text-stroke: 5px #000;
+    }
+
+    svg {
+      text-align: center;
+    }
+    text {
+      stroke-linejoin: round;
+      text-anchor: middle;
+      fill: #fff;
+      paint-order: stroke fill;
+      stroke: #000;
+      stroke-width: 6px;
+      font-size: 54px;
+      font-family: "SourceHanSansCN-Medium.otf";
+      letter-spacing: 1.2px;
+    }
   }
 }
 </style>

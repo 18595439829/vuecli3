@@ -55,6 +55,7 @@
       <Input v-model="formIpt" @on-enter="tulingRobot"> </Input>
     </div>
     <map-array></map-array>
+    <Slider v-model="sliderValue"/>
   </div>
 </template>
 <script>
@@ -168,8 +169,17 @@ export default {
       params: {},
       formIpt: "",
       myList: [],
-      robotList: []
+      robotList: [],
+      sliderValue: 50
     };
+  },
+  created() {
+    document.body.addEventListener('mouseup', (e) => {
+      console.log(e)
+    })
+    document.body.addEventListener('mouseup', (e) => {
+      console.log(e)
+    })
   },
   methods: {
     getFullName({ id, name, num }) {
@@ -207,7 +217,6 @@ export default {
       });
     }
   },
-  created() {}
 };
 </script>
 <style lang="less">

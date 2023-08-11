@@ -8,6 +8,7 @@
     <div
       ref="editor"
       contenteditable="true"
+      :class="$style['editor']"
       @keydown="keydown"
       @compositionupdate="compositionstart"
     ></div>
@@ -16,30 +17,34 @@
 
 <script>
 import editorJson from "@/common/editorJson.js";
-import KaoLa from '@/assets/img/Koala.jpg'
+import KaoLa from "@/assets/img/Koala.jpg";
 export default {
   name: "BaseEditor",
   data() {
-    return {};
+    return {
+    };
   },
   mounted() {
     this.init();
   },
   methods: {
     init() {
-      //   let html = ""
-      //  editorJson.forEach(json => {
-      //      let dom = ''
-      //      if (json.text) {
-
-      //      }
-      //      if (json.isPause) {
-      //          dom
-      //      }
-      //      html += dom
-      //  })
-      this.$refs.editor.innerHTML =
-        '南京<span data-symbol="change4">长</span>江大桥';
+      let html = "";
+      editorJson.forEach((json) => {
+        let dom = "";
+        if (json.text) {
+          if (json.selected) {
+            dom = `<text data-symbol="${json.selected}" data-map="${JSON.stringify(json.map)}">${json.text}</text>`
+          } else {
+            dom = json.text
+          }
+        }
+        if (json.isPause) {
+          dom += `<img src="${KaoLa}" data-pause="${json.duration}" />`;
+        }
+        html += dom;
+      });
+      this.$refs.editor.innerHTML = html;
     },
     keydown(e) {
       // 65-90: a-z; 48-57:小键盘0-9; 96-111: 数字键盘,108数字键盘enter; 186-222:符号键,小键盘的-+,[]\;',./
@@ -66,25 +71,57 @@ export default {
       e.data = "";
     },
     addPause() {
-      let img = `<img src=${KaoLa} data-time='300' style="width: 10px; height: 10px;"/>`
-      document.execCommand('insertHtml',false, img)
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
+      let node = range.startContainer;
+      console.log(node)
+      if (node.editorJson) {
+
+      }
+      document.execCommand("insertText", false, '1'); 
+      this.seSelectionPosition(-1, -1)
+      // document.execCommand("insertText", false, '1'); 
+      let img = `<img src=${KaoLa} data-time='300' style="width: 10px; height: 10px;"/>`;
+      document.execCommand("insertHtml", false, img);
+      // this.seSelectionPosition(-1, 0)
+      // document.execCommand("delete", false);
+      this.seSelectionPosition(1, 2)
+      document.execCommand("delete", false);
     },
     addBold() {
-      document.execCommand('bold', false)
+      document.execCommand("bold", false);
     },
     addPolyphone() {
-      let text = window.getSelection().toString()
+      let text = window.getSelection().toString();
       if (!text.length) {
-        return
+        return;
       }
-      document.execCommand('delete', false)
-        document.execCommand('insertHtml',false, `<span data-polyphone="123">${text}</span>`)
+      document.execCommand("delete", false);
+      document.execCommand(
+        "insertHtml",
+        false,
+        `<span data-polyphone="123">${text}</span>`
+      );
     },
+    seSelectionPosition(start, end) {
+      const selection = window.getSelection();
+      const range = selection.getRangeAt(0);
+      let node = range.startContainer;
+      let position = range.startOffset;
+      range.setStart(position + start)
+      range.setEnd(position + end )
+    }
   },
 };
 </script>
 
 <style lang="less" module>
 .container {
+  .editor {
+    img {
+      width: 20px;
+      height: 20px;
+    }
+  }
 }
 </style>

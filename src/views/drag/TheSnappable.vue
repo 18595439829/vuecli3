@@ -50,9 +50,9 @@ export default {
           snappable: true, // 是否初始化磁吸功能
           snapContainer: this.$refs.container, // 磁吸功能(辅助线)的容器
           snapThreshold: 10, // 磁吸效果触发的临界值,即元素与辅助线间距小于x,则自动贴边
-          bounds: this.$refs.content.getBoundingClientRect(), // moveable操作元素的外边界值(即包裹moveable元素的dom内边界){left, top, right, bottom}
-          innerBounds: this.$refs.inner.getBoundingClientRect(), // moveable操作元素的内边界值(即moveable元素包裹的dom的外边界){left, top, right, bottom}
-          // elementGuidelines: [this.$refs.content], // 磁吸效果辅助线的dom列表
+          // bounds: this.$refs.content.getBoundingClientRect(), // moveable操作元素的外边界值(即包裹moveable元素的dom内边界){left, top, right, bottom}
+          // innerBounds: this.$refs.inner.getBoundingClientRect(), // moveable操作元素的内边界值(即moveable元素包裹的dom的外边界){left, top, right, bottom}
+          elementGuidelines: [this.$refs.content, this.$refs.inner], // 磁吸效果辅助线的dom列表
           elementSnapDirections: {
             left: true,
             top: true,
@@ -127,7 +127,7 @@ export default {
         e.target.style.cursor = "move";
         this.setMoveableTarget(e.target);
       } else if (this.moveable) {
-        // this.moveable.target = null;
+        this.moveable.target = null;
       }
     },
   },

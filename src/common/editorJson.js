@@ -15,6 +15,16 @@ const list = [
     duration: null,
   },
   {
+    text: "当",
+    isPause: false,
+    duration: null,
+    map: {
+      dàng: "dang4",
+      dāng: "dang1",
+    },
+    selected: "dang4",
+  },
+  {
     text: "大",
     isPause: false,
     duration: null,
@@ -106,3 +116,4 @@ const list = [
     duration: null,
   },
 ];
+export default list

@@ -68,28 +68,28 @@ export default {
     ...mapMutations(["updateCropperData"]),
     cropperMedia(e) {
       this.isCropper = true;
-      // this.updateCropperData({
-      //     view: this.testData,
-      //     container: this.contentData
-      // })
-      let { width, height, left, top } = e.target.getBoundingClientRect();
       this.updateCropperData({
-        url: KAOLA,
-        img: "",
-        targetbox: { width, height, left, top },
-        innerbox: {
-          left: this.testData.windowX,
-          top: this.testData.windowY,
-          width: this.testData.windowWidth,
-          height: this.testData.windowHeight,
-        },
-        outterbox: {
-          left: this.testData.positionX,
-          top: this.testData.positionY,
-          width: this.testData.width,
-          height: this.testData.height,
-        },
-      });
+          view: this.testData,
+          container: this.contentData
+      })
+      // let { width, height, left, top } = e.target.getBoundingClientRect();
+      // this.updateCropperData({
+      //   url: KAOLA,
+      //   img: "",
+      //   targetbox: { width, height, left, top },
+      //   innerbox: {
+      //     left: this.testData.windowX,
+      //     top: this.testData.windowY,
+      //     width: this.testData.windowWidth,
+      //     height: this.testData.windowHeight,
+      //   },
+      //   outterbox: {
+      //     left: this.testData.positionX,
+      //     top: this.testData.positionY,
+      //     width: this.testData.width,
+      //     height: this.testData.height,
+      //   },
+      // });
     },
     getContentStyle() {
       return {
